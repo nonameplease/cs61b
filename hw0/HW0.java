@@ -1,5 +1,6 @@
 /** Scott Shao
  *  shaos@berkeley.edu
+ *  all test passed
  */
 public class HW0{
     public static void main(String[] args){
