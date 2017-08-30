@@ -39,7 +39,9 @@ public class IntListTest {
     public void testSquareListRecursive(){
         IntList L = IntList.list(1,2,3);
         IntList LSquare = IntList.squareListRecursive(L);
+        /* check testSquareListRecursive works*/
         assertEquals(IntList.list(1,4,9), LSquare);
+        /* check testSquareListRecursive is non-destructive*/
         assertNotEquals(LSquare, L);
     }
 
