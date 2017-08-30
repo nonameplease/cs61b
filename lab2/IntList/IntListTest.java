@@ -33,7 +33,7 @@ public class IntListTest {
      *  can be instantiated, for example, with
      *  IntList empty = IntList.list().
      */
-
+    
     //TODO:  Create testSquareListRecursive()
     @Test
     public void testSquareListRecursive(){
