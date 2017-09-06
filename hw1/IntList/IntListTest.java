@@ -32,7 +32,14 @@ public class IntListTest {
 
     @Test
     public void testDcatenate() {
-
+        IntList empty = IntList.list();
+        IntList A = IntList.list(3, 2);
+        IntList B = IntList.list(5);
+        IntList AB = IntList.list(3, 2, 5);
+        IntList BA = IntList.list(5, 3, 2);
+        assertEquals(empty, IntList.dcatenate(empty, empty));
+        assertEquals(AB, IntList.dcatenate(A, B));
+        assertEquals(BA, IntList.dcatenate(B, A));
     }
 
     /** Tests that subtail works properly. Again, don't use new.

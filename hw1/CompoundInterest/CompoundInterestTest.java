@@ -8,27 +8,36 @@ public class CompoundInterestTest {
         /** Sample assert statement for comparing integers.
 
         assertEquals(0, 0); */
+        assertEquals(2, CompoundInterest.numYears(2017));
+        assertEquals(5, CompoundInterest.numYears(2020));
     }
 
     @Test
     public void testFutureValue() {
         double tolerance = 0.01;
+        assertEquals(12.544, CompoundInterest.futureValue(10.0, 12.0, 2017), tolerance);
+        assertEquals(121, CompoundInterest.futureValue(100.0, 10.0, 2017), tolerance);
+        assertEquals(81, CompoundInterest.futureValue(100.0, -10.0, 2017), tolerance);
     }
 
     @Test
     public void testFutureValueReal() {
         double tolerance = 0.01;
+        assertEquals(11.8026496, CompoundInterest.futureValueReal(10, 12, 2017, 3), tolerance);
     }
 
 
     @Test
     public void testTotalSavings() {
         double tolerance = 0.01;
+        assertEquals(16550, CompoundInterest.totalSavings(5000, 2017, 10), tolerance);
     }
 
     @Test
     public void testTotalSavingsReal() {
         double tolerance = 0.01;
+        double target = 1000 * 1.1 * 1.1 * 0.97 * 0.97 + 1000 * 1.1 * 0.97 + 1000;
+        assertEquals(target, CompoundInterest.totalSavingsReal(1000, 2017, 10, 3), tolerance);
     }
 
 
