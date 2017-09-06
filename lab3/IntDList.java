@@ -27,22 +27,42 @@ public class IntDList {
     /** Return value #I in this list, where item 0 is the first, 1 is the
      *  second, ...., -1 is the last, -2 the second to last.... */
     public int get(int i) {
-        return 0;   // Your code here
+        if(i >= 0){
+            DNode temp = _front;
+            for(int j = 0; j < i; j++){
+                temp = temp._next;
+            }
+            return temp._val;
+        }
+        else{
+            DNode temp = _back;
+            i = i * -1;
+            for(int j = 0; j < i - 1; j++){
+                temp = temp._prev;
+            }
+            return temp._val;
+        }
     }
 
     /** The length of this list. */
     public int size() {
-        return 0;   // Your code here
+        DNode Temp = _front;
+        int temp = 0;
+        while(Temp._next != _back){
+            temp += 1;
+            Temp = Temp._next;
+        }
+        return temp;
     }
 
     /** Adds D to the front of the IntDList. */
     public void insertFront(int d) {
-        // Your code here 
+        _front._val = d;
     }
 
     /** Adds D to the back of the IntDList. */
     public void insertBack(int d) {
-        // Your code here 
+        _back._val = d;
     }
 
     /** Removes the last item in the IntDList and returns it.
