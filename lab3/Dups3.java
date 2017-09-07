@@ -30,16 +30,16 @@ public class Dups3 {
     static List<String> duplicates(List<String> L) {
         ArrayList<String> result = new ArrayList<String>();
         ListIterator<String> p1 = L.listIterator();
-        for(String temp = p1.next(); temp != null; temp = p1.next()){
-            if(p1.hasNext() == false){
+        for (String temp = p1.next(); temp != null; temp = p1.next()) {
+            if (p1.hasNext() == false) {
                 break;
             }
-            if(result.contains(temp)){
+            if (result.contains(temp)) {
                 continue;
             }
             ListIterator<String> p2 = L.listIterator(L.size());
-            while(p2.previousIndex() >= p1.nextIndex()){
-                if(temp.equals(p2.previous())){
+            while (p2.previousIndex() >= p1.nextIndex()) {
+                if (temp.equals(p2.previous())) {
                     result.add(temp);
                     break;
                 }

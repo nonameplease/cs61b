@@ -31,7 +31,7 @@ public class Dups4 {
         TreeSet<String> passed = new TreeSet<>();
         TreeSet<String> result = new TreeSet<>();
         ListIterator<String> p1 = L.listIterator();
-        for(String temp = p1.next(); temp != null; temp = p1.next()) {
+        for (String temp = p1.next(); temp != null; temp = p1.next()) {
             if (p1.hasNext() == false) {
                 break;
             }

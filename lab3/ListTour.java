@@ -69,17 +69,17 @@ public class ListTour {
       */
     static void printTour(List<String> L) {
         ListIterator<String> p1 = L.listIterator();
-        for(String temp = p1.next(); temp != null; temp = p1.next()){
+        for (String temp = p1.next(); temp != null; temp = p1.next()) {
             System.out.print(temp);
             System.out.print(" ");
-            if(p1.hasNext() == false){
+            if (p1.hasNext() == false) {
                 break;
             }
         }
-        for(String temp = p1.previous(); temp != null; temp = p1.previous()){
+        for (String temp = p1.previous(); temp != null; temp = p1.previous()) {
             System.out.print(temp);
             System.out.print(" ");
-            if(p1.hasPrevious() == false){
+            if (p1.hasPrevious() == false) {
                 break;
             }
         }

@@ -27,17 +27,16 @@ public class IntDList {
     /** Return value #I in this list, where item 0 is the first, 1 is the
      *  second, ...., -1 is the last, -2 the second to last.... */
     public int get(int i) {
-        if(i >= 0){
+        if (i >= 0) {
             DNode temp = _front;
-            for(int j = 0; j < i; j++){
+            for (int j = 0; j < i; j++) {
                 temp = temp._next;
             }
             return temp._val;
-        }
-        else{
+        } else {
             DNode temp = _back;
             i = i * -1;
-            for(int j = 0; j < i - 1; j++){
+            for (int j = 0; j < i - 1; j++) {
                 temp = temp._prev;
             }
             return temp._val;
@@ -47,7 +46,7 @@ public class IntDList {
     /** The length of this list. */
     public int size() {
         int temp = 0;
-        for(DNode Temp = _front; Temp != null; Temp = Temp._next){
+        for (DNode Temp = _front; Temp != null; Temp = Temp._next) {
             temp += 1;
         }
         return temp;
@@ -56,10 +55,9 @@ public class IntDList {
     /** Adds D to the front of the IntDList. */
     public void insertFront(int d) {
         _front = new DNode(null, d, _front);
-        if(_back == null){
+        if (_back == null) {
             _back = _front;
-        }
-        else{
+        } else {
             _front._next._prev = _front;
         }
     }
@@ -67,10 +65,9 @@ public class IntDList {
     /** Adds D to the back of the IntDList. */
     public void insertBack(int d) {
         _back = new DNode(_back, d, null);
-        if(_front == null){
+        if (_front == null) {
             _front = _back;
-        }
-        else{
+        } else {
             _back._prev._next = _back;
         }
     }

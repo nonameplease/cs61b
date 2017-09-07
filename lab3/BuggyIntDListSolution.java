@@ -32,7 +32,7 @@ public class BuggyIntDListSolution extends IntDList {
         }
         if (p._prev != null) {
             p._prev._next = p._next;
-        } else{
+        } else {
             _front = p._next;
         }
     }
