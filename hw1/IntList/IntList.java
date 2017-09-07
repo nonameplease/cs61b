@@ -138,7 +138,7 @@ public class IntList {
      *  elements of B.  May modify items of A. Don't use 'new'. */
 
     static IntList dcatenate(IntList A, IntList B) {
-        if(A == null){
+        if (A == null) {
             return B;
         }
         A.tail = dcatenate(A.tail, B);
@@ -153,7 +153,7 @@ public class IntList {
       * This method should NOT modify the items in L. */
 
     static IntList subTail(IntList L, int start) {
-        if(L == null || start == 0){
+        if (L == null || start == 0) {
             return L;
         }
         return subTail(L.tail, start - 1);
@@ -173,10 +173,10 @@ public class IntList {
      */
     static IntList sublist(IntList L, int start, int len) {
         //base case
-        if(len == 0){
+        if (len == 0) {
             return null;
         }
-        if(start > 0){
+        if (start > 0) {
             return sublist(L.tail, start - 1, len);
         }
         return new IntList(L.head, sublist(L.tail, 0, len - 1));
@@ -191,10 +191,10 @@ public class IntList {
      *  exist, and that START and LEN are >= 0. */
     static IntList dsublist(IntList L, int start, int len) {
         //base case
-        if(len == 0){
+        if (len == 0) {
             return null;
         }
-        if(start > 0){
+        if (start > 0) {
             return dsublist(L.tail, start - 1, len);
         }
         L.tail = dsublist(L.tail, 0, len - 1);

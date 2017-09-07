@@ -49,7 +49,7 @@ public class CompoundInterest {
      *  16550. */
     static double totalSavings(double perYear, int targetYear, double rate) {
         double totalMoney = perYear;
-        while(numYears(targetYear) != 0){
+        while (numYears(targetYear) != 0) {
             totalMoney += futureValue(perYear, rate, targetYear);
             targetYear -= 1;
         }
@@ -62,7 +62,7 @@ public class CompoundInterest {
     static double totalSavingsReal(double perYear, int targetYear, double rate,
                                double inflationRate) {
         double totalMoney = perYear;
-        while(numYears(targetYear) != 0){
+        while (numYears(targetYear) != 0) {
             totalMoney += futureValueReal(perYear, rate, targetYear, inflationRate);
             targetYear -= 1;
         }
@@ -76,8 +76,8 @@ public class CompoundInterest {
      *  INFLATIONRATE. */
     static void printDollarFV(int targetYear, double returnRate,
                               double inflationRate) {
-        double nominalDollarValue = futureValue(1, returnRate, targetYear); // replace 0 with your code
-        double realDollarValue = futureValueReal(1, returnRate, targetYear, inflationRate);    // replace 0 with your code
+        double nominalDollarValue = futureValue(1, returnRate, targetYear);
+        double realDollarValue = futureValueReal(1, returnRate, targetYear, inflationRate);
 
         // Do not change anything in this method below this line
         String dollarSummary =
