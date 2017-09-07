@@ -46,23 +46,33 @@ public class IntDList {
 
     /** The length of this list. */
     public int size() {
-        DNode Temp = _front;
         int temp = 0;
-        while(Temp._next != _back){
+        for(DNode Temp = _front; Temp != null; Temp = Temp._next){
             temp += 1;
-            Temp = Temp._next;
         }
         return temp;
     }
 
     /** Adds D to the front of the IntDList. */
     public void insertFront(int d) {
-        _front._val = d;
+        _front = new DNode(null, d, _front);
+        if(_back == null){
+            _back = _front;
+        }
+        else{
+            _front._next._prev = _front;
+        }
     }
 
     /** Adds D to the back of the IntDList. */
     public void insertBack(int d) {
-        _back._val = d;
+        _back = new DNode(_back, d, null);
+        if(_front == null){
+            _front = _back;
+        }
+        else{
+            _back._prev._next = _back;
+        }
     }
 
     /** Removes the last item in the IntDList and returns it.

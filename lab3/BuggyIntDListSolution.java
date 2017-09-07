@@ -30,23 +30,27 @@ public class BuggyIntDListSolution extends IntDList {
         } else {
             _back = p._prev;
         }
-        p._prev._next = p._next;
+        if (p._prev != null) {
+            p._prev._next = p._next;
+        } else{
+            _front = p._next;
+        }
     }
     public String getException() {
         //hint : this is what comes after the "java.lang" at the top of the stack trace
-        return "ERROR EXCEPTION HERE";
+        return "NullPointerException";
     }
 
     public String getErrorFunction() {
         // hint: this is the first function name that you see
         // when reading the stack trace from top to bottom
-        return "FUNCTION IN WHICH ERROR OCCURS HERE";
+        return "BuggyintDListSolution.remove";
     }
 
     public int getErrorLineNumber() {
         // PUT ERROR LINE NUMBER HERE
         // hint: this is the number that comes after whichever function the
         // error is occurring in.
-        return -1;
+        return 33;
     }
 }

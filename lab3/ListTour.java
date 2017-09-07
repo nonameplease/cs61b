@@ -68,7 +68,21 @@ public class ListTour {
       * alfred bob glorgus stipstip stipstip glorgus bob alfred
       */
     static void printTour(List<String> L) {
-        //FIX ME
+        ListIterator<String> p1 = L.listIterator();
+        for(String temp = p1.next(); temp != null; temp = p1.next()){
+            System.out.print(temp);
+            System.out.print(" ");
+            if(p1.hasNext() == false){
+                break;
+            }
+        }
+        for(String temp = p1.previous(); temp != null; temp = p1.previous()){
+            System.out.print(temp);
+            System.out.print(" ");
+            if(p1.hasPrevious() == false){
+                break;
+            }
+        }
     }
 
     /** Quick and dirty main method that calls static methods
@@ -76,10 +90,16 @@ public class ListTour {
     public static void main(String[] args) {
         /* comment out quickIteratorExamples after you
            understand how it works */
-        quickIteratorExamples();
+        //quickIteratorExamples();
 
         /* add a call to printTour. You'll need to create
            a list in main to provide to printTour */
+        ArrayList<String> L = new ArrayList<String>();
+        L.add("alfred");
+        L.add("bob");
+        L.add("glorgus");
+        L.add("stipstip");
+        printTour(L);
     }
 
 }
