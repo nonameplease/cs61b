@@ -82,6 +82,8 @@ public class Game {
         int y = valid.row();
         while (_model.tile(x, y) != null) {
             valid = _source.getNewTile(_model.size());
+            x = valid.col();
+            y = valid.row();
         }
         return valid;
     }
