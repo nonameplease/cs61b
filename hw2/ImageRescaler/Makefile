@@ -1,3 +1,4 @@
+STYLEPROG = style61b
 
 # All Java sources.  If you add more files, be sure to add them here as
 # well.
@@ -30,7 +31,7 @@ default: $(ALL_CLASSES)
 
 # Check style of source files with style61b.
 style:
-	style61b $(STUDENT)
+	$(STYLEPROG) $(STUDENT)
 
 # Remove files that are unnecessary or that can be regenerated with make.
 clean:
