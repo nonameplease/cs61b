@@ -80,7 +80,30 @@ class Model extends Observable {
         changed = false;
 
         // FIXME
-
+        // NOT WORKING
+        boolean lastTileNull = false;
+        int lastTile = 0;
+        for (int i = 0; i < size(); i++) {
+            for (int j = size() - 1; j >= 0; j--) {
+                if (tile(i, j) == null) {
+                    lastTileNull = true;
+                    lastTile = 0;
+                    continue;
+                }
+                if (tile(i, j).value() == lastTile || lastTileNull == true) {
+                    setVtile(i, j + 1, side, tile(i, j));
+                    lastTileNull = true;
+                    changed = true;
+                } else {
+                    lastTileNull = false;
+                }
+                if (tile(i, j) != null) {
+                    lastTile = tile(i, j).value();
+                }
+            }
+            lastTile = 0;
+            lastTileNull = false;
+        }
         checkGameOver();
         if (changed) {
             setChanged();
