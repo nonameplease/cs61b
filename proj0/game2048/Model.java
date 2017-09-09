@@ -1,5 +1,7 @@
 package game2048;
 
+import com.sun.tools.javac.code.Attribute;
+
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Observable;
@@ -80,30 +82,42 @@ class Model extends Observable {
         changed = false;
 
         // FIXME
-        // NOT WORKING
-        boolean lastTileNull = false;
-        int lastTile = 0;
         for (int i = 0; i < size(); i++) {
+            int value = 0;
+            boolean top = true;
             for (int j = size() - 1; j >= 0; j--) {
-                if (tile(i, j) == null) {
-                    lastTileNull = true;
-                    lastTile = 0;
-                    continue;
-                }
-                if (tile(i, j).value() == lastTile || lastTileNull == true) {
-                    setVtile(i, j + 1, side, tile(i, j));
-                    lastTileNull = true;
-                    changed = true;
+                if (vtile(i, j, side) == null) {
+                    int counter = 1;
+                    for (int k = j - 1; k >= 0; k--) {
+                        if (vtile(i, k, side) != null){
+                            if (value != 0 && vtile(i, k, side).value() == value) {
+                                setVtile(i, k + counter + 1, side, vtile(i, k, side));
+                            } else {
+                                setVtile(i, k + counter, side, vtile(i, k, side));
+                                value = vtile(i, k + counter, side).value();
+                            }
+                            changed = true;
+                            counter = 1;
+                        } else {
+                                counter += 1;
+                        }
+                    }
                 } else {
-                    lastTileNull = false;
+                    if (top == false) {
+                        if (value != 0 && vtile(i, j, side).value() == value) {
+                            setVtile(i, j + 1, side, vtile(i, j, side));
+                        }
+                    }
+                    if (vtile(i, j, side) != null) {
+                        value = vtile(i, j, side).value();
+                    } else {
+                        value = 0;
+                    }
                 }
-                if (tile(i, j) != null) {
-                    lastTile = tile(i, j).value();
-                }
+                top = false;
             }
-            lastTile = 0;
-            lastTileNull = false;
         }
+
         checkGameOver();
         if (changed) {
             setChanged();
@@ -140,6 +154,22 @@ class Model extends Observable {
      *  accordingly. */
     private void checkGameOver() {
         // FIXME
+        int max = 0;
+        boolean over = true;
+        for (int i = 0; i < size(); i++) {
+            for (int j = 0; j < size(); j++) {
+                if (tile(i, j) != null) {
+                    over = false;
+                    if (tile(i, j).value() > max) {
+                        max = tile(i, j).value();
+                    }
+                }
+            }
+        }
+        _maxScore = max;
+        if (over || max == 2048) {
+            _gameOver = true;
+        }
     }
 
     @Override
