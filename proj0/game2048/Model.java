@@ -82,6 +82,7 @@ class Model extends Observable {
         changed = false;
 
         // FIXME
+        //problem: when two tile in the middle move and one is merged with one on the side, the other tile with same number does not move.
         for (int i = 0; i < size(); i++) {
             int value = 0;
             boolean top = true;
