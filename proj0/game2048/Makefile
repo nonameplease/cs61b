@@ -13,6 +13,8 @@ SHELL = bash
 
 STYLEPROG = style61b
 
+PYTHON = python3
+
 PACKAGE = game2048
 
 # Flags to pass to Java compilations (include debugging info and report
@@ -55,7 +57,7 @@ sentinel: $(SRCS)
 
 # Run Tests.
 check: 
-	make -C .. check
+	make -C .. PYTHON=$(PYTHON) check
 
 # Find and remove all *~ and *.class files.
 clean:
