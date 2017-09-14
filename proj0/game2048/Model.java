@@ -8,7 +8,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author
+ *  @author Scott Shao
  */
 class Model extends Observable {
 
@@ -80,51 +80,11 @@ class Model extends Observable {
     boolean tilt(Side side) {
         boolean changed;
         changed = false;
-        /*
-        // FIXME
-        //problem: when two tile in the middle move and one is merged with one on the side, the other tile with same number does not move.
-        for (int i = 0; i < size(); i++) {
-            int value = 0;
-            boolean top = true;
-            for (int j = size() - 1; j >= 0; j--) {
-                if (vtile(i, j, side) == null) {
-                    int counter = 1;
-                    for (int k = j - 1; k >= 0; k--) {
-                        if (vtile(i, k, side) != null){
-                            if (value != 0 && vtile(i, k, side).value() == value) {
-                                setVtile(i, k + counter + 1, side, vtile(i, k, side));
-                            } else {
-                                setVtile(i, k + counter, side, vtile(i, k, side));
-                                value = vtile(i, k + counter, side).value();
-                            }
-                            changed = true;
-                            counter = 1;
-                        } else {
-                                counter += 1;
-                        }
-                    }
-                } else {
-                    if (top == false) {
-                        if (value != 0 && vtile(i, j, side).value() == value) {
-                            setVtile(i, j + 1, side, vtile(i, j, side));
-                        }
-                    }
-                    if (vtile(i, j, side) != null) {
-                        value = vtile(i, j, side).value();
-                    } else {
-                        value = 0;
-                    }
-                }
-                top = false;
-            }
-        }
-        */
-
-        //move tile
+        /**FIXME */
         for (int i = 0; i < size(); i++) {
             for (int j = size() - 1; j >= 0; j--) {
                 if (vtile(i, j, side) != null) {
-                    int distance = distWithMerge(i, j, side);
+                    int distance = distWithMerge(i, j, side, false);
                     setVtile(i, j + distance, side, vtile(i, j, side));
                     changed = true;
                 }
@@ -138,7 +98,8 @@ class Model extends Observable {
         return changed;
     }
 
-    /** Return the distance a tile can move up without merge */
+    /** Return the distance a tile at (COL, ROW, SIDE)
+     * can move up without merge. */
     private int dist(int col, int row, Side side) {
         int distance = 0;
         for (int i = size() - 1; i > row; i--) {
@@ -149,12 +110,13 @@ class Model extends Observable {
         return distance;
     }
 
-    /** Return the distance a tile can move up with merge */
-    private int distWithMerge(int col, int row, Side side) {
+    /** Return the distance a tile at (COL, ROW, SIDE)
+     * can move up with merge. If MERGED, then do not merge again. */
+    private int distWithMerge(int col, int row, Side side, boolean merged) {
         int distance = dist(col, row, side);
-        if (row < size() - 1 && row >= 0) {
-            if (vtile(col, row + 1, side) != null) {
-                if (vtile(col, row, side).value() == vtile(col, row + 1, side).value()) {
+        if (row >= 0 && row + distance < size() - 1 && merged == false) {
+            if (vtile(col, row, side) != null) {
+                if (vtile(col, row, side).value() == vtile(col, row + distance + 1, side).value()) {
                     distance += 1;
                 }
             }
@@ -190,7 +152,7 @@ class Model extends Observable {
     /** Deternmine whether game is over and update _gameOver and _maxScore
      *  accordingly. */
     private void checkGameOver() {
-        // FIXME
+        /**FIXME*/
         int max = 0;
         boolean over = true;
         for (int i = 0; i < size(); i++) {
@@ -204,7 +166,7 @@ class Model extends Observable {
             }
         }
         _maxScore = max;
-        if (over || max == 2048) {
+        if (over || max == MAX_PIECE) {
             _gameOver = true;
         }
     }

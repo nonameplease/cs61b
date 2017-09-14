@@ -3,7 +3,7 @@ package game2048;
 import static game2048.Side.*;
 
 /** The input/output and GUI controller for play of a game of 2048.
- *  @author */
+ *  @author Scott Shao*/
 public class Game {
 
     /** Controller for a game represented by MODEL, using SOURCE as the
@@ -76,7 +76,7 @@ public class Game {
      *  one that fits on the current board. Assumes there is at least one
      *  empty square on the board. */
     private Tile getValidNewTile() {
-        //return null; // FIXME
+        /** fixed */
         Tile valid = _source.getNewTile(_model.size());
         int x = valid.col();
         int y = valid.row();
