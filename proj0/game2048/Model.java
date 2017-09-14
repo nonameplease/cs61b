@@ -82,10 +82,15 @@ class Model extends Observable {
         changed = false;
         /**FIXME */
         for (int i = 0; i < size(); i++) {
+            boolean merged = false;
             for (int j = size() - 1; j >= 0; j--) {
                 if (vtile(i, j, side) != null) {
-                    int distance = distWithMerge(i, j, side, false);
+                    int checker = dist(i, j, side);
+                    int distance = distWithMerge(i, j, side, merged);
                     setVtile(i, j + distance, side, vtile(i, j, side));
+                    if (checker != distance) {
+                        merged = true;
+                    }
                     changed = true;
                 }
             }
