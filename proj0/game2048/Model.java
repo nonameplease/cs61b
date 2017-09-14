@@ -80,7 +80,7 @@ class Model extends Observable {
     boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
+        /*
         // FIXME
         //problem: when two tile in the middle move and one is merged with one on the side, the other tile with same number does not move.
         for (int i = 0; i < size(); i++) {
@@ -118,12 +118,48 @@ class Model extends Observable {
                 top = false;
             }
         }
+        */
+
+        //move tile
+        for (int i = 0; i < size(); i++) {
+            for (int j = size() - 1; j >= 0; j--) {
+                if (vtile(i, j, side) != null) {
+                    int distance = distWithMerge(i, j, side);
+                    setVtile(i, j + distance, side, vtile(i, j, side));
+                    changed = true;
+                }
+            }
+        }
 
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
+    }
+
+    /** Return the distance a tile can move up without merge */
+    private int dist(int col, int row, Side side) {
+        int distance = 0;
+        for (int i = size() - 1; i > row; i--) {
+            if (vtile(col, i, side) == null) {
+                distance += 1;
+            }
+        }
+        return distance;
+    }
+
+    /** Return the distance a tile can move up with merge */
+    private int distWithMerge(int col, int row, Side side) {
+        int distance = dist(col, row, side);
+        if (row < size() - 1 && row >= 0) {
+            if (vtile(col, row + 1, side) != null) {
+                if (vtile(col, row, side).value() == vtile(col, row + 1, side).value()) {
+                    distance += 1;
+                }
+            }
+        }
+        return distance;
     }
 
     /** Return the current Tile at (COL, ROW), when sitting with the board
