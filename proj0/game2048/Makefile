@@ -13,7 +13,7 @@ SHELL = bash
 
 STYLEPROG = style61b
 
-PYTHON = python3
+PYTHON = python
 
 PACKAGE = game2048
 

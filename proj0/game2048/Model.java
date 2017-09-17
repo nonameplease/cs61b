@@ -89,9 +89,12 @@ class Model extends Observable {
                 if (vtile(i, j, side) != null) {
                     int checker = dist(i, j, side);
                     int distance = distWithMerge(i, j, side, merged);
-                    setVtile(i, j + distance, side, vtile(i, j, side));
+                    Tile t = vtile(i, j, side);
+                    setVtile(i, j + distance, side, t);
                     if (checker != distance) {
                         merged = true;
+                    } else {
+                        merged = false;
                     }
                     changed = true;
                 }
@@ -122,7 +125,7 @@ class Model extends Observable {
     private int distWithMerge(int col, int row, Side side, boolean merged) {
         int distance = dist(col, row, side);
         if (row >= 0 && row + distance < size() - 1 && merged == false) {
-            if (vtile(col, row, side) != null) {
+            if (vtile(col, row, side) != null && vtile(col, row + distance + 1, side) != null) {
                 if (vtile(col, row, side).value() == vtile(col, row + distance + 1, side).value()) {
                     distance += 1;
                 }
@@ -162,14 +165,31 @@ class Model extends Observable {
         /**FIXME*/
         int max = 0;
         boolean over = true;
+        /** check board is full */
         for (int i = 0; i < size(); i++) {
             for (int j = 0; j < size(); j++) {
-                if (tile(i, j) != null) {
+                if (tile(i, j) == null) {
                     over = false;
-                    if (tile(i, j).value() > max) {
-                        max = tile(i, j).value();
+                    if (tile(i, j) != null) {
+                        if (tile(i, j).value() > max) {
+                            max = tile(i, j).value();
+                        }
                     }
                 }
+            }
+        }
+        /** check no valid move left */
+        for (int i = 0; i < size(); i++) {
+            for (int j = 0; j < size(); j++) {
+                Side[] side = {Side.NORTH, Side.EAST, Side.SOUTH, Side.WEST};
+                for (Side k : side) {
+                    int dist = dist(i, j, k);
+                    int distMerge = distWithMerge(i, j, k, false);
+                    if (dist != distMerge) {
+                        over = false;
+                    }
+                }
+
             }
         }
         _maxScore = max;
