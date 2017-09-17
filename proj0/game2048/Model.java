@@ -76,7 +76,9 @@ class Model extends Observable {
         setChanged();
     }
 
-    /** Tilt the board toward SIDE. Return true iff this changes the board. */
+    /** Tilt the board toward SIDE. Return true iff this changes the board.
+     * small bug: second combo tile won't merge. e.p.: 2,2,4,4 will only
+     * become 2,2,8 instead of 4,8.*/
     boolean tilt(Side side) {
         boolean changed;
         changed = false;
