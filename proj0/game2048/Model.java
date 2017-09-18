@@ -93,6 +93,7 @@ class Model extends Observable {
                     setVtile(i, j + distance, side, t);
                     if (checker != distance) {
                         merged = true;
+                        _score += vtile(i, j + distance, side).value();
                     } else {
                         merged = false;
                     }
@@ -194,9 +195,9 @@ class Model extends Observable {
 
             }
         }
-        _maxScore = max;
         if (over || max == MAX_PIECE) {
             _gameOver = true;
+            _maxScore = _score;
         }
     }
 
