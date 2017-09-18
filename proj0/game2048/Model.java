@@ -96,7 +96,9 @@ class Model extends Observable {
                     } else {
                         merged = false;
                     }
-                    changed = true;
+                    if (distance > 0) {
+                        changed = true;
+                    }
                 }
             }
         }
@@ -170,10 +172,10 @@ class Model extends Observable {
             for (int j = 0; j < size(); j++) {
                 if (tile(i, j) == null) {
                     over = false;
-                    if (tile(i, j) != null) {
-                        if (tile(i, j).value() > max) {
-                            max = tile(i, j).value();
-                        }
+                }
+                if (tile(i, j) != null) {
+                    if (tile(i, j).value() > max) {
+                        max = tile(i, j).value();
                     }
                 }
             }
