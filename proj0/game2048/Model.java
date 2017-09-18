@@ -1,6 +1,5 @@
 package game2048;
 
-import com.sun.tools.javac.code.Attribute;
 
 import java.util.Arrays;
 import java.util.Formatter;
@@ -82,7 +81,6 @@ class Model extends Observable {
     boolean tilt(Side side) {
         boolean changed;
         changed = false;
-        /**FIXME */
         for (int i = 0; i < size(); i++) {
             boolean merged = false;
             for (int j = size() - 1; j >= 0; j--) {
@@ -127,10 +125,14 @@ class Model extends Observable {
      * can move up with merge. If MERGED, then do not merge again. */
     private int distWithMerge(int col, int row, Side side, boolean merged) {
         int distance = dist(col, row, side);
-        if (row >= 0 && row + distance < size() - 1 && merged == false) {
-            if (vtile(col, row, side) != null && vtile(col, row + distance + 1, side) != null) {
-                if (vtile(col, row, side).value() == vtile(col, row + distance + 1, side).value()) {
-                    distance += 1;
+        if (row >= 0 && row + distance < size() - 1 && !merged) {
+            if (vtile(col, row, side) != null) {
+                if (vtile(col, row + distance + 1, side) != null) {
+                    int mergefrom = vtile(col, row, side).value();
+                    int mergeto = vtile(col, row + distance + 1, side).value();
+                    if (mergefrom == mergeto) {
+                        distance += 1;
+                    }
                 }
             }
         }
@@ -165,10 +167,8 @@ class Model extends Observable {
     /** Deternmine whether game is over and update _gameOver and _maxScore
      *  accordingly. */
     private void checkGameOver() {
-        /**FIXME*/
         int max = 0;
         boolean over = true;
-        /** check board is full */
         for (int i = 0; i < size(); i++) {
             for (int j = 0; j < size(); j++) {
                 if (tile(i, j) == null) {
@@ -181,7 +181,6 @@ class Model extends Observable {
                 }
             }
         }
-        /** check no valid move left */
         for (int i = 0; i < size(); i++) {
             for (int j = 0; j < size(); j++) {
                 Side[] side = {Side.NORTH, Side.EAST, Side.SOUTH, Side.WEST};

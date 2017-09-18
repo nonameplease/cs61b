@@ -77,7 +77,6 @@ public class Game {
      *  one that fits on the current board. Assumes there is at least one
      *  empty square on the board. */
     private Tile getValidNewTile() {
-        /** fixed */
         Tile valid = _source.getNewTile(_model.size());
         int x = valid.col();
         int y = valid.row();
