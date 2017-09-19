@@ -20,7 +20,7 @@ PACKAGE = game2048
 
 STYLEPROG = style61b
 
-PYTHON = python
+PYTHON = python3
 
 # Targets that don't correspond to files, but are to be treated as commands.
 .PHONY: default check clean style
