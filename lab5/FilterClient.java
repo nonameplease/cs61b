@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /** Exercises for Lab 6.
- *  @author You.
+ *  @author Scott Shao
  */
 public class FilterClient {
 
@@ -35,7 +35,6 @@ public class FilterClient {
             System.out.println(L);
             Filter<Integer> f1 = new TrivialFilter<Integer>(L.iterator());
             printAll(f1);
-            // ADDTOME?
         }
     }
 
@@ -51,20 +50,26 @@ public class FilterClient {
      *  starting with the first.  You should not need to define a new
      *  class. */
     static Filter<Integer> everyFourth(Iterator<Integer> input) {
-        return null;  // FIXME
+        Filter<Integer> everyother = new AlternatingFilter<Integer>(input);
+        Filter<Integer> everyfourth =
+                new AlternatingFilter<Integer>(everyother);
+        return everyfourth;
     }
 
     /** Returns a filter that delivers every even valued integer of
      *  INPUT. You should not need to define a new class. */
     static Filter<Integer> evenNumberFilter(Iterator<Integer> input) {
-        return null; // FIXME
+        Filter<Integer> everyeven =
+                new PredicateFilter<Integer>(x-> x % 2 == 0, input);
+        return everyeven;
     }
 
     /** A class whose instances represent the test for eveness. */
     static class Even implements Predicate<Integer> {
         @Override
         public boolean test(Integer x) {
-            return false; // FIXME
+            boolean even = (x % 2 == 0);
+            return even;
         }
     }
 }
