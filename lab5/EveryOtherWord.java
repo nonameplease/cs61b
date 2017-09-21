@@ -1,8 +1,4 @@
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -22,7 +18,15 @@ public class EveryOtherWord {
       */
 
     public static Iterable<String> everyOtherWord(List<String> L) {
-        return null; // FIXME!
+        Set<String> s = new HashSet<String>();
+        Iterator<String> i = L.iterator();
+        while(i.hasNext()) {
+            s.add(i.next());
+            if (i.hasNext()) {
+                i.next();
+            }
+        }
+        return s;
     }
 
     /** Tests whether or not your everyOtherWord method works correctly. */
