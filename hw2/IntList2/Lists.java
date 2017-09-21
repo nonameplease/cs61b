@@ -16,6 +16,17 @@ class Lists {
      *  original list pointed to by L. */
     static IntList2 naturalRuns(IntList L) {
         /* *Replace this body with the solution. */
-        return null;
+        if (L == null) {
+            return null;
+        }
+
+        IntList rest = null;
+        IntList head = L;
+        for (int value = L.head; L != null && value <= L.head; L = L.tail) {
+            value = L.head;
+            rest = L;
+        }
+        L.tail = null;
+        return new IntList2(head, naturalRuns(rest));
     }
 }
