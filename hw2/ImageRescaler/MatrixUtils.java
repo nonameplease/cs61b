@@ -71,13 +71,13 @@ public class MatrixUtils {
 
     /** Just like to one in ImageRescaler.java.
      *
-     * @param e
-     * @param r
-     * @param c
-     * @return
+     * @param e A 2-D array of energyMatrix.
+     * @param r Row number.
+     * @param c Column number.
+     * @return The value at that location in the 2-D array.
      */
     private static double get(double[][] e, int r, int c) {
-        if (c < 0 || c >= e[0].length || r < 0 || r >= e.length){
+        if (c < 0 || c >= e[0].length || r < 0 || r >= e.length) {
             return Double.POSITIVE_INFINITY;
         }
         return e[r][c];
@@ -115,8 +115,9 @@ public class MatrixUtils {
 
     /** Just like transpose method in ImageRescaler.java.
      *
-     * @param e
-     * @return
+     * @param e A 2-D array of energymatrix.
+     * @return A rotated 2-D array so that all data processing
+     * can be done vertically.
      */
     private static double[][] rotate(double[][] e) {
         int width = e[0].length;
@@ -172,8 +173,16 @@ public class MatrixUtils {
         return verticalSeam;
     }
 
+    /**
+     * A helper function that returns the index of the smallest
+     * thing in the array between index lo and index hi.
+     * @param e A 2-D array.
+     * @param lo Index lower limit.
+     * @param hi Index upper limit.
+     * @return Value of the smallest thing.
+     */
     private static int minindex(double[] e, int lo, int hi) {
-        if (lo < 0 ) {
+        if (lo < 0) {
             lo = 0;
         }
         if (hi >= e.length) {

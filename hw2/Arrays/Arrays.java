@@ -69,7 +69,9 @@ class Arrays {
         duration[length - 1] = A.length - temp3;
         int[][] arrayOfArray = new int[length][];
         for (int i = 0; i < length; i++) {
-            System.arraycopy(A, startingPoint[i], arrayOfArray[i], 0, duration[i]);
+            arrayOfArray[i] = new int[duration[i]];
+            System.arraycopy(A, startingPoint[i],
+                    arrayOfArray[i], 0, duration[i]);
         }
         return arrayOfArray;
     }

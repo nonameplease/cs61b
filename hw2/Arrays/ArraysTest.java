@@ -1,4 +1,3 @@
-import com.sun.tools.javac.code.Attribute;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
