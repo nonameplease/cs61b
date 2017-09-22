@@ -53,7 +53,34 @@ public class MatrixUtils {
      */
 
     public static double[][] accumulateVertical(double[][] m) {
-        return null; //your code here
+        m = copy(m);
+        for (int i = 1; i < m.length; i++) {
+            for (int j = 0; j < m[0].length; j++) {
+                double least = Double.POSITIVE_INFINITY;
+                for (int k = -1; k < 2; k++) {
+                    double value = get(m, i - 1, j + k);
+                    if (value < least) {
+                        least = value;
+                    }
+                }
+                m[i][j] += least;
+            }
+        }
+        return m;
+    }
+
+    /** Just like to one in ImageRescaler.java.
+     *
+     * @param e
+     * @param r
+     * @param c
+     * @return
+     */
+    private static double get(double[][] e, int r, int c) {
+        if (c < 0 || c >= e[0].length || r < 0 || r >= e.length){
+            return Double.POSITIVE_INFINITY;
+        }
+        return e[r][c];
     }
 
     /** Non-destructively accumulates a matrix M along the specified
@@ -80,7 +107,27 @@ public class MatrixUtils {
      */
 
     public static double[][] accumulate(double[][] m, Orientation orientation) {
-        return null; //your code here
+        if (orientation == Orientation.HORIZONTAL) {
+            m = rotate(m);
+        }
+        return rotate(accumulateVertical(m));
+    }
+
+    /** Just like transpose method in ImageRescaler.java.
+     *
+     * @param e
+     * @return
+     */
+    private static double[][] rotate(double[][] e) {
+        int width = e[0].length;
+        int height = e.length;
+        double[][] mT = new double[width][height];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                mT[j][i] = e[i][j];
+            }
+        }
+        return mT;
     }
 
     /** Finds the vertical seam VERTSEAM of the given matrix M.
@@ -113,7 +160,32 @@ public class MatrixUtils {
      */
 
     public static int[] findVerticalSeam(double[][] m) {
-        return null; //your code here
+        int width = m[0].length;
+        int height = m.length;
+        int[] verticalSeam = new int[height];
+        verticalSeam[height - 1] = minindex(m[height - 1], 0, width);
+        for (int i = height - 2; i >= 0; i--) {
+            int minRange = verticalSeam[i + 1] - 1;
+            int maxRange = verticalSeam[i + 1] + 1;
+            verticalSeam[i] = minindex(m[i], minRange, maxRange);
+        }
+        return verticalSeam;
+    }
+
+    private static int minindex(double[] e, int lo, int hi) {
+        if (lo < 0 ) {
+            lo = 0;
+        }
+        if (hi >= e.length) {
+            hi = e.length - 1;
+        }
+        int minindex = lo;
+        for (int i = lo; i <= hi; i++) {
+            if (e[i] < e[minindex]) {
+                minindex = i;
+            }
+        }
+        return minindex;
     }
 
     /** Returns the SEAM of M with the given ORIENTATION.
@@ -122,7 +194,10 @@ public class MatrixUtils {
      */
 
     public static int[] findSeam(double[][] m, Orientation orientation) {
-        return null; //your code here
+        if (orientation == Orientation.HORIZONTAL) {
+            m = rotate(m);
+        }
+        return findVerticalSeam(m);
     }
 
     /** does nothing. ARGS not used. use for whatever purposes you'd like */

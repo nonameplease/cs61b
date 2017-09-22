@@ -4,7 +4,7 @@
 /** HW #2, Problem #1. */
 
 /** List problem.
- *  @author
+ *  @author Scott Shao
  */
 class Lists {
     /** Return the list of lists formed by breaking up L into "natural runs":
@@ -18,15 +18,15 @@ class Lists {
         /* *Replace this body with the solution. */
         if (L == null) {
             return null;
+        } else {
+            IntList runs = L;
+            while (L.tail != null && L.tail.head > L.head) {
+                L = L.tail;
+            }
+            IntList ptr = L;
+            IntList2 rest = naturalRuns(ptr.tail);
+            ptr.tail = null;
+            return new IntList2(runs, rest);
         }
-
-        IntList rest = null;
-        IntList head = L;
-        for (int value = L.head; L != null && value <= L.head; L = L.tail) {
-            value = L.head;
-            rest = L;
-        }
-        L.tail = null;
-        return new IntList2(head, naturalRuns(rest));
     }
 }
