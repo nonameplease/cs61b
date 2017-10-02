@@ -3,7 +3,7 @@ import java.io.IOException;
 
 /** Translating Reader: a stream that is a translation of an
  *  existing reader.
- *  @author
+ *  @author Scott Shao
  */
 public class TrReader extends Reader {
     /** A new TrReader that produces the stream of characters produced
@@ -12,13 +12,56 @@ public class TrReader extends Reader {
      *  FROM.charAt(0) to TO.charAt(0), etc., leaving other characters
      *  unchanged.  FROM and TO must have the same length. */
     public TrReader(Reader str, String from, String to) {
-        // FILL IN
+        _reader = str;
+        _from = from;
+        _to = to;
     }
 
-    // FILL IN
-    // NOTE: Until you fill in the right methods, the compiler will
-    //       reject this file, saying that you must declare TrReader
-    //     abstract.  Don't do that; define the right methods instead!
+    /** Close the source file.
+     *
+     * @throws IOException
+     */
+    public void close() throws IOException {
+        _reader.close();
+    }
+
+    /** This method translate the INSTREAM to desired char
+     *  if index is not -1 and return it.
+     * @param instream instream from the source.
+     * @return return translated char or instream if index is -1.
+     */
+    private char translate(char instream) {
+        int index = _from.indexOf(instream);
+        if (index == -1) {
+            return instream;
+        } else {
+            return _to.charAt(index);
+        }
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        int output = _reader.read(cbuf, off, len);
+        for (int i = off; i < off + output; i++) {
+            cbuf[i] = translate(cbuf[i]);
+        }
+        return output;
+    }
+
+    /**
+     * The source.
+     */
+    private Reader _reader;
+
+    /**
+     * The string that should be translated.
+     */
+    private String _from;
+
+    /**
+     * The string that source should be translated to.
+     */
+    private String _to;
 }
 
 

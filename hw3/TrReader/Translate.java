@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.StringReader;
 
 /** String translation.
  *  @author
@@ -9,10 +10,12 @@ public class Translate {
      *  have the same length. */
     static String translate(String S, String from, String to) {
         /* NOTE: The try {...} catch is a technicality to keep Java happy. */
-        char[] buffer = new char[S.length()];
         try {
-            throw new IOException();
-            // REPLACE ABOVE LINE WITH THE RIGHT ANSWER.
+            TrReader readFunc = new TrReader(new StringReader(S), from, to);
+            char[] list = new char[S.length()];
+            readFunc.read(list, 0, list.length);
+            return new String(list);
+
         } catch (IOException e) {
             return null;
         }

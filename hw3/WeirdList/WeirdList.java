@@ -1,18 +1,31 @@
 /** A WeirdList holds a sequence of integers.
- * @author
+ * @author Scott Shao
  */
 public class WeirdList {
+    /**
+     * Class attribute: the head of the WeirdList.
+     */
+    private int _head;
+
+    /**
+     * Class attribute: the tail of the WeirdList.
+     */
+    private WeirdList _tail;
+
     /** The empty sequence of integers. */
     public static final WeirdList EMPTY =
-        null;  // REPLACE THIS LINE WITH THE RIGHT ANSWER.
+        new WeirdListEmpty(0, null);
 
     /** A new WeirdList whose head is HEAD and tail is TAIL. */
-    public WeirdList(int head, WeirdList tail) { /* FILL IN */ }
+    public WeirdList(int head, WeirdList tail) {
+        this._head = head;
+        this._tail = tail;
+    }
 
     /** Returns the number of elements in the sequence that
      *  starts with THIS. */
     public int length() {
-        return 0;  // REPLACE THIS LINE WITH THE RIGHT ANSWER.
+        return 1 + _tail.length();
     }
 
     /** Return a string containing my contents as a sequence of numerals
@@ -20,13 +33,43 @@ public class WeirdList {
      *  5, 4, and 2, this returns " 5 4 2". */
     @Override
     public String toString() {
-        return ""; // REPLACE THIS LINE WITH THE RIGHT ANSWER.
+        return " " + _head + _tail.toString();
     }
 
     /** Part 3b: Apply FUNC.apply to every element of THIS WeirdList in
      *  sequence, and return a WeirdList of the resulting values. */
     public WeirdList map(IntUnaryFunction func) {
-        return null;  // REPLACE THIS LINE WITH THE RIGHT ANSWER.
+        return new WeirdList(func.apply(_head), _tail.map(func));
+    }
+
+    /**
+     * A nested class that deal with the case of empty WeirdList.
+     */
+    private static class WeirdListEmpty extends WeirdList {
+
+        /**
+         * Constructor that calls the constructor of the parent class.
+         * @param head The head of the Weirdlist.
+         * @param tail The tail of the WeirdList.
+         */
+        public WeirdListEmpty(int head, WeirdList tail) {
+            super(head, tail);
+        }
+
+        @Override
+        public int length() {
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return "";
+        }
+
+        @Override
+        public WeirdList map(IntUnaryFunction func) {
+            return this;
+        }
     }
 
     /*
