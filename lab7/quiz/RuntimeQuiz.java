@@ -99,22 +99,4 @@ public class RuntimeQuiz {
                     + f7(array, start + 1, end - 1);
         }
     }
-
-    /** Below, fill out the runtimes for the specified methods of your IntDList **/
-
-    /* insertFront(int d) */
-    public static Asymptotic insert_front_notation;
-    public static Runtime insert_front_runtime;
-
-    /* insertBack(Object o) */
-    public static Asymptotic insert_back_notation;
-    public static Runtime insert_back_runtime;
-
-    /* get(int position) */
-    public static Asymptotic get_notation;
-    public static Runtime get_runtime;
-
-    /* toString() */
-    public static Asymptotic to_string_notation;
-    public static Runtime to_string_runtime;
 }
