@@ -30,8 +30,8 @@ public class RuntimeQuiz {
         }
     }
 
-    public static Asymptotic f2_notation = Asymptotic.BIG_O;
-    public static Runtime f2_runtime = Runtime.EXPONENTIAL;
+    public static Asymptotic f2_notation = Asymptotic.BIG_THETA;
+    public static Runtime f2_runtime = Runtime.CUBIC;
     public int f2(int n) {
         if (n <= 1) return n;
         f1(new int[n]);
