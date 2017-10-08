@@ -203,14 +203,19 @@ class Table {
     Table select(List<String> columnNames, List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
+        String[] values = new String[columnNames.size()];
         for (int row = 0; row < _size; row += 1) {
-            if (Condition.test(conditions, row)) {
-                String [] values = new String[_rowSize];
+            for (int colselect = 0; colselect < columnNames.size();
+                 colselect += 1) {
                 for (int col = 0; col < _rowSize; col += 1) {
-                    values[col] = get(row, col);
+                    if (_titles[col] == columnNames.get(colselect)) {
+                        if (Condition.test(conditions, row)) {
+                            values[colselect] = get(row, col);
+                        }
+                    }
                 }
-                result.add(values);
             }
+            result.add(values);
         }
         return result;
     }
@@ -222,6 +227,9 @@ class Table {
                  List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
+        Table fromThis = select(columnNames, conditions);
+        Table fromTable2 = table2.select(columnNames, conditions);
+
         return result;
     }
 
