@@ -126,7 +126,12 @@ class Table {
      *  Column.getFrom(Integer...) for a description of how Columns
      *  extract values. */
     public boolean add(List<Column> columns, Integer... rows) {
-        return false;   // REPLACE WITH SOLUTION
+        //return false;   // REPLACE WITH SOLUTION
+        String [] values = new String[columns.size()];
+        for (int col = 0; col < columns.size(); col += 1) {
+            values[col] = get(rows[col], col);
+        }
+        return add(values);
     }
 
     /** Read the contents of the file NAME.db, and return as a Table.
