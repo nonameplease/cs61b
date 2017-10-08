@@ -227,8 +227,30 @@ class Table {
                  List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
+        String[] values = new String[columnNames.size()];
+        ArrayList<Integer> indexToAdd = new ArrayList<Integer>();
+        boolean equal = true;
         Table fromThis = select(columnNames, conditions);
         Table fromTable2 = table2.select(columnNames, conditions);
+        for (int row = 0; row < fromThis._size; row += 1) {
+            for (int row2 = 0; row2 < fromTable2._size; row2 += 1) {
+                for (int col = 0; col < columnNames.size(); col += 1) {
+                    if (fromThis.get(row, col) != fromTable2.get(row2, col)) {
+                        equal = false;
+                    }
+                }
+                if (equal == true) {
+                    indexToAdd.add(row);
+                }
+                equal = true;
+            }
+        }
+        for (int index = 0; index < indexToAdd.size(); index += 1) {
+            for (int col = 0; col < columnNames.size(); col += 1) {
+                values[col] = fromThis.get(index, col);
+            }
+            result.add(values);
+        }
 
         return result;
     }
