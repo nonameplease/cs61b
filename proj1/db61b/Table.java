@@ -149,6 +149,9 @@ class Table {
             }
             String[] columnNames = header.split(",");
             // FILL IN
+            if (columnNames == null) {
+                throw error("missing column names in DB file");
+            }
         } catch (FileNotFoundException e) {
             throw error("could not find %s.db", name);
         } catch (IOException e) {
@@ -188,6 +191,11 @@ class Table {
      *  and indented by two spaces. */
     void print() {
         // FILL IN
+        for (int row = 0; row < _size; row += 1) {
+            for (int col = 0; col < _rowSize; col += 1) {
+                System.out.print(get(row, col) + "  ");
+            }
+        }
     }
 
     /** Return a new Table whose columns are COLUMNNAMES, selected from
