@@ -1,5 +1,6 @@
 package db61b;
 
+import org.junit.Test;
 import ucb.junit.textui;
 
 /** The suite of all JUnit tests for the qirkat package.
@@ -11,6 +12,14 @@ public class UnitTest {
      *  the arguments of runClasses to run other JUnit tests. */
     public static void main(String[] ignored) {
         /* textui.runClasses(); */
+    }
+
+    public class TestTable {
+
+        @Test
+        public void testGetTitle() {
+
+        }
     }
 
 }

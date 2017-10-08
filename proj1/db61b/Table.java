@@ -40,7 +40,7 @@ class Table {
         }
 
         // FIXME
-        _titles = null;
+        _titles = columnTitles;
         _columns = null;
     }
 
@@ -58,6 +58,9 @@ class Table {
     /** Return the title of the Kth column.  Requires 0 <= K < columns(). */
     public String getTitle(int k) {
         //return null;  // REPLACE WITH SOLUTION
+        if (k < 0 || k >= columns()) {
+            throw error("column number is out of range of this table");
+        }
         return _titles[k];
     }
 
@@ -66,7 +69,7 @@ class Table {
     public int findColumn(String title) {
         //return -1;  // REPLACE WITH SOLUTION
         int numTitle = -1;
-        for (int i = 0; i < _rowSize; i+=1) {
+        for (int i = 0; i < columns(); i+=1) {
             if (title == _titles[i]) {
                 numTitle = i;
             }
@@ -99,7 +102,7 @@ class Table {
         if (values.length != _rowSize) {
             throw error("invalid number of column arguments");
         }
-        boolean duplicated = true;
+        /*boolean duplicated = true;
         for (int row = 0; row < _size; row += 1) {
             for (int col = 0; col < _rowSize; col += 1) {
                 if (values[col] == get(row, col)) {
@@ -117,6 +120,19 @@ class Table {
             return true;
         } else {
             return false;
+        }*/
+
+        if (_size == 0) {
+            for (int col = 0; col < _rowSize; col += 1) {
+                _columns[col].add(values[col]);
+                return true;
+            }
+        } else {
+            for (int col = 0; col < _rowSize; col += 1) {
+                for (int row = 0; row < _size; row += 1) {
+
+                }
+            }
         }
     }
 
@@ -278,7 +294,13 @@ class Table {
      *  into those tables. */
     private static boolean equijoin(List<Column> common1, List<Column> common2,
                                     int row1, int row2) {
-        return true; // REPLACE WITH SOLUTION
+        //return true; // REPLACE WITH SOLUTION
+        for (int col = 0; col < common1.size(); col += 1) {
+            if (common1.get(col).getFrom(row1) != common2.get(col).getFrom(row2)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** A class that is essentially ArrayList<String>.  For technical reasons,
