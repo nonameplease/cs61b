@@ -203,6 +203,15 @@ class Table {
     Table select(List<String> columnNames, List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
+        for (int row = 0; row < _size; row += 1) {
+            if (Condition.test(conditions, row)) {
+                String [] values = new String[_rowSize];
+                for (int col = 0; col < _rowSize; col += 1) {
+                    values[col] = get(row, col);
+                }
+                result.add(values);
+            }
+        }
         return result;
     }
 
