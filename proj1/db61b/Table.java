@@ -51,30 +51,41 @@ class Table {
 
     /** Return the number of columns in this table. */
     public int columns() {
-        return 0;  // REPLACE WITH SOLUTION
+        //return 0;  // REPLACE WITH SOLUTION
+        return _rowSize;
     }
 
     /** Return the title of the Kth column.  Requires 0 <= K < columns(). */
     public String getTitle(int k) {
-        return null;  // REPLACE WITH SOLUTION
+        //return null;  // REPLACE WITH SOLUTION
+        return _titles[k];
     }
 
     /** Return the number of the column whose title is TITLE, or -1 if
      *  there isn't one. */
     public int findColumn(String title) {
-        return -1;  // REPLACE WITH SOLUTION
+        //return -1;  // REPLACE WITH SOLUTION
+        int numTitle = -1;
+        for (int i = 0; i < _rowSize; i+=1) {
+            if (title == _titles[i]) {
+                numTitle = i;
+            }
+        }
+        return numTitle;
     }
 
     /** Return the number of rows in this table. */
     public int size() {
-        return 0;  // REPLACE WITH SOLUTION
+        //return 0;  // REPLACE WITH SOLUTION
+        return _size;
     }
 
     /** Return the value of column number COL (0 <= COL < columns())
      *  of record number ROW (0 <= ROW < size()). */
     public String get(int row, int col) {
         try {
-            return null; // REPLACE WITH SOLUTION
+            //return null; // REPLACE WITH SOLUTION
+            return _columns[col].get(row);
         } catch (IndexOutOfBoundsException excp) {
             throw error("invalid row or column");
         }
@@ -84,7 +95,29 @@ class Table {
      *  row already exists.  Return true if anything was added,
      *  false otherwise. */
     public boolean add(String[] values) {
-        return false;   // REPLACE WITH SOLUTION
+        //return false;   // REPLACE WITH SOLUTION
+        if (values.length != _rowSize) {
+            throw error("invalid number of column arguments");
+        }
+        boolean duplicated = true;
+        for (int row = 0; row < _size; row += 1) {
+            for (int col = 0; col < _rowSize; col += 1) {
+                if (values[col] == get(row, col)) {
+                    duplicated = true;
+                } else {
+                    duplicated = false;
+                    continue;
+                }
+            }
+        }
+        if (duplicated == false) {
+            for (int col = 0; col < _rowSize; col += 1) {
+                _columns[col].add(values[col]);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /** Add a new row whose column values are extracted by COLUMNS from
