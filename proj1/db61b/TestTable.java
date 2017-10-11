@@ -110,6 +110,30 @@ public class TestTable {
 
     @Test
     public void testWriteTable() {
+        Table tableblank = Table.readTable("testing/blank");
+        tableblank.writeTable("blanktest");
+        Table blank = Table.readTable("blanktest");
+        assertEquals(tableblank.getTitle(0), blank.getTitle(0));
+        assertEquals(tableblank.getTitle(2), blank.getTitle(2));
+        Table enrolled = Table.readTable("testing/enrolled");
+        enrolled.writeTable("enrolledtest");
+        Table enrolledTest = Table.readTable("enrolledtest");
+        assertEquals(enrolled.getTitle(2), enrolledTest.getTitle(2));
+        assertEquals(enrolled.get(10, 1), enrolledTest.get(10, 1));
+    }
+
+    @Test
+    public void testPrint() {
+        Table table2 = Table.readTable("testing/enrolled");
+        System.out.println("testPrint");
+        table2.print();
+    }
+
+    @Test
+    public void testSelect() {
+        Table table2 = Table.readTable("testing/enrolled");
+        Column col1 = new Column("SID", table2);
+        Column col2 = new Column("Grade", table2);
         
     }
 
