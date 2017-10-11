@@ -110,7 +110,7 @@ public class TestTable {
 
     @Test
     public void testWriteTable() {
-        
+
     }
 
 }
