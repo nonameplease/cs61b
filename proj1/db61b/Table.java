@@ -102,7 +102,7 @@ class Table {
      *  false otherwise. */
     public boolean add(String[] values) {
         //return false;   // REPLACE WITH SOLUTION
-        if (values.length != _rowSize) {
+        /*if (values.length != _rowSize) {
             throw error("invalid number of column arguments");
         }
         if (_size == 0) {
@@ -114,18 +114,18 @@ class Table {
             return true;
         } else {
             int index = 0;
+            int counter = 0;
             OUTER: for (int col = 0; col < _rowSize; col += 1) {
                 for (int row = 0; row < _size; row += 1) {
                     if (get(row, col).compareTo(values[col]) < 0) {
                         index = row + 1;
                         break OUTER;
                     } else if (get(row,col).compareTo(values[col]) == 0) {
-                        index = -1;
-                        break OUTER;
+                        counter += 1;
                     }
                 }
             }
-            if (index != -1) {
+            if (index != 0 || counter < _rowSize) {
                 _size += 1;
                 for (int col = 0; col < _rowSize; col += 1) {
                     _columns[col].add(values[col]);
@@ -140,6 +140,50 @@ class Table {
             } else {
                 return false;
             }
+        }*/
+
+        boolean duplicate = false;
+        boolean smaller = true;
+        int index = 0;
+        for (int row = 0; row < _size; row += 1) {
+            int numOfDuplicates = 0;
+            for (int col = 0; col < _rowSize; col += 1) {
+                if (get(row, col).compareTo(values[col]) == 0) {
+                    numOfDuplicates += 1;
+                }
+            }
+            if (numOfDuplicates == _rowSize) {
+                duplicate = true;
+            } else {
+                numOfDuplicates = 0;
+            }
+        }
+        for (int row = 0; row < _size; row += 1) {
+            for (int col = 0; col < _rowSize; col += 1) {
+                if (values[col].compareTo(get(row, col)) > 0 && !duplicate) {
+                    smaller = false;
+                }
+            }
+            if (smaller == true) {
+                break;
+            } else {
+                index += 1;
+            }
+        }
+        if (duplicate) {
+            return false;
+        } else {
+            _size += 1;
+            for (int col = 0; col < _rowSize; col += 1) {
+                _columns[col].add(values[col]);
+            }
+            for (int i = 0; i < _index.size(); i += 1) {
+                if (_index.get(i) >= index) {
+                    _index.set(i, _index.get(i) + 1);
+                }
+            }
+            _index.add(_index.size(), index);
+            return true;
         }
     }
 
@@ -152,9 +196,10 @@ class Table {
         //return false;   // REPLACE WITH SOLUTION
         String [] values = new String[columns.size()];
         for (int col = 0; col < columns.size(); col += 1) {
-            values[col] = get(rows[col], col);
+            values[col] = columns.get(col).getFrom(rows[col]);
         }
-        return add(values);
+        boolean state = add(values);
+        return state;
     }
 
     /** Read the contents of the file NAME.db, and return as a Table.

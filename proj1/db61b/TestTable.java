@@ -2,6 +2,10 @@ package db61b;
 
 import com.sun.source.tree.AssertTree;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class TestTable {
@@ -71,11 +75,27 @@ public class TestTable {
         } catch (DBException e) {
             assertTrue(true);
         }
+        assertEquals("C", table.get(2, 2));
     }
 
     @Test
     public void testAdd2() {
-
+        table.add(row1);
+        table.add(row2);
+        table.add(row3);
+        Column first = new Column("First", table);
+        Column second = new Column("Second", table);
+        Column third = new Column("Third", table);
+        List<Column> columns = new ArrayList<Column>();
+        columns.add(first);
+        columns.add(second);
+        columns.add(third);
+        table.add(columns, 0, 1, 2);
+        assertEquals("a", table.get(3, 0));
+        assertEquals("e", table.get(3, 1));
+        assertEquals("C", table.get(3, 2));
+        String[] aeC = {"a", "e", "C"};
+        assertEquals(false, table.add(aeC));
     }
 
 }
