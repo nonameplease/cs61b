@@ -9,9 +9,7 @@
 package db61b;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.PrintStream;
+import java.io.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -172,6 +170,7 @@ class CommandInterpreter {
         Table table = tableDefinition();
         // FILL IN CODE TO EXECUTE THE STATEMENT
         //put into database
+        _database.put(name, table);
         _input.next(";");
     }
 
@@ -249,7 +248,30 @@ class CommandInterpreter {
         _input.next("store");
         String name = _input.peek();
         Table table = tableName();
-        // FILL THIS IN
+        FileWriter stream = null;
+        try {
+            stream = new FileWriter(name + ".db");
+        } catch (IOException e) {
+
+        }
+        PrintWriter output = new PrintWriter(stream);
+        ArrayList[] content = new ArrayList[table.size() + 1];
+        for (int col = 0; col < table.columns(); col += 1) {
+            content[0].add(table.getTitle(col));
+            content[0].add(",");
+        }
+        for (int row = 0; row < table.size(); row += 1) {
+            for (int col = 0; col < table.columns(); col += 1) {
+                content[row + 1].add(table.get(row, col));
+                content[row + 1].add(",");
+            }
+        }
+        for (int row = 0; row < table.size() + 1; row += 1) {
+            content[row].remove(content[row].size() - 1);
+        }
+        for (int row = 0; row < table.size() + 1; row += 1) {
+            output.print(content[row].toString());
+        }
         System.out.printf("Stored %s.db%n", name);
         _input.next(";");
     }
@@ -285,9 +307,11 @@ class CommandInterpreter {
             }
             String[] columnTitles = title.toArray(new String[title.size()]);
             table = new Table(columnTitles);
+            _input.next(")");
         } else {
             // REPLACE WITH SOLUTION
-            table = null;
+            _input.next("as");
+            table = selectClause();
         }
         return table;
     }
@@ -295,7 +319,8 @@ class CommandInterpreter {
     /** Parse and execute a select clause from the token stream, returning the
      *  resulting table. */
     Table selectClause() {
-        return null;         // REPLACE WITH SOLUTION
+        //return null;         // REPLACE WITH SOLUTION
+
 
     }
 
