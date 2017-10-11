@@ -320,7 +320,21 @@ class CommandInterpreter {
      *  resulting table. */
     Table selectClause() {
         //return null;         // REPLACE WITH SOLUTION
-
+        _input.next("select");
+        ArrayList<String> title = new ArrayList<String>();
+        title.add(columnName());
+        while (_input.nextIf(",")) {
+            title.add(columnName());
+        }
+        _input.next("from");
+        Table table = tableName();
+        if (_input.nextIf(",")) {
+            Table table2 = tableName();
+            return table.select(table2, title, conditionClause(table, table2));
+        } else {
+            conditionClause(table);
+            return table.select(title, conditionClause(table));
+        }
 
     }
 
@@ -358,13 +372,27 @@ class CommandInterpreter {
      *  token stream.  This denotes the conjunction (`and') of zero
      *  or more Conditions. */
     ArrayList<Condition> conditionClause(Table... tables) {
-        return null;        // REPLACE WITH SOLUTION
+        //return null;        // REPLACE WITH SOLUTION
+        ArrayList<Condition> conditions = new ArrayList<Condition>();
+        conditions.add(condition(tables));
+        while (_input.nextIf("|")) {
+            conditions.add(condition(tables));
+        }
+        return conditions;
     }
 
     /** Parse and return a Condition that applies to TABLES from the
      *  token stream. */
     Condition condition(Table... tables) {
-        return null;        // REPLACE WITH SOLUTION
+        //return null;        // REPLACE WITH SOLUTION
+        String col1 = columnName();
+        String relation = _input.next(Tokenizer.RELATION);
+        String col2 = _input.peek();
+        if (_input.nextIf(columnName())) {
+            return new Condition(new Column(col1, tables), relation, new Column(col2, tables));
+        } else {
+            return new Condition(new Column(col1, tables), relation, col2);
+        }
     }
 
     /** Advance the input past the next semicolon. */

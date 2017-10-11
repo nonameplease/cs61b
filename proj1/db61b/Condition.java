@@ -18,6 +18,10 @@ class Condition {
      *  strings "<", ">", "<=", ">=", "=", or "!=". */
     Condition(Column col1, String relation, Column col2) {
         // YOUR CODE HERE
+        _col1 = col1;
+        _relation = relation;
+        _col2 = col2;
+        _val2 = null;
     }
 
     /** A Condition representing COL1 RELATION 'VAL2', where COL1 is
@@ -35,7 +39,46 @@ class Condition {
      *  performing the test I denote. */
     boolean test(Integer... rows) {
         // REPLACE WITH SOLUTION
-        return false;
+        //return false;
+        int result;
+        if (_col2 != null) {
+            result = _col1.getFrom(rows).compareTo(_col2.getFrom(rows));
+        } else {
+            result = _col1.getFrom(rows).compareTo(_val2);
+        }
+        switch (_relation) {
+            case "<":
+                if (result < 0) {
+                    return true;
+                }
+                return false;
+            case ">":
+                if (result > 0) {
+                    return true;
+                }
+                return false;
+            case "<=":
+                if (result <= 0) {
+                    return true;
+                }
+                return false;
+            case ">=":
+                if (result >= 0) {
+                    return true;
+                }
+                return false;
+            case "=":
+                if (result == 0) {
+                    return true;
+                }
+                return false;
+            case "!=":
+                if (result != 0) {
+                    return true;
+                }
+                return false;
+        }
+        return true;
     }
 
     /** Return true iff ROWS satisfies all CONDITIONS. */
@@ -54,4 +97,5 @@ class Condition {
     /** Second operand, if literal (otherwise null). */
     private String _val2;
     // ADD ADDITIONAL FIELDS HERE
+    private String _relation;
 }
