@@ -167,6 +167,7 @@ class CommandInterpreter {
         String name = name();
         Table table = tableDefinition();
         // FILL IN CODE TO EXECUTE THE STATEMENT
+        //put into database
         _input.next(";");
     }
 
@@ -192,7 +193,12 @@ class CommandInterpreter {
         while (true) {
             int k;
             _input.next("(");
-            // FILL THIS IN
+            values[0] = literal();
+            k = 1;
+            while (_input.nextIf(",")) {
+                values[k] = literal();
+                k += 1;
+            }
             _input.next(")");
             table.add(values);
             if (!_input.nextIf(",")) {
@@ -219,7 +225,11 @@ class CommandInterpreter {
 
     /** Parse and execute a print statement from the token stream. */
     void printStatement() {
-        // FILL THIS IN
+        _input.next("print");
+        Table table = tableName();
+        //table.column() -> # of columns
+        //table.size() -> # of rows
+        table.print();
     }
 
     /** Parse and execute a select statement from the token stream. */
@@ -236,7 +246,13 @@ class CommandInterpreter {
         Table table;
         if (_input.nextIf("(")) {
             // REPLACE WITH SOLUTION
-            table = null;
+            ArrayList<String> title = new ArrayList<String>();
+            title.add(columnName());
+            while (_input.nextIf(",")) {
+                title.add(columnName());
+            }
+            String[] columnTitles = title.toArray(new String[title.size()]);
+            table = new Table(columnTitles);
         } else {
             // REPLACE WITH SOLUTION
             table = null;

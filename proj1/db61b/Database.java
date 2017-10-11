@@ -8,19 +8,25 @@
 package db61b;
 
 // FILL IN (WITH IMPORTS)?
+import java.util.HashMap;
+
 
 /** A collection of Tables, indexed by name.
  *  @author */
 class Database {
     /** An empty database. */
     public Database() {
-        // FILL IN
+        dataBase = new HashMap<String, Table>();
     }
 
     /** Return the Table whose name is NAME stored in this database, or null
      *  if there is no such table. */
     public Table get(String name) {
-        return null;             // REPLACE WITH SOLUTION
+        //return null;             // REPLACE WITH SOLUTION
+        if (dataBase.containsKey(name)) {
+            return dataBase.get(name);
+        }
+        return null;
     }
 
     /** Set or replace the table named NAME in THIS to TABLE.  TABLE and
@@ -29,8 +35,12 @@ class Database {
         if (name == null || table == null) {
             throw new IllegalArgumentException("null argument");
         }
-        // FILL IN
+        if (dataBase.containsKey(name)) {
+            dataBase.remove(name);
+        }
+        dataBase.put(name, table);
     }
 
-    // FILL IN?
+    HashMap<String, Table> dataBase;
+
 }

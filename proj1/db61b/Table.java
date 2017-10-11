@@ -41,7 +41,7 @@ class Table {
 
         // FIXME
         _titles = columnTitles;
-        _columns = null;
+        _columns = new ValueList[columnTitles.length];
     }
 
     /** A new Table whose columns are give by COLUMNTITLES. */
@@ -128,12 +128,26 @@ class Table {
                 return true;
             }
         } else {
-            for (int col = 0; col < _rowSize; col += 1) {
+            int index = 0;
+            OUTER: for (int col = 0; col < _rowSize; col += 1) {
                 for (int row = 0; row < _size; row += 1) {
-
+                    if (get(row, col).compareTo(values[col]) < 0) {
+                        index = row + 1;
+                        break OUTER;
+                    }
                 }
             }
+            if (index != 0) {
+                for (int col = 0; col < _rowSize; col += 1) {
+                    _columns[col].add(values[col]);
+                }
+                _index.add(index);
+                return true;
+            } else {
+                return false;
+            }
         }
+        return false;
     }
 
     /** Add a new row whose column values are extracted by COLUMNS from
