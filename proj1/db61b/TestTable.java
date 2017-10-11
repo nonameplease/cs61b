@@ -134,7 +134,13 @@ public class TestTable {
         Table table2 = Table.readTable("testing/enrolled");
         Column col1 = new Column("SID", table2);
         Column col2 = new Column("Grade", table2);
-        
+        Condition gradeA = new Condition(col2, "=", "A");
+        List<String> columnName = new ArrayList<String>();
+        columnName.add("Grade");
+        List<Condition> conditions = new ArrayList<Condition>();
+        conditions.add(gradeA);
+        Table selectResult = table2.select(columnName, conditions);
+        selectResult.print();
     }
 
 }
