@@ -8,9 +8,13 @@
 // solutions.
 package db61b;
 
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintStream;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import static db61b.Utils.*;
@@ -211,6 +215,33 @@ class CommandInterpreter {
     /** Parse and execute a load statement from the token stream. */
     void loadStatement() {
         // FILL THIS IN
+        _input.next("load");
+        String name = name();
+        /*FileReader file = null;
+        try {
+            file = new FileReader(name + ".db");
+        } catch (FileNotFoundException e) {
+            throw error("Table not found");
+        }
+        ArrayList allData = new ArrayList();
+        file.read(allData);*/
+        Scanner allData = new Scanner(name + "db");
+        //ArrayList<String> titles = new ArrayList<String>();
+        //titles.add(allData.next());
+        String titles = allData.next();
+        HashSet rows = new HashSet();
+        while (allData.hasNext()) {
+            rows.add(allData.next());
+        }
+        String[] columnTitles = titles.split(",");
+        Table table = new Table(columnTitles);
+        Object[] rowValues = rows.toArray();
+        for (int row = 0; row < rows.size(); row += 1) {
+            String[] values = rowValues[row].toString().split(",");
+            table.add(values);
+        }
+        _database.put(name, table);
+
     }
 
     /** Parse and execute a store statement from the token stream. */
@@ -230,6 +261,7 @@ class CommandInterpreter {
         //table.column() -> # of columns
         //table.size() -> # of rows
         table.print();
+        _input.next(";");
     }
 
     /** Parse and execute a select statement from the token stream. */
