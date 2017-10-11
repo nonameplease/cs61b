@@ -74,7 +74,7 @@ class Table {
         //return -1;  // REPLACE WITH SOLUTION
         int numTitle = -1;
         for (int i = 0; i < columns(); i+=1) {
-            if (title == _titles[i]) {
+            if (title.compareTo(_titles[i]) == 0) {
                 numTitle = i;
             }
         }
@@ -317,7 +317,7 @@ class Table {
             for (int colselect = 0; colselect < columnNames.size();
                  colselect += 1) {
                 for (int col = 0; col < _rowSize; col += 1) {
-                    if (_titles[col] == columnNames.get(colselect)) {
+                    if (_titles[col].compareTo(columnNames.get(colselect)) == 0) {
                         if (Condition.test(conditions, row)) {
                             values[colselect] = get(row, col);
                         }
