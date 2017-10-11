@@ -98,4 +98,19 @@ public class TestTable {
         assertEquals(false, table.add(aeC));
     }
 
+    @Test
+    public void testReadTable() {
+        Table table2 = Table.readTable("testing/blank");
+        assertEquals("First", table2.getTitle(0));
+        assertEquals("Third", table2.getTitle(2));
+        Table table3 = Table.readTable("testing/enrolled");
+        assertEquals("SID", table3.getTitle(0));
+        assertEquals("A", table3.get(4, 2));
+    }
+
+    @Test
+    public void testWriteTable() {
+        
+    }
+
 }

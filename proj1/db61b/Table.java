@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static db61b.Utils.*;
@@ -217,6 +218,18 @@ class Table {
             }
             String[] columnNames = header.split(",");
             // FILL IN
+            table = new Table(columnNames);
+            HashSet rows = new HashSet();
+            String nextLine = input.readLine();
+            while (nextLine != null) {
+                rows.add(nextLine);
+                nextLine = input.readLine();
+            }
+            Object[] rowsValue = rows.toArray();
+            for (int row = 0; row < rows.size(); row += 1) {
+                String[] values = rowsValue[row].toString().split(",");
+                table.add(values);
+            }
             if (columnNames == null) {
                 throw error("missing column names in DB file");
             }
