@@ -74,7 +74,7 @@ class Table {
         //return -1;  // REPLACE WITH SOLUTION
         int numTitle = -1;
         for (int i = 0; i < columns(); i+=1) {
-            if (title == _titles[i]) {
+            if (title.compareTo(_titles[i]) == 0) {
                 numTitle = i;
             }
         }
@@ -219,7 +219,7 @@ class Table {
             String[] columnNames = header.split(",");
             // FILL IN
             table = new Table(columnNames);
-            HashSet rows = new HashSet();
+            ArrayList<String> rows = new ArrayList<String>();
             String nextLine = input.readLine();
             while (nextLine != null) {
                 rows.add(nextLine);
@@ -260,21 +260,31 @@ class Table {
             output = new PrintStream(name + ".db");
             // FILL THIS IN
             ArrayList[] content = new ArrayList[size() + 1];
+            for (int i = 0; i < content.length; i += 1) {
+                content[i] = new ArrayList();
+            }
             for (int col = 0; col < columns(); col += 1) {
                 content[0].add(getTitle(col));
-                content[0].add(",");
+                //content[0].add(",");
             }
             for (int row = 0; row < size(); row += 1) {
                 for (int col = 0; col < columns(); col += 1) {
                     content[row + 1].add(get(row, col));
-                    content[row + 1].add(",");
+                    //content[row + 1].add(",");
                 }
             }
             for (int row = 0; row < size() + 1; row += 1) {
-                content[row].remove(content[row].size() - 1);
+                //content[row].remove(content[row].size() - 1);
             }
             for (int row = 0; row < size() + 1; row += 1) {
-                output.print(content[row].toString());
+                //String print = content[row].toString();
+                //output.print(print);
+                for (int col = 0; col < content[row].size() - 1; col += 1) {
+                    output.print(content[row].get(col));
+                    output.print(",");
+                }
+                output.print(content[row].get(content[row].size() - 1));
+                output.println();
             }
         } catch (IOException e) {
             throw error("trouble writing to %s.db", name);
@@ -291,8 +301,9 @@ class Table {
         // FILL IN
         for (int row = 0; row < _size; row += 1) {
             for (int col = 0; col < _rowSize; col += 1) {
-                System.out.print(get(row, col) + "  ");
+                System.out.print(" " + get(row, col) + "  ");
             }
+            System.out.println();
         }
     }
 
@@ -301,14 +312,17 @@ class Table {
     Table select(List<String> columnNames, List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
-        String[] values = new String[columnNames.size()];
+        ArrayList<String> values = new ArrayList<String>();
+        for (int col = 0; col < columnNames.size(); col += 1) {
+            values = new ArrayList<>();
+        }
         for (int row = 0; row < _size; row += 1) {
             for (int colselect = 0; colselect < columnNames.size();
                  colselect += 1) {
                 for (int col = 0; col < _rowSize; col += 1) {
-                    if (_titles[col] == columnNames.get(colselect)) {
+                    if (_titles[col].compareTo(columnNames.get(colselect)) == 0) {
                         if (Condition.test(conditions, row)) {
-                            values[colselect] = get(row, col);
+                            values.get(colselect)
                         }
                     }
                 }
