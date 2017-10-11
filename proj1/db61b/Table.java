@@ -41,7 +41,10 @@ class Table {
 
         // FIXME
         _titles = columnTitles;
-        _columns = new ValueList[columnTitles.length];
+        _columns = new ValueList[_rowSize];
+        for (int col = 0; col < _rowSize; col += 1) {
+            _columns[col] = new ValueList();
+        }
     }
 
     /** A new Table whose columns are give by COLUMNTITLES. */
@@ -79,7 +82,7 @@ class Table {
 
     /** Return the number of rows in this table. */
     public int size() {
-        //return 0;  // REPLACE WITH SOLUTION
+        // REPLACE WITH SOLUTION
         return _size;
     }
 
@@ -102,31 +105,13 @@ class Table {
         if (values.length != _rowSize) {
             throw error("invalid number of column arguments");
         }
-        /*boolean duplicated = true;
-        for (int row = 0; row < _size; row += 1) {
-            for (int col = 0; col < _rowSize; col += 1) {
-                if (values[col] == get(row, col)) {
-                    duplicated = true;
-                } else {
-                    duplicated = false;
-                    continue;
-                }
-            }
-        }
-        if (duplicated == false) {
-            for (int col = 0; col < _rowSize; col += 1) {
-                _columns[col].add(values[col]);
-            }
-            return true;
-        } else {
-            return false;
-        }*/
-
         if (_size == 0) {
             for (int col = 0; col < _rowSize; col += 1) {
                 _columns[col].add(values[col]);
-                return true;
             }
+            _index.add(0, 0);
+            _size += 1;
+            return true;
         } else {
             int index = 0;
             OUTER: for (int col = 0; col < _rowSize; col += 1) {
@@ -134,20 +119,28 @@ class Table {
                     if (get(row, col).compareTo(values[col]) < 0) {
                         index = row + 1;
                         break OUTER;
+                    } else if (get(row,col).compareTo(values[col]) == 0) {
+                        index = -1;
+                        break OUTER;
                     }
                 }
             }
-            if (index != 0) {
+            if (index != -1) {
+                _size += 1;
                 for (int col = 0; col < _rowSize; col += 1) {
                     _columns[col].add(values[col]);
                 }
-                _index.add(index);
+                for (int i = 0; i < _index.size(); i += 1) {
+                    if (_index.get(i) >= index) {
+                        _index.set(i, _index.get(i) + 1);
+                    }
+                }
+                _index.add(_index.size(), index);
                 return true;
             } else {
                 return false;
             }
         }
-        return false;
     }
 
     /** Add a new row whose column values are extracted by COLUMNS from
@@ -208,6 +201,23 @@ class Table {
             sep = "";
             output = new PrintStream(name + ".db");
             // FILL THIS IN
+            ArrayList[] content = new ArrayList[size() + 1];
+            for (int col = 0; col < columns(); col += 1) {
+                content[0].add(getTitle(col));
+                content[0].add(",");
+            }
+            for (int row = 0; row < size(); row += 1) {
+                for (int col = 0; col < columns(); col += 1) {
+                    content[row + 1].add(get(row, col));
+                    content[row + 1].add(",");
+                }
+            }
+            for (int row = 0; row < size() + 1; row += 1) {
+                content[row].remove(content[row].size() - 1);
+            }
+            for (int row = 0; row < size() + 1; row += 1) {
+                output.print(content[row].toString());
+            }
         } catch (IOException e) {
             throw error("trouble writing to %s.db", name);
         } finally {

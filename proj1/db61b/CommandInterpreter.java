@@ -216,17 +216,7 @@ class CommandInterpreter {
         // FILL THIS IN
         _input.next("load");
         String name = name();
-        /*FileReader file = null;
-        try {
-            file = new FileReader(name + ".db");
-        } catch (FileNotFoundException e) {
-            throw error("Table not found");
-        }
-        ArrayList allData = new ArrayList();
-        file.read(allData);*/
-        Scanner allData = new Scanner(name + "db");
-        //ArrayList<String> titles = new ArrayList<String>();
-        //titles.add(allData.next());
+        /*Scanner allData = new Scanner(name + "db");
         String titles = allData.next();
         HashSet rows = new HashSet();
         while (allData.hasNext()) {
@@ -238,7 +228,8 @@ class CommandInterpreter {
         for (int row = 0; row < rows.size(); row += 1) {
             String[] values = rowValues[row].toString().split(",");
             table.add(values);
-        }
+        }*/
+        Table table = Table.readTable(name);
         _database.put(name, table);
 
     }
@@ -248,7 +239,7 @@ class CommandInterpreter {
         _input.next("store");
         String name = _input.peek();
         Table table = tableName();
-        FileWriter stream = null;
+        /*FileWriter stream = null;
         try {
             stream = new FileWriter(name + ".db");
         } catch (IOException e) {
@@ -271,7 +262,8 @@ class CommandInterpreter {
         }
         for (int row = 0; row < table.size() + 1; row += 1) {
             output.print(content[row].toString());
-        }
+        }*/
+        table.writeTable(name);
         System.out.printf("Stored %s.db%n", name);
         _input.next(";");
     }
