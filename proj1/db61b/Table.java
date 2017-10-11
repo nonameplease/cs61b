@@ -312,14 +312,17 @@ class Table {
     Table select(List<String> columnNames, List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
-        String[] values = new String[columnNames.size()];
+        ArrayList<String> values = new ArrayList<String>();
+        for (int col = 0; col < columnNames.size(); col += 1) {
+            values = new ArrayList<>();
+        }
         for (int row = 0; row < _size; row += 1) {
             for (int colselect = 0; colselect < columnNames.size();
                  colselect += 1) {
                 for (int col = 0; col < _rowSize; col += 1) {
                     if (_titles[col].compareTo(columnNames.get(colselect)) == 0) {
                         if (Condition.test(conditions, row)) {
-                            values[colselect] = get(row, col);
+                            values.get(colselect)
                         }
                     }
                 }

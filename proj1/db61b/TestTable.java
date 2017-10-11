@@ -139,8 +139,8 @@ public class TestTable {
         columnName.add("Grade");
         List<Condition> conditions = new ArrayList<Condition>();
         conditions.add(gradeA);
-        Table selectResult = table2.select(columnName, conditions);
-        selectResult.print();
+        //Table selectResult = table2.select(columnName, conditions);
+        //selectResult.print();
     }
 
 }
