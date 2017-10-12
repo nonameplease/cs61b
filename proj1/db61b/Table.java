@@ -265,20 +265,16 @@ class Table {
             }
             for (int col = 0; col < columns(); col += 1) {
                 content[0].add(getTitle(col));
-                //content[0].add(",");
             }
             for (int row = 0; row < size(); row += 1) {
                 for (int col = 0; col < columns(); col += 1) {
                     content[row + 1].add(get(row, col));
-                    //content[row + 1].add(",");
                 }
             }
             for (int row = 0; row < size() + 1; row += 1) {
                 //content[row].remove(content[row].size() - 1);
             }
             for (int row = 0; row < size() + 1; row += 1) {
-                //String print = content[row].toString();
-                //output.print(print);
                 for (int col = 0; col < content[row].size() - 1; col += 1) {
                     output.print(content[row].get(col));
                     output.print(",");
@@ -313,21 +309,24 @@ class Table {
         Table result = new Table(columnNames);
         // FILL IN
         ArrayList<String> values = new ArrayList<String>();
-        for (int col = 0; col < columnNames.size(); col += 1) {
-            values = new ArrayList<>();
-        }
         for (int row = 0; row < _size; row += 1) {
-            for (int colselect = 0; colselect < columnNames.size();
-                 colselect += 1) {
+            for (int colselect = 0; colselect < columnNames.size(); colselect += 1) {
                 for (int col = 0; col < _rowSize; col += 1) {
                     if (_titles[col].compareTo(columnNames.get(colselect)) == 0) {
                         if (Condition.test(conditions, row)) {
-                            values.get(colselect)
+                            values.add(get(row,col));
                         }
                     }
                 }
             }
-            result.add(values);
+            if (values.size() == columnNames.size()) {
+                String[] valueString = new String[columnNames.size()];
+                for (int i = 0; i < columnNames.size(); i += 1) {
+                    valueString[i] = values.get(i);
+                }
+                result.add(valueString);
+            }
+            values.clear();
         }
         return result;
     }
@@ -339,7 +338,7 @@ class Table {
                  List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
-        String[] values = new String[columnNames.size()];
+        /*String[] values = new String[columnNames.size()];
         ArrayList<Integer> indexToAdd = new ArrayList<Integer>();
         boolean equal = true;
         Table fromThis = select(columnNames, conditions);
@@ -362,7 +361,8 @@ class Table {
                 values[col] = fromThis.get(index, col);
             }
             result.add(values);
-        }
+        }*/
+        
 
         return result;
     }

@@ -137,10 +137,34 @@ public class TestTable {
         Condition gradeA = new Condition(col2, "=", "A");
         List<String> columnName = new ArrayList<String>();
         columnName.add("Grade");
+        columnName.add("SID");
+        columnName.add("CCN");
         List<Condition> conditions = new ArrayList<Condition>();
         conditions.add(gradeA);
-        //Table selectResult = table2.select(columnName, conditions);
-        //selectResult.print();
+        Table selectResult = table2.select(columnName, conditions);
+        selectResult.print();
+        Condition SID = new Condition(col1, "<", col2);
+        List<Condition> conditions2 = new ArrayList<Condition>();
+        conditions2.add(SID);
+        Table selectResult2 = table2.select(columnName, conditions2);
+        System.out.println();
+        selectResult2.print();
+    }
+
+    @Test
+    public void testSelect2() {
+        Table table2 = Table.readTable("testing/enrolled");
+        Table table3 = Table.readTable("testing/students");
+        Column col = new Column("Grade", table2);
+        Condition gradeA = new Condition(col, "=", "A");
+        List<String> columnName = new ArrayList<String>();
+        //columnName.add("Grade");
+        columnName.add("SID");
+        //columnName.add("CCN");
+        List<Condition> conditions = new ArrayList<Condition>();
+        conditions.add(gradeA);
+        Table selectResult = table2.select(table3, columnName, conditions);
+        selectResult.print();
     }
 
 }
