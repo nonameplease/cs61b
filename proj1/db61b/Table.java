@@ -362,7 +362,47 @@ class Table {
             }
             result.add(values);
         }*/
-        
+        List<String> columnName1 = new ArrayList<String>();
+        List<String> columnName2 = new ArrayList<String>();
+        for (int i = 0; i < columnNames.size(); i += 1) {
+            for (int col = 0; col < columns(); col += 1) {
+                if (getTitle(col).compareTo(columnNames.get(i)) == 0) {
+                    columnName1.add(getTitle(col));
+                }
+            }
+            for (int col = 0; col < table2.columns(); col += 1) {
+                if (table2.getTitle(col).compareTo(columnNames.get(i)) == 0) {
+                    columnName2.add(table2.getTitle(col));
+                }
+            }
+        }
+        List<String> columnEquals = new ArrayList<String>();
+        for (int col1 = 0; col1 < columns(); col1 += 1) {
+            for (int col2 = 0; col2 < table2.columns(); col2 += 1) {
+                if (table2.getTitle(col2).compareTo(getTitle(col1)) == 0) {
+                    columnEquals.add(getTitle(col1));
+                    columnName1.remove(getTitle(col1));
+                    columnName2.remove(getTitle(col2));
+                }
+            }
+        }
+
+        if (columnNames.size() != (columnName1.size() + columnName2.size() + columnEquals.size())) {
+            throw error("Internal error: Number of columns does not match");
+        }
+
+        for (int col = 0; col < columnNames.size(); col += 1) {
+            if (columnName1.contains(columnNames.get(col))) {
+
+            } else if (columnName2.contains(columnNames.get(col))) {
+
+            } else if (columnEquals.contains(columnNames.get(col))) {
+
+            } else {
+                throw error("Internal error: Unexpected column");
+            }
+        }
+
 
         return result;
     }
