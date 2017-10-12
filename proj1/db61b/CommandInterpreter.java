@@ -229,9 +229,10 @@ class CommandInterpreter {
             String[] values = rowValues[row].toString().split(",");
             table.add(values);
         }*/
+        _input.next(";");
         Table table = Table.readTable(name);
         _database.put(name, table);
-
+        System.out.println("Loaded " + name + ".db");
     }
 
     /** Parse and execute a store statement from the token stream. */
@@ -365,12 +366,16 @@ class CommandInterpreter {
      *  or more Conditions. */
     ArrayList<Condition> conditionClause(Table... tables) {
         //return null;        // REPLACE WITH SOLUTION
-        ArrayList<Condition> conditions = new ArrayList<Condition>();
-        conditions.add(condition(tables));
-        while (_input.nextIf("|")) {
+        if (_input.nextIf("where")) {
+            ArrayList<Condition> conditions = new ArrayList<Condition>();
             conditions.add(condition(tables));
+            while (_input.nextIf("and")) {
+                conditions.add(condition(tables));
+            }
+            return conditions;
+        } else {
+            return null;
         }
-        return conditions;
     }
 
     /** Parse and return a Condition that applies to TABLES from the
