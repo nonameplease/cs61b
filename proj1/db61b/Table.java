@@ -391,15 +391,72 @@ class Table {
             throw error("Internal error: Number of columns does not match");
         }
 
-        for (int col = 0; col < columnNames.size(); col += 1) {
-            if (columnName1.contains(columnNames.get(col))) {
 
-            } else if (columnName2.contains(columnNames.get(col))) {
+        /*ArrayList<String> values = new ArrayList<String>();
+        for (int row = 0; row < size(); row += 1) {
+            boolean equals = true;
+            for (int col = 0; col < columnNames.size(); col += 1) {
+                if (columnName1.contains(columnNames.get(col))) {
+                    if (Condition.test(conditions, row)) {
+                        values.add(get(row, findColumn(columnNames.get(col))));
+                    }
+                } else if (columnName2.contains(columnNames.get(col))) {
+                    if (Condition.test(conditions, row)) {
+                        values.add(table2.get(row, table2.findColumn(columnNames.get(col))));
+                    }
+                } else if (columnEquals.contains(columnNames.get(col))) {
+                    if (Condition.test(conditions, row)) {
+                        if (get(row, findColumn(columnNames.get(col))).compareTo(table2.get(row, findColumn(columnNames.get(col)))) != 0) {
+                            equals = false;
+                        }
+                    }
+                } else {
+                    throw error("Internal error: Unexpected column");
+                }
+            }
+            if (equals == true && values.size() == columnNames.size()) {
+                String[] valueString = new String[columnNames.size()];
+                for (int i = 0; i < columnNames.size(); i += 1) {
+                    valueString[i] = values.get(i);
+                }
+                result.add(valueString);
+            }
+            values.clear();
+        }*/
 
-            } else if (columnEquals.contains(columnNames.get(col))) {
-
-            } else {
-                throw error("Internal error: Unexpected column");
+        //natural inner joint
+        ArrayList<String> values = new ArrayList<String>();
+        for (int row1 = 0; row1 < size(); row1 += 1) {
+            for (int row2 = 0; row2 < table2.size(); row2 += 1) {
+                boolean equals = true;
+                for (int i = 0; i < columnEquals.size(); i += 1) {
+                    int col1 = findColumn(columnEquals.get(i));
+                    int col2 = findColumn(columnEquals.get(i));
+                    if (get(row1, col1).compareTo(table2.get(row2, col2)) != 0) {
+                        equals = false;
+                    }
+                }
+                if (equals == true) {
+                    for (int col = 0; col < columnNames.size(); col += 1) {
+                        if (columnName1.contains(columnNames.get(col))) {
+                            values.add(get(row1, findColumn(columnNames.get(col))));
+                        } else if (columnName2.contains(columnNames.get(col))) {
+                            values.add(table2.get(row2, table2.findColumn(columnNames.get(col))));
+                        } else if (columnEquals.contains(columnNames.get(col))) {
+                            values.add(get(row1, findColumn(columnNames.get(col))));
+                        } else {
+                            throw error("Internal error");
+                        }
+                        if (values.size() == columnNames.size()) {
+                            String[] valueString = new String[values.size()];
+                            for (int i = 0; i < values.size(); i += 1) {
+                                valueString[i] = values.get(i);
+                            }
+                            result.add(valueString);
+                            values.clear();
+                        }
+                    }
+                }
             }
         }
 
