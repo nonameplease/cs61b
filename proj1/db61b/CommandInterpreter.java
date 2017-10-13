@@ -9,6 +9,8 @@
 package db61b;
 
 
+import com.sun.xml.internal.xsom.impl.scd.Token;
+
 import java.io.*;
 
 import java.util.ArrayList;
@@ -229,10 +231,10 @@ class CommandInterpreter {
             String[] values = rowValues[row].toString().split(",");
             table.add(values);
         }*/
-        _input.next(";");
         Table table = Table.readTable(name);
         _database.put(name, table);
         System.out.println("Loaded " + name + ".db");
+        _input.next(";");
     }
 
     /** Parse and execute a store statement from the token stream. */
@@ -328,7 +330,6 @@ class CommandInterpreter {
             //conditionClause(table);
             return table.select(title, conditionClause(table));
         }
-
     }
 
     /** Parse and return a valid name (identifier) from the token stream. */
@@ -384,11 +385,14 @@ class CommandInterpreter {
         //return null;        // REPLACE WITH SOLUTION
         String col1 = columnName();
         String relation = _input.next(Tokenizer.RELATION);
-        String col2 = _input.peek();
-        if (_input.nextIf(columnName())) {
-            return new Condition(new Column(col1, tables), relation, new Column(col2, tables));
-        } else {
+        //String col2 = _input.peek();
+        if (_input.nextIs(Tokenizer.IDENTIFIER)) {
+            return new Condition(new Column(col1, tables), relation, new Column(_input.next(), tables));
+        } else if (_input.nextIs(Tokenizer.LITERAL)){
+            String col2 = literal();
             return new Condition(new Column(col1, tables), relation, col2);
+        } else {
+            throw error("Input is not a column name nor a literal");
         }
     }
 
