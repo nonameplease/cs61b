@@ -169,6 +169,7 @@ class Table {
                 break;
             } else {
                 index += 1;
+                smaller = true;
             }
         }
         if (duplicate) {
@@ -178,12 +179,24 @@ class Table {
             for (int col = 0; col < _rowSize; col += 1) {
                 _columns[col].add(values[col]);
             }
-            for (int i = 0; i < _index.size(); i += 1) {
+            /*for (int i = 0; i < _index.size(); i += 1) {
                 if (_index.get(i) >= index) {
                     _index.set(i, _index.get(i) + 1);
                 }
             }
-            _index.add(_index.size(), index);
+            _index.add(_index.size(), index);*/
+
+
+            _index.add(_size - 1);
+            for (int i = 0; i < _index.size(); i += 1) {
+                if (i == index) {
+                    _index.add(i, _size - 1);
+                }
+
+                System.out.print(_index.get(i));
+            }
+                System.out.println();
+
             return true;
         }
     }
@@ -297,7 +310,7 @@ class Table {
         // FILL IN
         for (int row = 0; row < _size; row += 1) {
             for (int col = 0; col < _rowSize; col += 1) {
-                System.out.print(" " + get(row, col) + "  ");
+                System.out.print(" " + get(_index.get(row), col) + "  ");
             }
             System.out.println();
         }
@@ -471,23 +484,23 @@ class Table {
                         }
                     }
                 }
-                /*if (values.size() == columnNames.size()) {
+                if (values.size() == columnNames.size()) {
                     String[] valueString = new String[values.size()];
                     for (int i = 0; i < values.size(); i += 1) {
                         valueString[i] = values.get(i);
                     }
                     result.add(valueString);
                 }
-                values.clear();*/
+                values.clear();
             }
-            if (values.size() == columnNames.size()) {
+            /*if (values.size() == columnNames.size()) {
                 String[] valueString = new String[values.size()];
                 for (int i = 0; i < values.size(); i += 1) {
                     valueString[i] = values.get(i);
                 }
                 result.add(valueString);
             }
-            values.clear();
+            values.clear();*/
         }
         return result;
     }

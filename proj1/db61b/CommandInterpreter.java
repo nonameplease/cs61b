@@ -387,7 +387,7 @@ class CommandInterpreter {
         String relation = _input.next(Tokenizer.RELATION);
         //String col2 = _input.peek();
         if (_input.nextIs(Tokenizer.IDENTIFIER)) {
-            return new Condition(new Column(col1, tables), relation, new Column(_input.next(), tables));
+            return new Condition(new Column(col1, tables), relation, new Column(columnName(), tables));
         } else {
             String col2 = literal();
             return new Condition(new Column(col1, tables), relation, col2);

@@ -124,7 +124,8 @@ public class TestTable {
 
     @Test
     public void testPrint() {
-        Table table2 = Table.readTable("testing/enrolled");
+        //Table table2 = Table.readTable("testing/enrolled");
+        Table table2 = Table.readTable("testing/select2testfile1");
         System.out.println("testPrint");
         table2.print();
     }
@@ -154,11 +155,13 @@ public class TestTable {
     @Test
     public void testSelect2() {
         System.out.println("new test: ");
-        Table students = Table.readTable("students");
-        Table enrolled = Table.readTable("enrolled");
+        Table students = Table.readTable("testing/select2testfile2");
+        Table enrolled = Table.readTable("testing/select2testfile1");
         List<String> columnName = new ArrayList<String>();
+        //columnName.add("SID");
         columnName.add("Firstname");
         columnName.add("Lastname");
+        //columnName.add("CCN");
         columnName.add("Grade");
         List<Condition> conditions = new ArrayList<Condition>();
         Column col1 = new Column("CCN", students, enrolled);
