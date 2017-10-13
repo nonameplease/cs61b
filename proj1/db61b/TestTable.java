@@ -155,8 +155,8 @@ public class TestTable {
     @Test
     public void testSelect2() {
         System.out.println("new test: ");
-        Table students = Table.readTable("testing/select2testfile2");
-        Table enrolled = Table.readTable("testing/select2testfile1");
+        Table students = Table.readTable("students");
+        Table enrolled = Table.readTable("enrolled");
         List<String> columnName = new ArrayList<String>();
         //columnName.add("SID");
         columnName.add("Firstname");
@@ -168,8 +168,11 @@ public class TestTable {
         Condition CCN = new Condition(col1, "=", "21001");
         Column col2 = new Column("SID", students, enrolled);
         Condition SID = new Condition(col2, "=", col2);
+        Column col3 = new Column("Grade", students, enrolled);
+        Condition Grade = new Condition(col3, "=", "B+");
         conditions.add(CCN);
         conditions.add(SID);
+        //conditions.add(Grade);
         Table selectResult = students.select(enrolled, columnName, conditions);
         selectResult.print();
     }

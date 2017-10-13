@@ -102,47 +102,6 @@ class Table {
      *  row already exists.  Return true if anything was added,
      *  false otherwise. */
     public boolean add(String[] values) {
-        //return false;   // REPLACE WITH SOLUTION
-        /*if (values.length != _rowSize) {
-            throw error("invalid number of column arguments");
-        }
-        if (_size == 0) {
-            for (int col = 0; col < _rowSize; col += 1) {
-                _columns[col].add(values[col]);
-            }
-            _index.add(0, 0);
-            _size += 1;
-            return true;
-        } else {
-            int index = 0;
-            int counter = 0;
-            OUTER: for (int col = 0; col < _rowSize; col += 1) {
-                for (int row = 0; row < _size; row += 1) {
-                    if (get(row, col).compareTo(values[col]) < 0) {
-                        index = row + 1;
-                        break OUTER;
-                    } else if (get(row,col).compareTo(values[col]) == 0) {
-                        counter += 1;
-                    }
-                }
-            }
-            if (index != 0 || counter < _rowSize) {
-                _size += 1;
-                for (int col = 0; col < _rowSize; col += 1) {
-                    _columns[col].add(values[col]);
-                }
-                for (int i = 0; i < _index.size(); i += 1) {
-                    if (_index.get(i) >= index) {
-                        _index.set(i, _index.get(i) + 1);
-                    }
-                }
-                _index.add(_index.size(), index);
-                return true;
-            } else {
-                return false;
-            }
-        }*/
-
         boolean duplicate = false;
         boolean smaller = true;
         int index = 0;
@@ -161,7 +120,7 @@ class Table {
         }
         for (int row = 0; row < _size; row += 1) {
             for (int col = 0; col < _rowSize; col += 1) {
-                if (values[col].compareTo(get(row, col)) > 0 && !duplicate) {
+                if (values[col].compareTo(get(_index.get(row), col)) > 0 && !duplicate) {
                     smaller = false;
                 }
             }
@@ -179,24 +138,12 @@ class Table {
             for (int col = 0; col < _rowSize; col += 1) {
                 _columns[col].add(values[col]);
             }
-            /*for (int i = 0; i < _index.size(); i += 1) {
+            for (int i = 0; i < _index.size(); i += 1) {
                 if (_index.get(i) >= index) {
                     _index.set(i, _index.get(i) + 1);
                 }
             }
-            _index.add(_index.size(), index);*/
-
-
-            _index.add(_size - 1);
-            for (int i = 0; i < _index.size(); i += 1) {
-                if (i == index) {
-                    _index.add(i, _size - 1);
-                }
-
-                System.out.print(_index.get(i));
-            }
-                System.out.println();
-
+            _index.add(_index.size(), index);
             return true;
         }
     }
@@ -272,9 +219,9 @@ class Table {
             sep = "";
             output = new PrintStream(name + ".db");
             // FILL THIS IN
-            ArrayList[] content = new ArrayList[size() + 1];
+            ValueList[] content = new ValueList[size() + 1];
             for (int i = 0; i < content.length; i += 1) {
-                content[i] = new ArrayList();
+                content[i] = new ValueList();
             }
             for (int col = 0; col < columns(); col += 1) {
                 content[0].add(getTitle(col));
@@ -308,9 +255,10 @@ class Table {
      *  and indented by two spaces. */
     void print() {
         // FILL IN
-        for (int row = 0; row < _size; row += 1) {
-            for (int col = 0; col < _rowSize; col += 1) {
-                System.out.print(" " + get(_index.get(row), col) + "  ");
+        for (int row = 0; row < _index.size(); row += 1) {
+            System.out.print(" ");
+            for (int col = 0; col < columns(); col += 1) {
+                System.out.print(" " + get(_index.get(row), col).trim());
             }
             System.out.println();
         }
@@ -355,31 +303,7 @@ class Table {
                  List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
-        /*String[] values = new String[columnNames.size()];
-        ArrayList<Integer> indexToAdd = new ArrayList<Integer>();
-        boolean equal = true;
-        Table fromThis = select(columnNames, conditions);
-        Table fromTable2 = table2.select(columnNames, conditions);
-        for (int row = 0; row < fromThis._size; row += 1) {
-            for (int row2 = 0; row2 < fromTable2._size; row2 += 1) {
-                for (int col = 0; col < columnNames.size(); col += 1) {
-                    if (fromThis.get(row, col) != fromTable2.get(row2, col)) {
-                        equal = false;
-                    }
-                }
-                if (equal == true) {
-                    indexToAdd.add(row);
-                }
-                equal = true;
-            }
-        }
-        for (int index = 0; index < indexToAdd.size(); index += 1) {
-            for (int col = 0; col < columnNames.size(); col += 1) {
-                values[col] = fromThis.get(index, col);
-            }
-            result.add(values);
-        }*/
-        List<String> columnName1 = new ArrayList<String>();
+        /*List<String> columnName1 = new ArrayList<String>();
         List<String> columnName2 = new ArrayList<String>();
         for (int i = 0; i < columnNames.size(); i += 1) {
             for (int col = 0; col < columns(); col += 1) {
@@ -394,7 +318,7 @@ class Table {
             }
         }
         List<String> columnEquals = new ArrayList<String>();
-        for (int col1 = 0; col1 < columnName1.size(); col1 += 1) {
+        *//*for (int col1 = 0; col1 < columnName1.size(); col1 += 1) {
             for (int col2 = 0; col2 < columnName2.size(); col2 += 1) {
                 if (columnName2.get(col2).compareTo(columnName1.get(col1)) == 0) {
                     columnEquals.add(getTitle(col1));
@@ -402,44 +326,21 @@ class Table {
                     columnName2.remove(getTitle(col2));
                 }
             }
-        }
+        }*//*
 
-        if (columnNames.size() != (columnName1.size() + columnName2.size() + columnEquals.size())) {
-            throw error("Internal error: Number of columns does not match");
-        }
-
-
-        /*ArrayList<String> values = new ArrayList<String>();
-        for (int row = 0; row < size(); row += 1) {
-            boolean equals = true;
-            for (int col = 0; col < columnNames.size(); col += 1) {
-                if (columnName1.contains(columnNames.get(col))) {
-                    if (Condition.test(conditions, row)) {
-                        values.add(get(row, findColumn(columnNames.get(col))));
+        for (int col1 = 0; col1 < columns(); col1 += 1) {
+            for (int col2 = 0; col2 <table2.columns(); col2 += 1) {
+                if (getTitle(col1).compareTo(table2.getTitle(col2)) == 0) {
+                    columnEquals.add(getTitle(col1));
+                    if (columnName1.contains(getTitle(col1))) {
+                        columnName1.remove(getTitle(col1));
                     }
-                } else if (columnName2.contains(columnNames.get(col))) {
-                    if (Condition.test(conditions, row)) {
-                        values.add(table2.get(row, table2.findColumn(columnNames.get(col))));
+                    if (columnName2.contains(getTitle(col1))) {
+                        columnName2.remove(getTitle(col1));
                     }
-                } else if (columnEquals.contains(columnNames.get(col))) {
-                    if (Condition.test(conditions, row)) {
-                        if (get(row, findColumn(columnNames.get(col))).compareTo(table2.get(row, findColumn(columnNames.get(col)))) != 0) {
-                            equals = false;
-                        }
-                    }
-                } else {
-                    throw error("Internal error: Unexpected column");
                 }
             }
-            if (equals == true && values.size() == columnNames.size()) {
-                String[] valueString = new String[columnNames.size()];
-                for (int i = 0; i < columnNames.size(); i += 1) {
-                    valueString[i] = values.get(i);
-                }
-                result.add(valueString);
-            }
-            values.clear();
-        }*/
+        }
 
         //natural inner joint
         ArrayList<String> values = new ArrayList<String>();
@@ -493,15 +394,7 @@ class Table {
                 }
                 values.clear();
             }
-            /*if (values.size() == columnNames.size()) {
-                String[] valueString = new String[values.size()];
-                for (int i = 0; i < values.size(); i += 1) {
-                    valueString[i] = values.get(i);
-                }
-                result.add(valueString);
-            }
-            values.clear();*/
-        }
+        }*/
         return result;
     }
 
