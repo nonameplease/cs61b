@@ -174,6 +174,10 @@ class CommandInterpreter {
         //put into database
         _database.put(name, table);
         _input.next(";");
+        /////////////////////////////
+        table.writeTable("enrolled2");
+        table.print();
+        ////////////////////////////
     }
 
     /** Parse and execute an exit or quit statement. Actually does nothing
@@ -300,8 +304,8 @@ class CommandInterpreter {
             while (_input.nextIf(",")) {
                 title.add(columnName());
             }
-            String[] columnTitles = title.toArray(new String[title.size()]);
-            table = new Table(columnTitles);
+            //String[] columnTitles = title.toArray(new String[title.size()]);
+            table = new Table(title);
             _input.next(")");
         } else {
             // REPLACE WITH SOLUTION

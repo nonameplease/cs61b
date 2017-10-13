@@ -299,11 +299,13 @@ class Table {
     /** Return a new Table whose columns are COLUMNNAMES, selected
      *  from pairs of rows from this table and from TABLE2 that match
      *  on all columns with identical names and satisfy CONDITIONS. */
+
+    //select 2 still not working.
     Table select(Table table2, List<String> columnNames,
                  List<Condition> conditions) {
         Table result = new Table(columnNames);
         // FILL IN
-        /*List<String> columnName1 = new ArrayList<String>();
+        List<String> columnName1 = new ArrayList<String>();
         List<String> columnName2 = new ArrayList<String>();
         for (int i = 0; i < columnNames.size(); i += 1) {
             for (int col = 0; col < columns(); col += 1) {
@@ -318,7 +320,9 @@ class Table {
             }
         }
         List<String> columnEquals = new ArrayList<String>();
-        *//*for (int col1 = 0; col1 < columnName1.size(); col1 += 1) {
+
+
+        for (int col1 = 0; col1 < columnName1.size(); col1 += 1) {
             for (int col2 = 0; col2 < columnName2.size(); col2 += 1) {
                 if (columnName2.get(col2).compareTo(columnName1.get(col1)) == 0) {
                     columnEquals.add(getTitle(col1));
@@ -326,9 +330,9 @@ class Table {
                     columnName2.remove(getTitle(col2));
                 }
             }
-        }*//*
+        }
 
-        for (int col1 = 0; col1 < columns(); col1 += 1) {
+        /*for (int col1 = 0; col1 < columns(); col1 += 1) {
             for (int col2 = 0; col2 <table2.columns(); col2 += 1) {
                 if (getTitle(col1).compareTo(table2.getTitle(col2)) == 0) {
                     columnEquals.add(getTitle(col1));
@@ -340,7 +344,7 @@ class Table {
                     }
                 }
             }
-        }
+        }*/
 
         //natural inner joint
         ArrayList<String> values = new ArrayList<String>();
@@ -394,7 +398,72 @@ class Table {
                 }
                 values.clear();
             }
-        }*/
+        }
+
+        //create natural inner joint table
+        /*ValueList column = new ValueList();
+        ArrayList<Column> columnList = new ArrayList<Column>();
+        ArrayList<Column> columnList2 = new ArrayList<Column>();
+        ValueList values = new ValueList();
+        ArrayList<ArrayList<Column>> columnGroup = new ArrayList<ArrayList<Column>>();
+        ArrayList<ArrayList<Integer>> rowGroup = new ArrayList<ArrayList<Integer>>();
+        ArrayList<String> titles = new ArrayList<String>();
+        for (int col = 0; col < columns(); col += 1) {
+            for (int col2 = 0; col2 < table2.columns(); col2 += 1) {
+                if (getTitle(col).compareTo(table2.getTitle(col2)) == 0) {
+                    column.add(getTitle(col));
+                    titles.add(getTitle(col));
+                }
+            }
+        }
+
+        for (int i = 0; i < column.size(); i += 1) {
+            Column column1 = new Column(column.get(i), this);
+            Column column2 = new Column(column.get(i), table2);
+            columnList.add(column1);
+            columnList2.add(column2);
+
+        }
+
+        for (int row1 = 0; row1 < size(); row1 += 1) {
+            for (int row2 = 0; row2 < table2.size(); row2 += 1) {
+                if (equijoin(columnList, columnList2, row1, row2)) {
+                    ArrayList<Column> tempColumn = new ArrayList<Column>();
+                    ArrayList<Integer> tempRows = new ArrayList<Integer>();
+                    for (int col = 0; col < columnList.size(); col += 1) {
+                        tempColumn.add(columnList.get(col));
+                        tempRows.add(row1);
+                    }
+                    for (int col = 0; col < columns(); col += 1) {
+                        if (!columnList.contains(getTitle(col))) {
+                            tempColumn.add(new Column (getTitle(col), this));
+                            tempRows.add(row1);
+                            titles.add(getTitle(col));
+                        }
+                    }
+                    for (int col = 0; col < table2.columns(); col += 1) {
+                        if (!columnList2.contains(table2.getTitle(col))) {
+                            tempColumn.add(new Column (table2.getTitle(col), table2));
+                            tempRows.add(row2);
+                            titles.add(getTitle(col));
+                        }
+                    }
+                    columnGroup.add(tempColumn);
+                    rowGroup.add(tempRows);
+                }
+            }
+        }
+
+        Table table = new Table(titles);
+        for (int i = 0; i < rowGroup.size(); i += 1) {
+            Integer[] ints = new Integer[rowGroup.get(i).size()];
+            for (int j = 0; j < rowGroup.get(i).size(); j += 1) {
+                ints[j] = rowGroup.get(i).get(j);
+            }
+            table.add(columnGroup.get(0),ints);
+        }
+
+        table.print();*/
         return result;
     }
 
