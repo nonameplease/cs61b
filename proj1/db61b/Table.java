@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -270,10 +271,10 @@ class Table {
         Table result = new Table(columnNames);
         // FILL IN
         ArrayList<String> values = new ArrayList<String>();
-        for (int row = 0; row < _size; row += 1) {
+        for (int row = 0; row < size(); row += 1) {
             for (int colselect = 0; colselect < columnNames.size(); colselect += 1) {
-                for (int col = 0; col < _rowSize; col += 1) {
-                    if (_titles[col].compareTo(columnNames.get(colselect)) == 0) {
+                for (int col = 0; col < columns(); col += 1) {
+                    if (getTitle(col).compareTo(columnNames.get(colselect)) == 0) {
                         if (conditions != null) {
                             if (Condition.test(conditions, row)) {
                                 values.add(get(row, col));
@@ -303,7 +304,7 @@ class Table {
     //select 2 still not working.
     Table select(Table table2, List<String> columnNames,
                  List<Condition> conditions) {
-        Table result = new Table(columnNames);
+        /*Table result = new Table(columnNames);
         // FILL IN
         List<String> columnName1 = new ArrayList<String>();
         List<String> columnName2 = new ArrayList<String>();
@@ -332,7 +333,7 @@ class Table {
             }
         }
 
-        /*for (int col1 = 0; col1 < columns(); col1 += 1) {
+        *//*for (int col1 = 0; col1 < columns(); col1 += 1) {
             for (int col2 = 0; col2 <table2.columns(); col2 += 1) {
                 if (getTitle(col1).compareTo(table2.getTitle(col2)) == 0) {
                     columnEquals.add(getTitle(col1));
@@ -344,7 +345,7 @@ class Table {
                     }
                 }
             }
-        }*/
+        }*//*
 
         //natural inner joint
         ArrayList<String> values = new ArrayList<String>();
@@ -398,10 +399,10 @@ class Table {
                 }
                 values.clear();
             }
-        }
+        }*/
 
         //create natural inner joint table
-        /*ValueList column = new ValueList();
+        ValueList column = new ValueList();
         ArrayList<Column> columnList = new ArrayList<Column>();
         ArrayList<Column> columnList2 = new ArrayList<Column>();
         ValueList values = new ValueList();
@@ -430,26 +431,34 @@ class Table {
                 if (equijoin(columnList, columnList2, row1, row2)) {
                     ArrayList<Column> tempColumn = new ArrayList<Column>();
                     ArrayList<Integer> tempRows = new ArrayList<Integer>();
-                    for (int col = 0; col < columnList.size(); col += 1) {
-                        tempColumn.add(columnList.get(col));
-                        tempRows.add(row1);
-                    }
-                    for (int col = 0; col < columns(); col += 1) {
-                        if (!columnList.contains(getTitle(col))) {
-                            tempColumn.add(new Column (getTitle(col), this));
-                            tempRows.add(row1);
-                            titles.add(getTitle(col));
+                    if (conditions != null) {
+                        if (Condition.test(conditions, row1, row2)) {
+                            for (int col = 0; col < column.size(); col += 1) {
+                                tempColumn.add(columnList.get(col));
+                                tempRows.add(row1);
+                            }
+                            for (int col = 0; col < columns(); col += 1) {
+                                if (!column.contains(getTitle(col))) {
+                                    tempColumn.add(new Column(getTitle(col), this));
+                                    tempRows.add(row1);
+                                    if (!titles.contains(getTitle(col))) {
+                                        titles.add(getTitle(col));
+                                    }
+                                }
+                            }
+                            for (int col = 0; col < table2.columns(); col += 1) {
+                                if (!column.contains(table2.getTitle(col))) {
+                                    tempColumn.add(new Column(table2.getTitle(col), table2));
+                                    tempRows.add(row2);
+                                    if (!titles.contains(table2.getTitle(col))) {
+                                        titles.add(table2.getTitle(col));
+                                    }
+                                }
+                            }
+                            columnGroup.add(tempColumn);
+                            rowGroup.add(tempRows);
                         }
                     }
-                    for (int col = 0; col < table2.columns(); col += 1) {
-                        if (!columnList2.contains(table2.getTitle(col))) {
-                            tempColumn.add(new Column (table2.getTitle(col), table2));
-                            tempRows.add(row2);
-                            titles.add(getTitle(col));
-                        }
-                    }
-                    columnGroup.add(tempColumn);
-                    rowGroup.add(tempRows);
                 }
             }
         }
@@ -462,9 +471,12 @@ class Table {
             }
             table.add(columnGroup.get(0),ints);
         }
-
-        table.print();*/
-        return result;
+        Table returnTable = table.select(columnNames, null);
+        //returnTable.print();
+        //table.print();
+        //return table;
+        return returnTable;
+        //return result;
     }
 
     /** Return <0, 0, or >0 depending on whether the row formed from
@@ -492,7 +504,7 @@ class Table {
                                     int row1, int row2) {
         //return true; // REPLACE WITH SOLUTION
         for (int col = 0; col < common1.size(); col += 1) {
-            if (common1.get(col).getFrom(row1) != common2.get(col).getFrom(row2)) {
+            if (common1.get(col).getFrom(row1).compareTo(common2.get(col).getFrom(row2)) != 0) {
                 return false;
             }
         }
