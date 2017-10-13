@@ -325,7 +325,7 @@ class CommandInterpreter {
             Table table2 = tableName();
             return table.select(table2, title, conditionClause(table, table2));
         } else {
-            conditionClause(table);
+            //conditionClause(table);
             return table.select(title, conditionClause(table));
         }
 

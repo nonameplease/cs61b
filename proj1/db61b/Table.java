@@ -313,8 +313,12 @@ class Table {
             for (int colselect = 0; colselect < columnNames.size(); colselect += 1) {
                 for (int col = 0; col < _rowSize; col += 1) {
                     if (_titles[col].compareTo(columnNames.get(colselect)) == 0) {
-                        if (Condition.test(conditions, row)) {
-                            values.add(get(row,col));
+                        if (conditions != null) {
+                            if (Condition.test(conditions, row)) {
+                                values.add(get(row, col));
+                            }
+                        } else {
+                            values.add(get(row, col));
                         }
                     }
                 }
@@ -377,9 +381,9 @@ class Table {
             }
         }
         List<String> columnEquals = new ArrayList<String>();
-        for (int col1 = 0; col1 < columns(); col1 += 1) {
-            for (int col2 = 0; col2 < table2.columns(); col2 += 1) {
-                if (table2.getTitle(col2).compareTo(getTitle(col1)) == 0) {
+        for (int col1 = 0; col1 < columnName1.size(); col1 += 1) {
+            for (int col2 = 0; col2 < columnName2.size(); col2 += 1) {
+                if (columnName2.get(col2).compareTo(columnName1.get(col1)) == 0) {
                     columnEquals.add(getTitle(col1));
                     columnName1.remove(getTitle(col1));
                     columnName2.remove(getTitle(col2));
@@ -459,7 +463,9 @@ class Table {
                 }
             }
         }
-
+        if (conditions != null) {
+            result = result.select(columnNames, conditions);
+        }
 
         return result;
     }
