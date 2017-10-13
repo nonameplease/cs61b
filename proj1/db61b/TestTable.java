@@ -153,18 +153,20 @@ public class TestTable {
 
     @Test
     public void testSelect2() {
-        Table table2 = Table.readTable("testing/select2testfile1");
-        Table table3 = Table.readTable("testing/select2testfile2");
-        Column col = new Column("Grade", table2);
-        Condition gradeA = new Condition(col, "=", "B");
+        System.out.println("new test: ");
+        Table students = Table.readTable("students");
+        Table enrolled = Table.readTable("enrolled");
         List<String> columnName = new ArrayList<String>();
-        //columnName.add("Grade");
-        columnName.add("SID");
-        //columnName.add("CCN");
+        columnName.add("Firstname");
         columnName.add("Lastname");
+        columnName.add("Grade");
         List<Condition> conditions = new ArrayList<Condition>();
-        conditions.add(gradeA);
-        Table selectResult = table2.select(table3, columnName, conditions);
+        Column col1 = new Column("CCN", students, enrolled);
+        Condition CCN = new Condition(col1, "=", "21001");
+        Column col2 = new Column("SID", students, enrolled);
+        //Condition SID = new Condition(col2, "=", SID);
+        conditions.add(CCN);
+        Table selectResult = students.select(enrolled, columnName, conditions);
         selectResult.print();
     }
 

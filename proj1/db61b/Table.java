@@ -430,6 +430,7 @@ class Table {
 
         //natural inner joint
         ArrayList<String> values = new ArrayList<String>();
+        Table returnValue = null;
         for (int row1 = 0; row1 < size(); row1 += 1) {
             for (int row2 = 0; row2 < table2.size(); row2 += 1) {
                 boolean equals = true;
@@ -464,10 +465,13 @@ class Table {
             }
         }
         if (conditions != null) {
-            result = result.select(columnNames, conditions);
+            returnValue = result.select(columnNames, conditions);
+            //result = result.select(columnNames, conditions);
+        } else {
+            returnValue = result;
         }
 
-        return result;
+        return returnValue;
     }
 
     /** Return <0, 0, or >0 depending on whether the row formed from

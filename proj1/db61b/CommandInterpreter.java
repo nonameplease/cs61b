@@ -388,11 +388,9 @@ class CommandInterpreter {
         //String col2 = _input.peek();
         if (_input.nextIs(Tokenizer.IDENTIFIER)) {
             return new Condition(new Column(col1, tables), relation, new Column(_input.next(), tables));
-        } else if (_input.nextIs(Tokenizer.LITERAL)){
+        } else {
             String col2 = literal();
             return new Condition(new Column(col1, tables), relation, col2);
-        } else {
-            throw error("Input is not a column name nor a literal");
         }
     }
 
