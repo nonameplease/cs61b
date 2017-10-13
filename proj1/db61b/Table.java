@@ -430,7 +430,6 @@ class Table {
 
         //natural inner joint
         ArrayList<String> values = new ArrayList<String>();
-        Table returnValue = null;
         for (int row1 = 0; row1 < size(); row1 += 1) {
             for (int row2 = 0; row2 < table2.size(); row2 += 1) {
                 boolean equals = true;
@@ -444,34 +443,53 @@ class Table {
                 if (equals == true) {
                     for (int col = 0; col < columnNames.size(); col += 1) {
                         if (columnName1.contains(columnNames.get(col))) {
-                            values.add(get(row1, findColumn(columnNames.get(col))));
+                            if (conditions != null){
+                                if (Condition.test(conditions, row1, row2)) {
+                                    values.add(get(row1, findColumn(columnNames.get(col))));
+                                }
+                            } else {
+                                values.add(get(row1, findColumn(columnNames.get(col))));
+                            }
                         } else if (columnName2.contains(columnNames.get(col))) {
-                            values.add(table2.get(row2, table2.findColumn(columnNames.get(col))));
+                            if (conditions != null) {
+                                if (Condition.test(conditions, row1, row2)) {
+                                    values.add(table2.get(row2, table2.findColumn(columnNames.get(col))));
+                                }
+                            } else {
+                                values.add(table2.get(row2, table2.findColumn(columnNames.get(col))));
+                            }
                         } else if (columnEquals.contains(columnNames.get(col))) {
-                            values.add(get(row1, findColumn(columnNames.get(col))));
+                            if (conditions != null) {
+                                if (Condition.test(conditions, row1, row2)) {
+                                    values.add(get(row1, findColumn(columnNames.get(col))));
+                                }
+                            } else {
+                                values.add(get(row1, findColumn(columnNames.get(col))));
+                            }
                         } else {
                             throw error("Internal error");
                         }
-                        if (values.size() == columnNames.size()) {
-                            String[] valueString = new String[values.size()];
-                            for (int i = 0; i < values.size(); i += 1) {
-                                valueString[i] = values.get(i);
-                            }
-                            result.add(valueString);
-                            values.clear();
-                        }
                     }
                 }
+                /*if (values.size() == columnNames.size()) {
+                    String[] valueString = new String[values.size()];
+                    for (int i = 0; i < values.size(); i += 1) {
+                        valueString[i] = values.get(i);
+                    }
+                    result.add(valueString);
+                }
+                values.clear();*/
             }
+            if (values.size() == columnNames.size()) {
+                String[] valueString = new String[values.size()];
+                for (int i = 0; i < values.size(); i += 1) {
+                    valueString[i] = values.get(i);
+                }
+                result.add(valueString);
+            }
+            values.clear();
         }
-        if (conditions != null) {
-            returnValue = result.select(columnNames, conditions);
-            //result = result.select(columnNames, conditions);
-        } else {
-            returnValue = result;
-        }
-
-        return returnValue;
+        return result;
     }
 
     /** Return <0, 0, or >0 depending on whether the row formed from

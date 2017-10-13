@@ -164,8 +164,9 @@ public class TestTable {
         Column col1 = new Column("CCN", students, enrolled);
         Condition CCN = new Condition(col1, "=", "21001");
         Column col2 = new Column("SID", students, enrolled);
-        //Condition SID = new Condition(col2, "=", SID);
+        Condition SID = new Condition(col2, "=", col2);
         conditions.add(CCN);
+        conditions.add(SID);
         Table selectResult = students.select(enrolled, columnName, conditions);
         selectResult.print();
     }
