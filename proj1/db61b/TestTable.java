@@ -1,6 +1,5 @@
 package db61b;
 
-import com.sun.source.tree.AssertTree;
 import org.junit.Test;
 
 import java.util.ArrayList;

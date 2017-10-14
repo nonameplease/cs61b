@@ -9,16 +9,13 @@
 package db61b;
 
 
-import com.sun.xml.internal.xsom.impl.scd.Token;
 
 import java.io.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 import static db61b.Utils.*;
-import static db61b.Tokenizer.*;
 
 /** An object that reads and interprets a sequence of commands from an
  *  input source.
