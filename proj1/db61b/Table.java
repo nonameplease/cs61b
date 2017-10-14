@@ -431,33 +431,39 @@ class Table {
                 if (equijoin(columnList, columnList2, row1, row2)) {
                     ArrayList<Column> tempColumn = new ArrayList<Column>();
                     ArrayList<Integer> tempRows = new ArrayList<Integer>();
+                    boolean state = false;
                     if (conditions != null) {
                         if (Condition.test(conditions, row1, row2)) {
-                            for (int col = 0; col < column.size(); col += 1) {
-                                tempColumn.add(columnList.get(col));
-                                tempRows.add(row1);
-                            }
-                            for (int col = 0; col < columns(); col += 1) {
-                                if (!column.contains(getTitle(col))) {
-                                    tempColumn.add(new Column(getTitle(col), this));
-                                    tempRows.add(row1);
-                                    if (!titles.contains(getTitle(col))) {
-                                        titles.add(getTitle(col));
-                                    }
-                                }
-                            }
-                            for (int col = 0; col < table2.columns(); col += 1) {
-                                if (!column.contains(table2.getTitle(col))) {
-                                    tempColumn.add(new Column(table2.getTitle(col), table2));
-                                    tempRows.add(row2);
-                                    if (!titles.contains(table2.getTitle(col))) {
-                                        titles.add(table2.getTitle(col));
-                                    }
-                                }
-                            }
-                            columnGroup.add(tempColumn);
-                            rowGroup.add(tempRows);
+                            state = true;
                         }
+                    } else {
+                        state = true;
+                    }
+                    if (state == true) {
+                        for (int col = 0; col < column.size(); col += 1) {
+                            tempColumn.add(columnList.get(col));
+                            tempRows.add(row1);
+                        }
+                        for (int col = 0; col < columns(); col += 1) {
+                            if (!column.contains(getTitle(col))) {
+                                tempColumn.add(new Column(getTitle(col), this));
+                                tempRows.add(row1);
+                                if (!titles.contains(getTitle(col))) {
+                                    titles.add(getTitle(col));
+                                }
+                            }
+                        }
+                        for (int col = 0; col < table2.columns(); col += 1) {
+                            if (!column.contains(table2.getTitle(col))) {
+                                tempColumn.add(new Column(table2.getTitle(col), table2));
+                                tempRows.add(row2);
+                                if (!titles.contains(table2.getTitle(col))) {
+                                    titles.add(table2.getTitle(col));
+                                }
+                            }
+                        }
+                        columnGroup.add(tempColumn);
+                        rowGroup.add(tempRows);
                     }
                 }
             }

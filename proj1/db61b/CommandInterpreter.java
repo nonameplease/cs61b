@@ -175,8 +175,8 @@ class CommandInterpreter {
         _database.put(name, table);
         _input.next(";");
         /////////////////////////////
-        table.writeTable("enrolled2");
-        table.print();
+        //table.writeTable("enrolled2");
+        //table.print();
         ////////////////////////////
     }
 
