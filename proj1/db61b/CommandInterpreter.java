@@ -1,16 +1,8 @@
-// This is a SUGGESTED skeleton for a class that parses and executes database
-// statements.  Be sure to read the STRATEGY section, and ask us if you have any
-// questions about it.  You can throw this away if you want, but it is a good
-// idea to try to understand it first.  Our solution adds or changes about 50
-// lines in this skeleton.
-
-// Comments that start with "//" are intended to be removed from your
-// solutions.
 package db61b;
 
 
 
-import java.io.*;
+import java.io.PrintStream;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,7 +11,7 @@ import static db61b.Utils.*;
 
 /** An object that reads and interprets a sequence of commands from an
  *  input source.
- *  @author */
+ *  @author Scott Shao */
 class CommandInterpreter {
 
     /* STRATEGY.
@@ -210,7 +202,6 @@ class CommandInterpreter {
 
     /** Parse and execute a load statement from the token stream. */
     void loadStatement() {
-        // FILL THIS IN
         _input.next("load");
         String name = name();
         Table table = Table.readTable(name);
@@ -267,7 +258,6 @@ class CommandInterpreter {
     /** Parse and execute a select clause from the token stream, returning the
      *  resulting table. */
     Table selectClause() {
-        //return null;         // REPLACE WITH SOLUTION
         _input.next("select");
         ArrayList<String> title = new ArrayList<String>();
         title.add(columnName());
@@ -280,7 +270,6 @@ class CommandInterpreter {
             Table table2 = tableName();
             return table.select(table2, title, conditionClause(table, table2));
         } else {
-            //conditionClause(table);
             return table.select(title, conditionClause(table));
         }
     }
@@ -319,7 +308,6 @@ class CommandInterpreter {
      *  token stream.  This denotes the conjunction (`and') of zero
      *  or more Conditions. */
     ArrayList<Condition> conditionClause(Table... tables) {
-        //return null;        // REPLACE WITH SOLUTION
         if (_input.nextIf("where")) {
             ArrayList<Condition> conditions = new ArrayList<Condition>();
             conditions.add(condition(tables));
@@ -338,7 +326,8 @@ class CommandInterpreter {
         String col1 = columnName();
         String relation = _input.next(Tokenizer.RELATION);
         if (_input.nextIs(Tokenizer.IDENTIFIER)) {
-            return new Condition(new Column(col1, tables), relation, new Column(columnName(), tables));
+            return new Condition(new Column(col1, tables),
+                    relation, new Column(columnName(), tables));
         } else {
             String col2 = literal();
             return new Condition(new Column(col1, tables), relation, col2);

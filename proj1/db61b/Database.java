@@ -1,18 +1,11 @@
-// This is a SUGGESTED skeleton for a class that contains the Tables your
-// program manipulates.  You can throw this away if you want, but it is a good
-// idea to try to understand it first.  Our solution changes about 6
-// lines in this skeleton.
-
-// Comments that start with "//" are intended to be removed from your
-// solutions.
 package db61b;
 
-// FILL IN (WITH IMPORTS)?
+
 import java.util.HashMap;
 
 
 /** A collection of Tables, indexed by name.
- *  @author */
+ *  @author Scott Shao */
 class Database {
     /** An empty database. */
     public Database() {
@@ -22,7 +15,6 @@ class Database {
     /** Return the Table whose name is NAME stored in this database, or null
      *  if there is no such table. */
     public Table get(String name) {
-        //return null;             // REPLACE WITH SOLUTION
         if (dataBase.containsKey(name)) {
             return dataBase.get(name);
         }
@@ -41,6 +33,7 @@ class Database {
         dataBase.put(name, table);
     }
 
-    HashMap<String, Table> dataBase;
+    /** A set of Map with String and Table linked together.*/
+    private HashMap<String, Table> dataBase;
 
 }

@@ -114,7 +114,7 @@ public class TestTable {
         Table blank = Table.readTable("blanktest");
         assertEquals(tableblank.getTitle(0), blank.getTitle(0));
         assertEquals(tableblank.getTitle(2), blank.getTitle(2));
-        Table enrolled = Table.readTable("testing/enrolled");
+        Table enrolled = Table.readTable("enrolled");
         enrolled.writeTable("enrolledtest");
         Table enrolledTest = Table.readTable("enrolledtest");
         assertEquals(enrolled.getTitle(2), enrolledTest.getTitle(2));
@@ -123,8 +123,7 @@ public class TestTable {
 
     @Test
     public void testPrint() {
-        //Table table2 = Table.readTable("testing/enrolled");
-        Table table2 = Table.readTable("select2testfile1");
+        Table table2 = Table.readTable("students");
         System.out.println("testPrint");
         table2.print();
     }
@@ -143,9 +142,9 @@ public class TestTable {
         conditions.add(gradeA);
         Table selectResult = table2.select(columnName, conditions);
         selectResult.print();
-        Condition SID = new Condition(col1, "<", col2);
+        Condition sid = new Condition(col1, "<", col2);
         List<Condition> conditions2 = new ArrayList<Condition>();
-        conditions2.add(SID);
+        conditions2.add(sid);
         Table selectResult2 = table2.select(columnName, conditions2);
         System.out.println();
         selectResult2.print();
@@ -157,21 +156,18 @@ public class TestTable {
         Table students = Table.readTable("students");
         Table enrolled = Table.readTable("enrolled");
         List<String> columnName = new ArrayList<String>();
-        //columnName.add("SID");
         columnName.add("Firstname");
         columnName.add("Lastname");
-        //columnName.add("CCN");
         columnName.add("Grade");
         List<Condition> conditions = new ArrayList<Condition>();
         Column col1 = new Column("CCN", students, enrolled);
-        Condition CCN = new Condition(col1, "=", "21001");
+        Condition ccn = new Condition(col1, "=", "21001");
         Column col2 = new Column("SID", students, enrolled);
-        Condition SID = new Condition(col2, "=", col2);
+        Condition sid = new Condition(col2, "=", col2);
         Column col3 = new Column("Grade", students, enrolled);
-        Condition Grade = new Condition(col3, "=", "B+");
-        conditions.add(CCN);
-        conditions.add(SID);
-        //conditions.add(Grade);
+        Condition grade = new Condition(col3, "=", "B+");
+        conditions.add(ccn);
+        conditions.add(sid);
         Table selectResult = students.select(enrolled, columnName, conditions);
         selectResult.print();
     }

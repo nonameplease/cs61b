@@ -1,16 +1,10 @@
-// This is a SUGGESTED skeleton for a class that describes a single
-// Condition (such as CCN = '99776').  You can throw this away if you
-// want,  but it is a good idea to try to understand it first.
-// Our solution changes or adds about 30 lines in this skeleton.
-
-// Comments that start with "//" are intended to be removed from your
-// solutions.
 package db61b;
 
 import java.util.List;
+import static db61b.Utils.*;
 
 /** Represents a single 'where' condition in a 'select' command.
- *  @author */
+ *  @author Scott Shao */
 class Condition {
 
     /** A Condition representing COL1 RELATION COL2, where COL1 and COL2
@@ -44,38 +38,39 @@ class Condition {
             result = _col1.getFrom(rows).compareTo(_val2);
         }
         switch (_relation) {
-            case "<":
-                if (result < 0) {
-                    return true;
-                }
-                return false;
-            case ">":
-                if (result > 0) {
-                    return true;
-                }
-                return false;
-            case "<=":
-                if (result <= 0) {
-                    return true;
-                }
-                return false;
-            case ">=":
-                if (result >= 0) {
-                    return true;
-                }
-                return false;
-            case "=":
-                if (result == 0) {
-                    return true;
-                }
-                return false;
-            case "!=":
-                if (result != 0) {
-                    return true;
-                }
-                return false;
+        case "<":
+            if (result < 0) {
+                return true;
+            }
+            return false;
+        case ">":
+            if (result > 0) {
+                return true;
+            }
+            return false;
+        case "<=":
+            if (result <= 0) {
+                return true;
+            }
+            return false;
+        case ">=":
+            if (result >= 0) {
+                return true;
+            }
+            return false;
+        case "=":
+            if (result == 0) {
+                return true;
+            }
+            return false;
+        case "!=":
+            if (result != 0) {
+                return true;
+            }
+            return false;
+        default:
+            throw error("unrecognizable command");
         }
-        return true;
     }
 
     /** Return true iff ROWS satisfies all CONDITIONS. */
@@ -93,5 +88,7 @@ class Condition {
     private Column _col1, _col2;
     /** Second operand, if literal (otherwise null). */
     private String _val2;
+    /** The relational string that represent the relations between
+     * two variables.*/
     private String _relation;
 }
