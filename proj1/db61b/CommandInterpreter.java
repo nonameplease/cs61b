@@ -170,14 +170,8 @@ class CommandInterpreter {
         _input.next("table");
         String name = name();
         Table table = tableDefinition();
-        // FILL IN CODE TO EXECUTE THE STATEMENT
-        //put into database
         _database.put(name, table);
         _input.next(";");
-        /////////////////////////////
-        //table.writeTable("enrolled2");
-        //table.print();
-        ////////////////////////////
     }
 
     /** Parse and execute an exit or quit statement. Actually does nothing
@@ -222,19 +216,6 @@ class CommandInterpreter {
         // FILL THIS IN
         _input.next("load");
         String name = name();
-        /*Scanner allData = new Scanner(name + "db");
-        String titles = allData.next();
-        HashSet rows = new HashSet();
-        while (allData.hasNext()) {
-            rows.add(allData.next());
-        }
-        String[] columnTitles = titles.split(",");
-        Table table = new Table(columnTitles);
-        Object[] rowValues = rows.toArray();
-        for (int row = 0; row < rows.size(); row += 1) {
-            String[] values = rowValues[row].toString().split(",");
-            table.add(values);
-        }*/
         Table table = Table.readTable(name);
         _database.put(name, table);
         System.out.println("Loaded " + name + ".db");
@@ -246,30 +227,6 @@ class CommandInterpreter {
         _input.next("store");
         String name = _input.peek();
         Table table = tableName();
-        /*FileWriter stream = null;
-        try {
-            stream = new FileWriter(name + ".db");
-        } catch (IOException e) {
-
-        }
-        PrintWriter output = new PrintWriter(stream);
-        ArrayList[] content = new ArrayList[table.size() + 1];
-        for (int col = 0; col < table.columns(); col += 1) {
-            content[0].add(table.getTitle(col));
-            content[0].add(",");
-        }
-        for (int row = 0; row < table.size(); row += 1) {
-            for (int col = 0; col < table.columns(); col += 1) {
-                content[row + 1].add(table.get(row, col));
-                content[row + 1].add(",");
-            }
-        }
-        for (int row = 0; row < table.size() + 1; row += 1) {
-            content[row].remove(content[row].size() - 1);
-        }
-        for (int row = 0; row < table.size() + 1; row += 1) {
-            output.print(content[row].toString());
-        }*/
         table.writeTable(name);
         System.out.printf("Stored %s.db%n", name);
         _input.next(";");
@@ -279,8 +236,6 @@ class CommandInterpreter {
     void printStatement() {
         _input.next("print");
         Table table = tableName();
-        //table.column() -> # of columns
-        //table.size() -> # of rows
         table.print();
         _input.next(";");
     }
@@ -298,17 +253,14 @@ class CommandInterpreter {
     Table tableDefinition() {
         Table table;
         if (_input.nextIf("(")) {
-            // REPLACE WITH SOLUTION
             ArrayList<String> title = new ArrayList<String>();
             title.add(columnName());
             while (_input.nextIf(",")) {
                 title.add(columnName());
             }
-            //String[] columnTitles = title.toArray(new String[title.size()]);
             table = new Table(title);
             _input.next(")");
         } else {
-            // REPLACE WITH SOLUTION
             _input.next("as");
             table = selectClause();
         }
@@ -386,10 +338,8 @@ class CommandInterpreter {
     /** Parse and return a Condition that applies to TABLES from the
      *  token stream. */
     Condition condition(Table... tables) {
-        //return null;        // REPLACE WITH SOLUTION
         String col1 = columnName();
         String relation = _input.next(Tokenizer.RELATION);
-        //String col2 = _input.peek();
         if (_input.nextIs(Tokenizer.IDENTIFIER)) {
             return new Condition(new Column(col1, tables), relation, new Column(columnName(), tables));
         } else {

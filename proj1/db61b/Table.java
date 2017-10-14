@@ -13,8 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import static db61b.Utils.*;
@@ -56,13 +54,11 @@ class Table {
 
     /** Return the number of columns in this table. */
     public int columns() {
-        //return 0;  // REPLACE WITH SOLUTION
         return _rowSize;
     }
 
     /** Return the title of the Kth column.  Requires 0 <= K < columns(). */
     public String getTitle(int k) {
-        //return null;  // REPLACE WITH SOLUTION
         if (k < 0 || k >= columns()) {
             throw error("column number is out of range of this table");
         }
@@ -72,7 +68,6 @@ class Table {
     /** Return the number of the column whose title is TITLE, or -1 if
      *  there isn't one. */
     public int findColumn(String title) {
-        //return -1;  // REPLACE WITH SOLUTION
         int numTitle = -1;
         for (int i = 0; i < columns(); i+=1) {
             if (title.compareTo(_titles[i]) == 0) {
@@ -84,7 +79,6 @@ class Table {
 
     /** Return the number of rows in this table. */
     public int size() {
-        // REPLACE WITH SOLUTION
         return _size;
     }
 
@@ -92,7 +86,6 @@ class Table {
      *  of record number ROW (0 <= ROW < size()). */
     public String get(int row, int col) {
         try {
-            //return null; // REPLACE WITH SOLUTION
             return _columns[col].get(row);
         } catch (IndexOutOfBoundsException excp) {
             throw error("invalid row or column");
@@ -103,7 +96,7 @@ class Table {
      *  row already exists.  Return true if anything was added,
      *  false otherwise. */
     public boolean add(String[] values) {
-        boolean duplicate = false;
+        /*boolean duplicate = false;
         boolean smaller = true;
         int index = 0;
         for (int row = 0; row < _size; row += 1) {
@@ -146,7 +139,79 @@ class Table {
             }
             _index.add(_index.size(), index);
             return true;
+        }*/
+
+        /*boolean duplicate = false;
+        for (int col = 0; col < columns(); col += 1) {
+            _columns[col].add(values[col]);
         }
+        _size = _columns[0].size();
+        for (int row = 0; row < size(); row += 1) {
+            if (_index.size() == 0) {
+                _index.add(size() - 1);
+            } else {
+                _index.add(size() - 1);
+                if (compareRows(size() - 1, _index.get(row)) < 0) {
+                    _index.add(row, size() - 1);
+                    break;
+                } else {
+                    _index.remove(_index.size() - 1);
+                }
+            }
+            //////////////merge point
+        }
+        for (int row = 0; row < size() - 1; row += 1) {
+            if (compareRows(row, size() - 1) == 0) {
+                duplicate = true;
+            }
+        }
+        if (!duplicate) {
+            return true;
+        } else {
+            for (int col = 0; col < columns(); col += 1) {
+                _columns[col].remove(_columns.length - 1);
+            }
+            _index.remove(_index.indexOf(size() - 1));
+            _size -= 1;
+            return false;
+            }*/
+
+        if (size() == 0) {
+            for (int col = 0; col < columns(); col += 1) {
+                ValueList firstline = new ValueList();
+                firstline.add(values[col]);
+                _columns[col] = firstline;
+            }
+            _index.add(0, 0);
+            _size += 1;
+            return true;
+        } else {
+            for (int row = 0; row < size(); row += 1) {
+                boolean duplicate = true;
+                for (int col = 0; col < columns(); col += 1) {
+                    if (get(row, col).compareTo(values[col]) != 0) {
+                        duplicate = false;
+                    }
+                }
+                if (duplicate) {
+                    return false;
+                }
+            }
+            for (int col = 0; col < columns(); col += 1) {
+                _columns[col].add(values[col]);
+            }
+            for (int index = 0; index < _index.size(); index += 1) {
+                if (compareRows(_index.get(index), size()) > 0) {
+                    _index.add(index, size());
+                    _size += 1;
+                    return true;
+                }
+            }
+            _index.add(_index.size(), _size);
+            _size += 1;
+            return true;
+        }
+
     }
 
     /** Add a new row whose column values are extracted by COLUMNS from
@@ -155,7 +220,6 @@ class Table {
      *  Column.getFrom(Integer...) for a description of how Columns
      *  extract values. */
     public boolean add(List<Column> columns, Integer... rows) {
-        //return false;   // REPLACE WITH SOLUTION
         String [] values = new String[columns.size()];
         for (int col = 0; col < columns.size(); col += 1) {
             values[col] = columns.get(col).getFrom(rows[col]);
@@ -219,7 +283,6 @@ class Table {
             String sep;
             sep = "";
             output = new PrintStream(name + ".db");
-            // FILL THIS IN
             ValueList[] content = new ValueList[size() + 1];
             for (int i = 0; i < content.length; i += 1) {
                 content[i] = new ValueList();
@@ -231,9 +294,6 @@ class Table {
                 for (int col = 0; col < columns(); col += 1) {
                     content[row + 1].add(get(row, col));
                 }
-            }
-            for (int row = 0; row < size() + 1; row += 1) {
-                //content[row].remove(content[row].size() - 1);
             }
             for (int row = 0; row < size() + 1; row += 1) {
                 for (int col = 0; col < content[row].size() - 1; col += 1) {
@@ -255,7 +315,6 @@ class Table {
     /** Print my contents on the standard output, separated by spaces
      *  and indented by two spaces. */
     void print() {
-        // FILL IN
         for (int row = 0; row < _index.size(); row += 1) {
             System.out.print(" ");
             for (int col = 0; col < columns(); col += 1) {
@@ -269,7 +328,6 @@ class Table {
      *  rows of this table that satisfy CONDITIONS. */
     Table select(List<String> columnNames, List<Condition> conditions) {
         Table result = new Table(columnNames);
-        // FILL IN
         ArrayList<String> values = new ArrayList<String>();
         for (int row = 0; row < size(); row += 1) {
             for (int colselect = 0; colselect < columnNames.size(); colselect += 1) {
@@ -300,107 +358,8 @@ class Table {
     /** Return a new Table whose columns are COLUMNNAMES, selected
      *  from pairs of rows from this table and from TABLE2 that match
      *  on all columns with identical names and satisfy CONDITIONS. */
-
-    //select 2 still not working.
     Table select(Table table2, List<String> columnNames,
                  List<Condition> conditions) {
-        /*Table result = new Table(columnNames);
-        // FILL IN
-        List<String> columnName1 = new ArrayList<String>();
-        List<String> columnName2 = new ArrayList<String>();
-        for (int i = 0; i < columnNames.size(); i += 1) {
-            for (int col = 0; col < columns(); col += 1) {
-                if (getTitle(col).compareTo(columnNames.get(i)) == 0) {
-                    columnName1.add(getTitle(col));
-                }
-            }
-            for (int col = 0; col < table2.columns(); col += 1) {
-                if (table2.getTitle(col).compareTo(columnNames.get(i)) == 0) {
-                    columnName2.add(table2.getTitle(col));
-                }
-            }
-        }
-        List<String> columnEquals = new ArrayList<String>();
-
-
-        for (int col1 = 0; col1 < columnName1.size(); col1 += 1) {
-            for (int col2 = 0; col2 < columnName2.size(); col2 += 1) {
-                if (columnName2.get(col2).compareTo(columnName1.get(col1)) == 0) {
-                    columnEquals.add(getTitle(col1));
-                    columnName1.remove(getTitle(col1));
-                    columnName2.remove(getTitle(col2));
-                }
-            }
-        }
-
-        *//*for (int col1 = 0; col1 < columns(); col1 += 1) {
-            for (int col2 = 0; col2 <table2.columns(); col2 += 1) {
-                if (getTitle(col1).compareTo(table2.getTitle(col2)) == 0) {
-                    columnEquals.add(getTitle(col1));
-                    if (columnName1.contains(getTitle(col1))) {
-                        columnName1.remove(getTitle(col1));
-                    }
-                    if (columnName2.contains(getTitle(col1))) {
-                        columnName2.remove(getTitle(col1));
-                    }
-                }
-            }
-        }*//*
-
-        //natural inner joint
-        ArrayList<String> values = new ArrayList<String>();
-        for (int row1 = 0; row1 < size(); row1 += 1) {
-            for (int row2 = 0; row2 < table2.size(); row2 += 1) {
-                boolean equals = true;
-                for (int i = 0; i < columnEquals.size(); i += 1) {
-                    int col1 = findColumn(columnEquals.get(i));
-                    int col2 = findColumn(columnEquals.get(i));
-                    if (get(row1, col1).compareTo(table2.get(row2, col2)) != 0) {
-                        equals = false;
-                    }
-                }
-                if (equals == true) {
-                    for (int col = 0; col < columnNames.size(); col += 1) {
-                        if (columnName1.contains(columnNames.get(col))) {
-                            if (conditions != null){
-                                if (Condition.test(conditions, row1, row2)) {
-                                    values.add(get(row1, findColumn(columnNames.get(col))));
-                                }
-                            } else {
-                                values.add(get(row1, findColumn(columnNames.get(col))));
-                            }
-                        } else if (columnName2.contains(columnNames.get(col))) {
-                            if (conditions != null) {
-                                if (Condition.test(conditions, row1, row2)) {
-                                    values.add(table2.get(row2, table2.findColumn(columnNames.get(col))));
-                                }
-                            } else {
-                                values.add(table2.get(row2, table2.findColumn(columnNames.get(col))));
-                            }
-                        } else if (columnEquals.contains(columnNames.get(col))) {
-                            if (conditions != null) {
-                                if (Condition.test(conditions, row1, row2)) {
-                                    values.add(get(row1, findColumn(columnNames.get(col))));
-                                }
-                            } else {
-                                values.add(get(row1, findColumn(columnNames.get(col))));
-                            }
-                        } else {
-                            throw error("Internal error");
-                        }
-                    }
-                }
-                if (values.size() == columnNames.size()) {
-                    String[] valueString = new String[values.size()];
-                    for (int i = 0; i < values.size(); i += 1) {
-                        valueString[i] = values.get(i);
-                    }
-                    result.add(valueString);
-                }
-                values.clear();
-            }
-        }*/
-
         //create natural inner joint table
         ValueList column = new ValueList();
         ArrayList<Column> columnList = new ArrayList<Column>();
@@ -478,11 +437,7 @@ class Table {
             table.add(columnGroup.get(0),ints);
         }
         Table returnTable = table.select(columnNames, null);
-        //returnTable.print();
-        //table.print();
-        //return table;
         return returnTable;
-        //return result;
     }
 
     /** Return <0, 0, or >0 depending on whether the row formed from
@@ -508,7 +463,6 @@ class Table {
      *  into those tables. */
     private static boolean equijoin(List<Column> common1, List<Column> common2,
                                     int row1, int row2) {
-        //return true; // REPLACE WITH SOLUTION
         for (int col = 0; col < common1.size(); col += 1) {
             if (common1.get(col).getFrom(row1).compareTo(common2.get(col).getFrom(row2)) != 0) {
                 return false;

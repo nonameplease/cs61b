@@ -17,7 +17,6 @@ class Condition {
      *  are column designators. and RELATION is one of the
      *  strings "<", ">", "<=", ">=", "=", or "!=". */
     Condition(Column col1, String relation, Column col2) {
-        // YOUR CODE HERE
         _col1 = col1;
         _relation = relation;
         _col2 = col2;
@@ -38,8 +37,6 @@ class Condition {
      *  from which my columns are selected, returns the result of
      *  performing the test I denote. */
     boolean test(Integer... rows) {
-        // REPLACE WITH SOLUTION
-        //return false;
         int result;
         if (_col2 != null) {
             result = _col1.getFrom(rows).compareTo(_col2.getFrom(rows));
@@ -96,6 +93,5 @@ class Condition {
     private Column _col1, _col2;
     /** Second operand, if literal (otherwise null). */
     private String _val2;
-    // ADD ADDITIONAL FIELDS HERE
     private String _relation;
 }

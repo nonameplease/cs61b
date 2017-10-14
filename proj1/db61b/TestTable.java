@@ -100,17 +100,17 @@ public class TestTable {
 
     @Test
     public void testReadTable() {
-        Table table2 = Table.readTable("testing/blank");
+        Table table2 = Table.readTable("blank");
         assertEquals("First", table2.getTitle(0));
         assertEquals("Third", table2.getTitle(2));
-        Table table3 = Table.readTable("testing/enrolled");
+        Table table3 = Table.readTable("enrolled");
         assertEquals("SID", table3.getTitle(0));
         assertEquals("A", table3.get(4, 2));
     }
 
     @Test
     public void testWriteTable() {
-        Table tableblank = Table.readTable("testing/blank");
+        Table tableblank = Table.readTable("blank");
         tableblank.writeTable("blanktest");
         Table blank = Table.readTable("blanktest");
         assertEquals(tableblank.getTitle(0), blank.getTitle(0));
@@ -125,14 +125,14 @@ public class TestTable {
     @Test
     public void testPrint() {
         //Table table2 = Table.readTable("testing/enrolled");
-        Table table2 = Table.readTable("testing/select2testfile1");
+        Table table2 = Table.readTable("select2testfile1");
         System.out.println("testPrint");
         table2.print();
     }
 
     @Test
     public void testSelect() {
-        Table table2 = Table.readTable("testing/enrolled");
+        Table table2 = Table.readTable("enrolled");
         Column col1 = new Column("SID", table2);
         Column col2 = new Column("Grade", table2);
         Condition gradeA = new Condition(col2, "=", "A");
