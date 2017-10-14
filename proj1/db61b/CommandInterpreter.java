@@ -223,7 +223,9 @@ class CommandInterpreter {
     /** Parse and execute a print statement from the token stream. */
     void printStatement() {
         _input.next("print");
-        Table table = tableName();
+        String name = name();
+        Table table = _database.get(name);
+        System.out.println("Contents of " + name + ":");
         table.print();
         _input.next(";");
     }

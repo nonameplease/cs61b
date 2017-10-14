@@ -13,6 +13,5 @@ public class UnitTest {
         textui.runClasses(
                 TestTable.class
         );
-        /** textui.runClasses(); */
     }
 }
