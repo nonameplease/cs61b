@@ -283,50 +283,29 @@ class Table {
             for (int col2 = 0; col2 < table2.columns(); col2 += 1) {
                 if (getTitle(col).compareTo(table2.getTitle(col2)) == 0) {
                     column.add(getTitle(col));
-                    titles.add(getTitle(col));
+                    columnList.add(new Column(getTitle(col), this));
+                    columnList2.add(new Column(getTitle(col), table2));
                 }
             }
         }
-        for (int i = 0; i < column.size(); i += 1) {
-            columnList.add(new Column(column.get(i), this));
-            columnList2.add(new Column(column.get(i), table2));
-        }
-
         for (int row1 = 0; row1 < size(); row1 += 1) {
             for (int row2 = 0; row2 < table2.size(); row2 += 1) {
                 if (equijoin(columnList, columnList2, row1, row2)) {
                     ArrayList<Column> tempColumn = new ArrayList<Column>();
                     ArrayList<Integer> tempRows = new ArrayList<Integer>();
-                    boolean state = false;
-                    if (conditions != null) {
-                        if (Condition.test(conditions, row1, row2)) {
-                            state = true;
-                        }
-                    } else {
-                        state = true;
-                    }
-                    if (state) {
-                        for (int col = 0; col < column.size(); col += 1) {
-                            tempColumn.add(columnList.get(col));
-                            tempRows.add(row1);
-                        }
+                    if (conditions == null
+                            || Condition.test(conditions, row1, row2)) {
                         for (int col = 0; col < columns(); col += 1) {
-                            if (!column.contains(getTitle(col))) {
-                                tempColumn.add(new Column(getTitle(col), this));
-                                tempRows.add(row1);
-                                if (!titles.contains(getTitle(col))) {
-                                    titles.add(getTitle(col));
-                                }
-                            }
+                            tempColumn.add(new Column(getTitle(col), this));
+                            tempRows.add(row1);
+                            titles.add(getTitle(col));
                         }
                         for (int col = 0; col < table2.columns(); col += 1) {
                             if (!column.contains(table2.getTitle(col))) {
                                 tempColumn.add(new Column(
                                         table2.getTitle(col), table2));
                                 tempRows.add(row2);
-                                if (!titles.contains(table2.getTitle(col))) {
-                                    titles.add(table2.getTitle(col));
-                                }
+                                titles.add(table2.getTitle(col));
                             }
                         }
                         columnGroup.add(tempColumn);
@@ -335,7 +314,7 @@ class Table {
                 }
             }
         }
-        Table table = new Table(titles);
+        Table table = new Table(titles.subList(0, columnGroup.get(0).size()));
         for (int i = 0; i < rowGroup.size(); i += 1) {
             Integer[] ints = new Integer[rowGroup.get(i).size()];
             for (int j = 0; j < rowGroup.get(i).size(); j += 1) {

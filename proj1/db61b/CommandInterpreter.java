@@ -271,8 +271,8 @@ class CommandInterpreter {
         if (_input.nextIf(",")) {
             Table table2 = tableName();
             for (int i = 0; i < title.size(); i += 1) {
-                if (table.findColumn(title.get(i)) == -1 &&
-                        table2.findColumn(title.get(i)) == -1) {
+                if (table.findColumn(title.get(i)) == -1
+                        && table2.findColumn(title.get(i)) == -1) {
                     throw error("unknown column: " + title.get(i));
                 }
             }
