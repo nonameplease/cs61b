@@ -95,7 +95,7 @@ public class CompactLinkedList<T> extends AbstractSequentialList<T> {
 
         @Override
         /** Insert OBJ immediately before the element that would be
-         *  returned by next() (if any) and before the element that would
+         *  returned by next() (if any) and after the element that would
          *  be returned by previous() (if any).  Throws an
          *  IllegalStateException if the list is currently full. */
         public void add(T obj) {
