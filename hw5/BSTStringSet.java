@@ -26,11 +26,13 @@ public class BSTStringSet implements StringSet {
         if (n == null) {
             return new Node(s);
         }
-        if (s.compareTo(n.s) < 0) {
-            n.left = putHelper(s, n.left);
-        }
-        if (s.compareTo(n.s) > 0) {
-            n.right = putHelper(s, n.right);
+        if (s != null) {
+            if (s.compareTo(n.s) < 0) {
+                n.left = putHelper(s, n.left);
+            }
+            if (s.compareTo(n.s) > 0) {
+                n.right = putHelper(s, n.right);
+            }
         }
         return n;
     }
@@ -51,11 +53,13 @@ public class BSTStringSet implements StringSet {
         if (n == null) {
             return false;
         }
-        if (s.compareTo(n.s) < 0) {
-            return containsHelper(s, n.left);
-        }
-        if (s.compareTo(n.s) > 0) {
-            return containsHelper(s, n.right);
+        if (s != null) {
+            if (s.compareTo(n.s) < 0) {
+                return containsHelper(s, n.left);
+            }
+            if (s.compareTo(n.s) > 0) {
+                return containsHelper(s, n.right);
+            }
         }
         return true;
     }
