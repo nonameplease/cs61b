@@ -23,10 +23,10 @@ public class BSTStringSet implements StringSet {
      * @return Put String s in the BSTStringSet.
      */
     private Node putHelper(String s, Node n) {
-        if (n == null) {
-            return new Node(s);
-        }
         if (s != null) {
+            if (n == null) {
+                return new Node(s);
+            }
             if (s.compareTo(n.s) < 0) {
                 n.left = putHelper(s, n.left);
             }
