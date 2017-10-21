@@ -74,9 +74,10 @@ public class BSTStringSet implements StringSet {
         if (n == null) {
             return null;
         }
-        List returnValue = new ArrayList();
-        returnValue.add(asListHelper(n.left));
-        returnValue.add(asListHelper(n.right));
+        List<String> returnValue = new ArrayList<String>();
+        returnValue.add(n.s);
+        asListHelper(n.left);
+        asListHelper(n.right);
         return returnValue;
     }
 
