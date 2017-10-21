@@ -3,25 +3,29 @@ HW #5.
 
 Question D.
 
-1.
+1. Theta(x**2)
 
 
-2.
+2. Theta(log(x))
 
 
-3.
+3. Theta(x**2)
+    It is because j is running (1 + N)N/2 times.
 
+4. Theta(N+M)
+    It is because j is never reset to zero in the for loop, second for loop run M times
+    then outside for loop run N times while inside for loop run 1 time.
+5. Theta(N*log(N))
+    It is because each level run N times and there are log(N) levels.
 
-4.
+6. log_10(b**(log_b(f(x)))) = log_10(f(x))
+    log_10(b) * log_b(f(x)) = log_10(f(x))
+    This shows that log_b(f(x)) and log_10(f(x)) is different by a constant factor, which
+    means that for x > M, there exist a K such that abs(log_b(f(x))) < abs(K*log_10(f(x)))
+7. log(p(x)) <= log(last term of polynomial + 1).
+    Assuming last term of polynomial is an*x**n, then log(an*x**n + 1) = O(log(x**n)) = O(n*log(x))
 
-
-5.
-
-
-6.
-
-
-7.
-
-
-8.
+8. f(n) <= ceiling of f(n) <= f(n) + 1. Assuming N in f, f(N) > 0.
+    Because f is non-decreasing, f(n) >= f(N) for all n >= N. This leads to:
+    for n >= N:
+    ceiling of f(n) <= f(n)*(1 + 1/f(N))
