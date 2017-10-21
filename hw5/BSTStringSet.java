@@ -77,7 +77,7 @@ public class BSTStringSet implements StringSet {
      */
     private List<String> asListHelper(Node n, List list) {
         if (n == null) {
-            return null;
+            return list;
         }
         asListHelper(n.left, list);
         list.add(n.s);
