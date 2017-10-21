@@ -66,7 +66,8 @@ public class BSTStringSet implements StringSet {
 
     @Override
     public List<String> asList() {
-        return asListHelper(root);
+        List<String> returnValue = new ArrayList<String>();
+        return asListHelper(root, returnValue);
     }
 
     /**
@@ -74,15 +75,14 @@ public class BSTStringSet implements StringSet {
      * @param n A Node
      * @return A List implementation
      */
-    private List<String> asListHelper(Node n) {
+    private List<String> asListHelper(Node n, List list) {
         if (n == null) {
             return null;
         }
-        List<String> returnValue = new ArrayList<String>();
-        returnValue.add(n.s);
-        asListHelper(n.left);
-        asListHelper(n.right);
-        return returnValue;
+        asListHelper(n.left, list);
+        list.add(n.s);
+        asListHelper(n.right, list);
+        return list;
     }
 
     /** Represents a single Node of the tree. */
