@@ -75,7 +75,7 @@ public class BSTStringSet implements StringSet {
      * @param n A Node
      * @return A List implementation
      */
-    private List<String> asListHelper(Node n, List list) {
+    private List<String> asListHelper(Node n, List<String> list) {
         if (n == null) {
             return list;
         }
