@@ -33,13 +33,7 @@ following formats:
      @<TEXT
   specifies that the next line of filtered output from the program in this
   section (see below) must exactly match TEXT, ignoring trailing blanks and
-  prompts, etc. from the program for 
-  this section, ending with a "... wins." message.  ENDPATN is
-  an optional Python pattern.  If present, it must match the "wins" line (as for @?).
-
-* The line
-     @black...ENDPATN
-  is similar, except that the first move is from Black.
+  prompts, etc., from the program for this section.
 
 * The line
      @send white...ENDPATN
