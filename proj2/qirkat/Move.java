@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
  *  each distinct Move.  A "vestigial" move represents a single board
  *  position, as opposed to a move (its starting and ending rows are
  *  equal, likewise columns).
- *  @author
+ *  @author Scott Shao
  */
 class Move {
 

@@ -1,9 +1,8 @@
 package qirkat;
 
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.Observable;
-import java.util.Observer;
+import com.sun.tools.javac.code.Attribute;
+
+import java.util.*;
 
 import static qirkat.PieceColor.*;
 import static qirkat.Move.*;
@@ -17,13 +16,17 @@ import static qirkat.Move.*;
  *  counting from 0).
  *
  *  Moves on this board are denoted by Moves.
- *  @author
+ *  @author Scott Shao
  */
 class Board extends Observable {
 
     /** A new, cleared board at the start of the game. */
     Board() {
         // FIXME?
+
+        //////////
+        _board = defaultBoard;
+        //////////
         clear();
     }
 
@@ -45,6 +48,11 @@ class Board extends Observable {
         _gameOver = false;
 
         // FIXME
+        //////////
+        String defaultString =
+                "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
+        setPieces(defaultString, _whoseMove);
+        //////////
 
         setChanged();
         notifyObservers();
@@ -249,6 +257,9 @@ class Board extends Observable {
     String toString(boolean legend) {
         Formatter out = new Formatter();
         // FIXME
+        if (legend == false) {
+            out.format("a", _board);
+        }
         return out.toString();
     }
 
@@ -271,6 +282,17 @@ class Board extends Observable {
      *  a specialized private list type for this purpose. */
     private static class MoveList extends ArrayList<Move> {
     }
+
+    //////////
+    private String[] defaultBoard =
+            {"w", "w", "w", "w", "w",
+                    "w", "w", "w", "w", "w",
+                    "b", "b", "-", "w", "w",
+                    "b", "b", "b", "b", "b",
+                    "b", "b", "b", "b", "b"};
+
+    private String[] _board;
+    //////////
 
     /** A read-only view of a Board. */
     private class ConstantBoard extends Board implements Observer {
