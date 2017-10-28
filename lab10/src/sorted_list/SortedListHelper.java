@@ -18,7 +18,8 @@ public class SortedListHelper {
     public static <T extends Comparable<T>> void insertIntoSortedList(List<T> list, T item) {
         boolean inserted = false;
 
-        for (int i = 0; i < list.size(); i++) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
             if (item.compareTo(list.get(i)) < 0) {
                 list.add(i, item);
                 inserted = true;
