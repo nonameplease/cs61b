@@ -49,9 +49,7 @@ class Board extends Observable {
 
         // FIXME
         //////////
-        String defaultString =
-                "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
-        setPieces(defaultString, _whoseMove);
+        setPieces(defaultBoard, _whoseMove);
         //////////
 
         setChanged();
@@ -66,6 +64,7 @@ class Board extends Observable {
     /** Copy B into me. */
     private void internalCopy(Board b) {
         // FIXME
+        _board = b._board;
     }
 
     /** Set my contents as defined by STR.  STR consists of 25 characters,
@@ -102,6 +101,7 @@ class Board extends Observable {
             }
         }
 
+        _board = str;
         // FIXME
 
         setChanged();
@@ -124,7 +124,14 @@ class Board extends Observable {
     /** Return the current contents of the square at linearized index K. */
     PieceColor get(int k) {
         assert validSquare(k);
-        return null; // FIXME
+        //return null; // FIXME
+        if (_board.charAt(k) == 'b') {
+            return BLACK;
+        } else if (_board.charAt(k) == 'w') {
+            return WHITE;
+        } else {
+            return EMPTY;
+        }
     }
 
     /** Set get(C, R) to V, where 'a' <= C <= 'e', and
@@ -138,11 +145,53 @@ class Board extends Observable {
     private void set(int k, PieceColor v) {
         assert validSquare(k);
         // FIXME
+        _board =  _board.substring(0, k) + v.shortName() + _board.substring(k + 1);
     }
 
     /** Return true iff MOV is legal on the current board. */
     boolean legalMove(Move mov) {
-        return false; // FIXME
+        /**
+         * Need to be fixed since it is used to check for legal moves.
+         */
+        //return false; // FIXME
+        if (validSquare(mov.col0(), mov.row0()) && validSquare(mov.col1(), mov.row1())) {
+            if (get(mov.col0(), mov.row0()) != EMPTY) {
+                /**
+                 * Up, Down, Left, Right
+                 */
+                if (Math.abs(mov.col0() - mov.col1()) + Math.abs(mov.row0() - mov.row1()) == 1) {
+                    if (get(mov.col1(), mov.row1()) == EMPTY) {
+                        /**
+                         * Up, Down
+                         */
+                        if (get(mov.col0(), mov.row0()) == BLACK) {
+                            if (mov.row1() - mov.row0() <= 0) {
+                                return true;
+                            }
+                        }
+
+                        if (get(mov.col0(), mov.row0()) == WHITE) {
+                            if (mov.row1() - mov.row0() >= 0) {
+                                return true;
+                            }
+                        }
+
+                        /**
+                         * Left, Right
+                         */
+                        if (Math.abs(mov.col0() - mov.col1()) == 1) {
+                            return true;
+                        }
+                    }
+                }
+
+                /**
+                 * Still need to inpliment diagonal
+                 * This should be a lot easier?
+                 */
+            }
+        }
+        return false;
     }
 
     /** Return a list of all legal moves from the current position. */
@@ -172,12 +221,112 @@ class Board extends Observable {
      *  with linearized index K to MOVES. */
     private void getMoves(ArrayList<Move> moves, int k) {
         // FIXME
+
+        /**
+         * Diagonal
+         */
+        if (k % 2 == 0) {
+            if (get(k) == BLACK) {
+                if (validSquare(k - 4) && row(k) - 1 == row(k - 4) && get(k - 4) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k - 4), row(k - 4)));
+                }
+
+                if (validSquare(k - 6) && row(k) - 1 == row(k - 6) && get(k - 6) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k - 6), row(k - 6)));
+                }
+            }
+
+            if (get(k) == WHITE) {
+                if (validSquare(k + 4) && row(k) + 1 == row(k + 4) && get(k + 4) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k + 4), row(k + 4)));
+                }
+
+                if (validSquare(k + 6) && row(k) + 1 == row(k + 6) && get(k + 6) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k + 6), row(k + 6)));
+                }
+            }
+        }
+
+        /**
+         * Left and Right
+         */
+        if (get(k) == BLACK || get(k) == WHITE) {
+            if (validSquare(k - 1) && row(k) == row(k - 1) && get(k - 1) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k - 1), row(k)));
+            }
+
+            if (validSquare(k + 1) && row(k) == row(k + 1) && get(k + 1) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k + 1), row(k)));
+            }
+        }
+
+        /**
+         * Up and Down
+         */
+        if (get(k) == BLACK) {
+            if (validSquare(k - 5) && get(k - 5) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k - 5), row(k - 5)));
+            }
+        }
+
+        if (get(k) == WHITE) {
+            if (validSquare(k + 5) && get(k + 5) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k + 5), row(k + 5)));
+            }
+        }
+
     }
 
     /** Add all legal captures from the position with linearized index K
      *  to MOVES. */
     private void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
+
+
+        if (get(k) == BLACK || get(k) == WHITE) {
+            /**
+             * Left and Right
+             */
+            if (validSquare(k - 2) && row(k) == row(k - 2) && get(k - 1) == get(k).opposite() && get(k - 2) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k - 2), row(k - 2)));
+            }
+
+            if (validSquare(k + 2) && row(k) == row(k + 2) && get(k + 1) == get(k).opposite() && get(k + 2) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k + 2), row(k + 2)));
+            }
+
+            /**
+             * Up and Down
+             */
+            if (validSquare(k - 10) && get(k - 5) == get(k).opposite() && get(k - 10) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k - 10), row(k - 10)));
+            }
+
+            if (validSquare(k + 10) && get(k + 5) == get(k).opposite() && get(k + 10) == EMPTY) {
+                moves.add(move(col(k), row(k), col(k + 10), row(k + 10)));
+            }
+
+            /**
+             * Diagonal
+             */
+            if (k % 2 == 0) {
+                if (validSquare(k - 8) && row(k) - 2 == row(k - 8) && get(k - 4) == get(k).opposite() && get(k - 8) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k - 8), row(k - 8)));
+                }
+
+                if (validSquare(k - 12) && row(k) - 2 == row(k - 12) && get(k - 6) == get(k).opposite() && get(k - 12) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k - 12), row(k - 12)));
+                }
+
+                if (validSquare(k + 8) && row(k) - 2 == row(k + 8) && get(k + 4) == get(k).opposite() && get(k + 8) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k + 8), row(k + 8)));
+                }
+
+                if (validSquare(k + 12) && row(k) + 2 == row(k + 12) && get(k + 6) == get(k).opposite() && get(k + 12) == EMPTY) {
+                    moves.add(move(col(k), row(k), col(k + 12), row(k + 12)));
+                }
+            }
+        }
     }
 
     /** Return true iff MOV is a valid jump sequence on the current board.
@@ -234,6 +383,8 @@ class Board extends Observable {
         assert legalMove(mov);
 
         // FIXME
+        set(mov.col1(), mov.row1(), get(mov.col0(), mov.row0()));
+        set(mov.col0(), mov.row0(), EMPTY);
 
         setChanged();
         notifyObservers();
@@ -258,7 +409,7 @@ class Board extends Observable {
         Formatter out = new Formatter();
         // FIXME
         if (legend == false) {
-            out.format("a", _board);
+            out.format("%s", _board);
         }
         return out.toString();
     }
@@ -284,14 +435,11 @@ class Board extends Observable {
     }
 
     //////////
-    private String[] defaultBoard =
-            {"w", "w", "w", "w", "w",
-                    "w", "w", "w", "w", "w",
-                    "b", "b", "-", "w", "w",
-                    "b", "b", "b", "b", "b",
-                    "b", "b", "b", "b", "b"};
+    private String defaultBoard =
+            "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
 
-    private String[] _board;
+    private String _board;
+
     //////////
 
     /** A read-only view of a Board. */

@@ -159,13 +159,15 @@ class Move {
     /** Return true iff this is a horizontal, non-capturing move to
      *  the left. */
     boolean isLeftMove() {
-        return false; // FIXME
+        //return false; // FIXME
+        return _col0 > _col1 && !_isJump;
     }
 
     /** Return true iff this is a horizontal, non-capturing move
      *  to the right. */
     boolean isRightMove() {
-        return false; // FIXME
+        //return false; // FIXME
+        return _col0 < _col1 && !_isJump;
     }
 
     /** Returns the source column. */
@@ -191,13 +193,31 @@ class Move {
     /** For a jump, returns the row of the jumped-over square for the
      *  first leg of the jump.  For a non-capturing move, same as row1(). */
     char jumpedRow() {
-        return '1';  // FIXME
+        //return '1';  // FIXME
+        if (!_isJump) {
+            return _row1;
+        } else {
+            if (_row0 < _row1) {
+                return (char) (_row0 + '1');
+            } else {
+                return (char) (_row0 - '1');
+            }
+        }
     }
 
     /** For a jump, returns the column of the jumped-over square for the
      *  first leg of the jump.  For a non-capturing move, same as col1(). */
     char jumpedCol() {
-        return 'a'; // FIXME
+        //return 'a'; // FIXME
+        if (!_isJump) {
+            return _col1;
+        } else {
+            if (_col0 < _col1) {
+                return (char) (_col0 + 'a');
+            } else {
+                return (char) (_col0 - 'a');
+            }
+        }
     }
 
     /** Return the linearized index of my source square. */
@@ -271,7 +291,11 @@ class Move {
 
     /** Write my string representation into OUT. */
     private void toString(Formatter out) {
-        out.format("???"); // FIXME
+        //out.format("???"); // FIXME
+        out.format("%s%s-%s%s", _col0, _row0, _col1, _row1);
+        if (_staged != null && _staged._nextJump != null) {
+            _staged._nextJump.toString();
+        }
     }
 
     /** Set me to COL0 ROW0 - COL1 ROW1 - NEXTJUMP. */
