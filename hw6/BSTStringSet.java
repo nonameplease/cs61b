@@ -51,7 +51,7 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
 
     @Override
     public Iterator<String> iterator(String low, String high) {
-        return null;  // FIXME
+        return new BSTIterator(low, high);
     }
 
     /** Return either the node in this BST that contains S, or, if
@@ -97,7 +97,7 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
     }
 
     /** An iterator over BSTs. */
-    private static class BSTIterator implements Iterator<String> {
+    private class BSTIterator implements Iterator<String> {
         /** Stack of nodes to be delivered.  The values to be delivered
          *  are (a) the label of the top of the stack, then (b)
          *  the labels of the right child of the top of the stack inorder,
@@ -106,9 +106,21 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
          *  the stack. */
         private Stack<Node> _toDo = new Stack<>();
 
+        private String _low, _high;
+
+        private boolean bounded = false;
+
+
         /** A new iterator over the labels in NODE. */
         BSTIterator(Node node) {
             addTree(node);
+        }
+
+        BSTIterator(String low, String high) {
+            _low = low;
+            _high = high;
+            addTree(root);
+            bounded = true;
         }
 
         @Override
@@ -134,14 +146,28 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
 
         /** Add the relevant subtrees of the tree rooted at NODE. */
         private void addTree(Node node) {
-            while (node != null) {
-                _toDo.push(node);
-                node = node.left;
+            if (!bounded) {
+                while (node != null) {
+                    _toDo.push(node);
+                    node = node.left;
+                }
+            } else {
+                if (node != null) {
+                    if (node.s.compareTo(_low) < 0) {
+                        addTree(node.right);
+                    } else if (node.s.compareTo(_high) >= 0) {
+                        addTree(node.left);
+                    } else {
+                        _toDo.push(node);
+                        addTree(node.left);
+                    }
+                }
             }
         }
     }
 
     // ADD A CLASS, PERHAPS?
+   // private static class BSTIteratorBound extends BSTIterator
 
     /** Root node of the tree. */
     private Node root;
