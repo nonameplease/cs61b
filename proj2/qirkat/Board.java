@@ -91,6 +91,17 @@ class Board extends Observable {
         _board = str.toCharArray();
 
         for (int k = 0; k < str.length(); k += 1) {
+            int destk = 0;
+            if (k >= 0 && k <= 4) {
+                destk = k + 20;
+            } else if (k >= 5 && k <= 9) {
+                destk = k + 10;
+            } else if (k >= 15 && k <= 19) {
+                destk = k - 10;
+            } else if (k >= 20 && k <= 24) {
+                destk = k - 20;
+            }
+
             switch (str.charAt(k)) {
             case '-':
                 set(k, EMPTY);
@@ -107,6 +118,7 @@ class Board extends Observable {
         }
 
         // FIXME
+        _whoseMove = nextMove.opposite();
 
         setChanged();
         notifyObservers();

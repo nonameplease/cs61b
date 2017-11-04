@@ -41,4 +41,12 @@ public class MoveTest {
         assertEquals("a3-a5-c3", parseMove("a3-a5-c3").toString());
         assertEquals("a3-a5-c3-e1", parseMove("a3-a5-c3-e1").toString());
     }
+
+    /////////////////////////////////////////
+    @Test
+    public void testIndex() {
+        System.out.println(Move.index('a', '1'));
+        System.out.println(Move.index('e', '5'));
+    }
+    /////////////////////////////////////////
 }

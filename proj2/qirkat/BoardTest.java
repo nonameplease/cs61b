@@ -104,9 +104,30 @@ public class BoardTest {
         assertEquals(test10, testingBuffer);
         test10.add(22);
         test10.add(2);
+        /**
+         * Testing PossibleDiagonalJump and concatenation of ArrayList.
+         */
         testBoard.PossibleDiagonalJump(10, testingBuffer);
         assertEquals(test10, testingBuffer);
         testingBuffer.clear();
+    }
+
+    @Test
+    public void testSetPieces() {
+        /**
+         * Did not test PieceColor.
+         */
+        Board b0 = new Board();
+        Board b1 = new Board(b0);
+        b0.setPieces(GAME1_BOARD, PieceColor.BLACK);
+        assertEquals(GAME1_BOARD, b0.toString());
+        System.out.println(b0.toString());
+        assertEquals(PieceColor.WHITE, b0.get('a', '1'));
+    }
+
+    @Test
+    public void testGetMove() {
+
     }
     //////////////////////////////////////////////////////
 
