@@ -66,7 +66,9 @@ class Board extends Observable {
     /** Copy B into me. */
     private void internalCopy(Board b) {
         // FIXME
-        _board = b._board;
+        _board = b.toString().toCharArray();
+        _whoseMove = b.whoseMove();
+        _gameOver = b.gameOver();
     }
 
     /** Set my contents as defined by STR.  STR consists of 25 characters,

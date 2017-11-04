@@ -150,6 +150,19 @@ public class BoardTest {
         //System.out.println(testingBuffer);
         //assertEquals(movesc3, testingBuffer);
     }
+
+    @Test
+    public void testGetMoves() {
+        Board testBoard = new Board();
+        testBoard.setPieces(GAME1_BOARD, PieceColor.BLACK);
+        System.out.println(testBoard);
+        System.out.println(testBoard.getMoves());
+        String GAME2_BOARD =
+                "  b b b b b\n  b b b b b\n  - b - b -\n  w - w - w\n  w w w w w";
+        testBoard.setPieces(GAME2_BOARD, PieceColor.BLACK);
+        System.out.println(testBoard);
+        System.out.println(testBoard.getMoves());
+    }
     //////////////////////////////////////////////////////
 
 }
