@@ -47,7 +47,7 @@ class ECHashStringSet implements StringSet {
         size += 1;
         int bucketNum = buckets.length;
         if (size == 1) {
-
+            buckets[0].add(s);
         } else if (size > bucketNum * MAX_LOAD_FACTOR && !resizing) {
             resize(bucketNum * 5);
         } else if (size < bucketNum / MAX_LOAD_FACTOR && !resizing) {

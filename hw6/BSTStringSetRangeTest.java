@@ -50,6 +50,7 @@ public class BSTStringSetRangeTest {
     }
 
     /** ARGS = [ random seed, size of WORDS1, low bound, high bound ]. */
+    String[] test1 = {"100", "100", "4", "8"};
     public static void main(String[] args) {
         long seed = Long.parseLong(args[0]);
         int N = Integer.parseInt(args[1]);
