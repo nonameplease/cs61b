@@ -64,7 +64,14 @@ class ECHashStringSet implements StringSet {
 
     public boolean contains(String s) {
         if (s != null) {
-            return this.contains(s);
+            int bucketNum = buckets.length;
+            int hashCode = s.hashCode() & REMOVE_TOP_BIT;
+            int whichBucket = hashCode & bucketNum;
+            if (buckets[whichBucket] == null) {
+                return false;
+            } else {
+                return buckets[whichBucket].contains(s);
+            }
         } else {
             return false;
         }

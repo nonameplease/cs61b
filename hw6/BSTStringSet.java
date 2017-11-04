@@ -1,8 +1,4 @@
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Implementation of a BST based String Set.
@@ -51,7 +47,7 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
 
     @Override
     public Iterator<String> iterator(String low, String high) {
-        return new BSTIterator(low, high);
+        return new BSTIterator(low, high, root);
     }
 
     /** Return either the node in this BST that contains S, or, if
@@ -104,7 +100,7 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
          *  then (c) the nodes in the rest of the stack (i.e., the result
          *  of recursively applying this rule to the result of popping
          *  the stack. */
-        private Stack<Node> _toDo = new Stack<>();
+        private ArrayDeque<Node> _toDo = new ArrayDeque<>();
 
         private String _low, _high;
 
@@ -116,16 +112,16 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
             addTree(node);
         }
 
-        BSTIterator(String low, String high) {
+        BSTIterator(String low, String high, Node n) {
             _low = low;
             _high = high;
-            addTree(root);
+            addTree(n);
             bounded = true;
         }
 
         @Override
         public boolean hasNext() {
-            return !_toDo.empty();
+            return !_toDo.isEmpty();
         }
 
         @Override
