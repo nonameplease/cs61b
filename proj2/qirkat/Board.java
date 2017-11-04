@@ -159,6 +159,8 @@ class Board extends Observable {
          * Need to be fixed since it is used to check for legal moves.
          */
         //return false; // FIXME
+
+        return (getMoves().contains(mov));
         /*if (validSquare(mov.col0(), mov.row0()) && validSquare(mov.col1(), mov.row1())) {
             if (get(mov.col0(), mov.row0()) != EMPTY) {
                 *//**
@@ -198,12 +200,28 @@ class Board extends Observable {
         }
         return false;*/
         //assume all move in mov is on board.
-        if (!mov.isJump()) {
+        /*if (!mov.isJump()) {
             if (get(mov.col0(), mov.row0()).isPiece() && !get(mov.col1(), mov.row1()).isPiece()) {
-
+                if (Math.abs(mov.row0() - mov.row1()) == 1 || Math.abs(mov.col0() - mov.col1()) == 1) {
+                    if (get(mov.col0(), mov.row0()) == BLACK) {
+                        if (mov.row1() <= mov.row0()) {
+                            return true;
+                        }
+                    } else if (get(mov.col0(), mov.row0()) == WHITE) {
+                        if (mov.row1() >= mov.row0()) {
+                            return true;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        } else {
+            if (get(mov.col0(), mov.row0()).isPiece() && !get(mov.col1(), mov.row1()).isPiece()) {
+                if ()
             }
         }
-        return false;
+        return false;*/
     }
 
     /** Return a list of all legal moves from the current position. */
@@ -359,7 +377,12 @@ class Board extends Observable {
     /** Return true iff a jump is possible for a piece at position with
      *  linearized index K. */
     boolean jumpPossible(int k) {
-        return false; // FIXME
+        //return false; // FIXME
+        int range = 8;
+        if (k % 2 == 1) {
+            range = 4;
+        }
+
     }
 
     /** Return true iff a jump is possible from the current board. */
@@ -461,6 +484,25 @@ class Board extends Observable {
            // "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
 
     private char[] _board;
+
+    /**
+     * ArrayList dictionary.
+     * 0 -> Up = 5.
+     * 1 -> Down = -5.
+     * 2 -> Left = -1.
+     * 3 -> Right = 1.
+     * 4 -> UpLeft = 4.
+     * 5 -> UpRight = 6.
+     * 6 -> DownLeft = -6.
+     * 7 -> DownRight = -4.
+     */
+    private ArrayList<Integer> direction = new ArrayList<Integer>(Arrays.asList(5, -5, -1, 1, 4, 6, -6, -4));
+
+    private boolean inside(int k) {
+        
+    }
+
+
 
     //////////
 
