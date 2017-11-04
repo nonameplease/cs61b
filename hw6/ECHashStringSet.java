@@ -34,11 +34,6 @@ class ECHashStringSet implements StringSet {
     private int size;
 
     /**
-     * A boolean to keep track if resizing is in progress.
-     */
-    private boolean resizing = false;
-
-    /**
      * Constructor with bucket size.
      * @param bucketsSize The size of the bucket.
      */
@@ -59,18 +54,42 @@ class ECHashStringSet implements StringSet {
 
     /**
      * Resize the bucket.
-     * @param newCount New bucket number.
      */
-    public void resize(int newCount) {
-        ECHashStringSet newechss = new ECHashStringSet(newCount);
-        newechss.resizing = true;
-        for (int i = 0; i < buckets.size(); i += 1) {
-            for (String s : buckets.get(i)) {
-                newechss.put(s);
+    public void resize() {
+        LinkedList<LinkedList<String>> old = buckets;
+        buckets = new LinkedList<LinkedList<String>>();
+        for (int i = 0; i < old.size() * 2; i += 1) {
+            buckets.add(new LinkedList<String>());
+        }
+        size = 0;
+        for (LinkedList<String> sl : old) {
+            if (sl != null) {
+                for (String s : sl) {
+                    this.put(s);
+                }
             }
         }
-        buckets = newechss.buckets;
-        newechss.resizing = false;
+    }
+
+    /**
+     * Find current load factor.
+     * @return Number of load factor.
+     */
+    private double load() {
+        return ((double) size) / ((double) buckets.size());
+    }
+
+    /**
+     * Find the corresponding bucket of a potentially
+     * negative hashcode.
+     * @param hashCode A hashcode, can be negative.
+     * @return Bucket number.
+     */
+    private int findBucketFromHash(int hashCode) {
+        int bucketNum = buckets.size();
+        int hashCode2 = hashCode & REMOVE_TOP_BIT;
+        int whichBucket = hashCode2 % bucketNum;
+        return whichBucket;
     }
 
     /**
@@ -79,20 +98,16 @@ class ECHashStringSet implements StringSet {
      * @param s A String.
      */
     public void put(String s) {
-        size += 1;
-        int bucketNum = buckets.size();
-        if (size != 1 && size > bucketNum * MAX_LOAD_FACTOR && !resizing) {
-            resize(bucketNum * 5);
-        } else if (size != 1
-                && size < bucketNum / MAX_LOAD_FACTOR && !resizing) {
-            resize(bucketNum / 5);
-        }
-
-        int hashCode = s.hashCode() & REMOVE_TOP_BIT;
-        int whichBucket = hashCode % bucketNum;
-        LinkedList<String> temp = buckets.get(whichBucket);
-        if (!temp.contains(s)) {
-            temp.add(s);
+        if (s != null) {
+            if (load() > MAX_LOAD_FACTOR) {
+                resize();
+            }
+            int key = findBucketFromHash(s.hashCode());
+            if (buckets.get(key) == null) {
+                buckets.add(key, new LinkedList<String>());
+            }
+            buckets.get(key).add(s);
+            size += 1;
         }
     }
 
@@ -102,12 +117,16 @@ class ECHashStringSet implements StringSet {
      * @return true iff S is in the string set.
      */
     public boolean contains(String s) {
-        int bucketNum = buckets.size();
-        int hashCode = s.hashCode() & REMOVE_TOP_BIT;
-        int whichBucket = hashCode % bucketNum;
-        LinkedList<String> temp = buckets.get(whichBucket);
-        //return temp.contains(s);
-        return this.contains(s);
+        if (s != null) {
+            int key = findBucketFromHash(s.hashCode());
+            if (buckets.get(key) == null) {
+                return false;
+            } else {
+                return buckets.get(key).contains(s);
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
