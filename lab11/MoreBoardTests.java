@@ -57,5 +57,9 @@ public class MoreBoardTests {
     public void testSomething() {
     	Board b = getBoard();
     	// write things to test here
+        Board b0 = new Board();
+        assertEquals(b0, b0);
+        makeMoves(b0, null);
+        assertEquals(b0, b0);
     }
 }

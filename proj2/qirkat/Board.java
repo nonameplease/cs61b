@@ -49,7 +49,9 @@ class Board extends Observable {
 
         // FIXME
         //////////
-        setPieces(defaultBoard.toString(), _whoseMove);
+        //System.out.println(defaultBoard);
+        //System.out.println(String.valueOf(defaultBoard));
+        setPieces(String.valueOf(defaultBoard), _whoseMove);
         //////////
 
         setChanged();
@@ -75,6 +77,7 @@ class Board extends Observable {
      *  NEXTMOVE indicates whose move it is.
      */
     void setPieces(String str, PieceColor nextMove) {
+
         if (nextMove == EMPTY || nextMove == null) {
             throw new IllegalArgumentException("bad player color");
         }
@@ -85,6 +88,7 @@ class Board extends Observable {
 
         // FIXME
 
+        _board = str.toCharArray();
 
         for (int k = 0; k < str.length(); k += 1) {
             switch (str.charAt(k)) {
@@ -102,7 +106,6 @@ class Board extends Observable {
             }
         }
 
-        _board = str.toCharArray();
         // FIXME
 
         setChanged();
@@ -147,7 +150,7 @@ class Board extends Observable {
         assert validSquare(k);
         // FIXME
         //_board =  _board.toString().substring(0, ) + v.shortName() + _board.substring(k + 1);
-        _board[k] = v.shortName().toCharArray()[0];
+        _board[k] = v.shortName().charAt(0);
     }
 
     /** Return true iff MOV is legal on the current board. */
@@ -156,16 +159,16 @@ class Board extends Observable {
          * Need to be fixed since it is used to check for legal moves.
          */
         //return false; // FIXME
-        if (validSquare(mov.col0(), mov.row0()) && validSquare(mov.col1(), mov.row1())) {
+        /*if (validSquare(mov.col0(), mov.row0()) && validSquare(mov.col1(), mov.row1())) {
             if (get(mov.col0(), mov.row0()) != EMPTY) {
-                /**
+                *//**
                  * Up, Down, Left, Right
-                 */
+                 *//*
                 if (Math.abs(mov.col0() - mov.col1()) + Math.abs(mov.row0() - mov.row1()) == 1) {
                     if (get(mov.col1(), mov.row1()) == EMPTY) {
-                        /**
+                        *//**
                          * Up, Down
-                         */
+                         *//*
                         if (get(mov.col0(), mov.row0()) == BLACK) {
                             if (mov.row1() - mov.row0() <= 0) {
                                 return true;
@@ -178,19 +181,26 @@ class Board extends Observable {
                             }
                         }
 
-                        /**
+                        *//**
                          * Left, Right
-                         */
+                         *//*
                         if (Math.abs(mov.col0() - mov.col1()) == 1) {
                             return true;
                         }
                     }
                 }
 
-                /**
+                *//**
                  * Still need to inpliment diagonal
                  * This should be a lot easier?
-                 */
+                 *//*
+            }
+        }
+        return false;*/
+        //assume all move in mov is on board.
+        if (!mov.isJump()) {
+            if (get(mov.col0(), mov.row0()).isPiece() && !get(mov.col1(), mov.row1()).isPiece()) {
+
             }
         }
         return false;
@@ -411,7 +421,15 @@ class Board extends Observable {
         Formatter out = new Formatter();
         // FIXME
         if (legend == false) {
-            out.format("%s", _board);
+            for (int i = 0; i < 25; i += 5) {
+                out.format(" ");
+                for (int j = 0; j < 5; j +=1) {
+                    out.format("%2s", String.valueOf(_board[i + j]));
+                }
+                if (i < 20) {
+                    out.format("\n");
+                }
+            }
         }
         return out.toString();
     }

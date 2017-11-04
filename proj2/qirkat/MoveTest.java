@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import static qirkat.Move.*;
 
 /** Test Move creation.
- *  @author
+ *  @author Scott Shao
  */
 public class MoveTest {
 

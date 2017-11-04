@@ -109,6 +109,7 @@ class Move {
         }
         if (move0.isVestigial()) {
             return null; // FIXME
+
         }
         if (move0.jumpTail() == null) {
             return null; // FIXME

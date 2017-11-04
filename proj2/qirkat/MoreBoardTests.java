@@ -60,6 +60,13 @@ public class MoreBoardTests {
     @Test
     public void testSomething() {
     	Board b = getBoard();
+        String[] GAME1 =
+                { "c2-c3", "c4-c2",
+                        "c1-c3", "a3-c1",
+                        "c3-a3", "c5-c4",
+                        "a3-c5-c3",
+                };
     	// write things to test here
+        //makeMove(b, GAME1);
     }
 }
