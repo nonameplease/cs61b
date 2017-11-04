@@ -559,6 +559,8 @@ class Board extends Observable {
 
     /**
      * A integer array representing direction of addition. Even for column, odd for row.
+     * Up -> Right -> Down -> Left ->.
+     * UpRight -> DownRight -> DownLeft -> UpLeft.
      */
     private Integer[] toThat = new Integer[]{0, 1, 1, 0, 0, -1, -1, 0, 1, 1, 1, -1, -1, -1, -1, 1};
 
@@ -581,7 +583,7 @@ class Board extends Observable {
      * @return column assuming on board.
      */
     private int Col(int k) {
-        return k & 5;
+        return k % 5;
     }
 
     /**
@@ -606,7 +608,7 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    private void PossibleStraightMove(int k, ArrayList<Integer> possible) {
+    public void PossibleStraightMove(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 0; i < 8; i += 2) {
@@ -624,7 +626,7 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    private void PossibleDiagonalMove(int k, ArrayList<Integer> possible) {
+    public void PossibleDiagonalMove(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 8; i < 16; i += 2) {
@@ -644,7 +646,7 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    private void PossibleStraightJump(int k, ArrayList<Integer> possible) {
+    public void PossibleStraightJump(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 0; i < 8; i += 2) {
@@ -662,7 +664,7 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    private void PossibleDiagonalJump(int k, ArrayList<Integer> possible) {
+    public void PossibleDiagonalJump(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 8; i < 16; i += 2) {

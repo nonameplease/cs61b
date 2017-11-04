@@ -1,6 +1,9 @@
 package qirkat;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 /** Tests of the Board class.
@@ -53,5 +56,58 @@ public class BoardTest {
         makeMoves(b0, GAME1);
         assertEquals("second pass failed to reach same position", b2, b0);
     }
+
+
+
+    //////////////////////////////////////////////////////
+    @Test
+    public void testPossibleStraightMove() {
+        Board testBoard = new Board();
+        ArrayList<Integer> testingBuffer = new ArrayList<Integer>();
+        ArrayList<Integer> test0 = new ArrayList<Integer>();
+        test0.add(5);
+        test0.add(1);
+        testBoard.PossibleStraightMove(0, testingBuffer);
+        assertEquals(test0, testingBuffer);
+        testingBuffer.clear();
+        ArrayList<Integer> test2 = new ArrayList<Integer>();
+        test2.add(7);
+        test2.add(3);
+        test2.add(1);
+        testBoard.PossibleStraightMove(2, testingBuffer);
+        assertEquals(test2, testingBuffer);
+        test2.add(8);
+        test2.add(6);
+        /**
+         * Testing PossibleDiagonalMove and concatenation of ArrayList.
+         */
+        testBoard.PossibleDiagonalMove(2, testingBuffer);
+        assertEquals(test2, testingBuffer);
+        testingBuffer.clear();
+    }
+
+    @Test
+    public void testPossibleStraightJump() {
+        Board testBoard = new Board();
+        ArrayList<Integer> testingBuffer = new ArrayList<Integer>();
+        ArrayList<Integer> test0 = new ArrayList<Integer>();
+        test0.add(10);
+        test0.add(2);
+        testBoard.PossibleStraightJump(0, testingBuffer);
+        assertEquals(test0, testingBuffer);
+        testingBuffer.clear();
+        ArrayList<Integer> test10 = new ArrayList<Integer>();
+        test10.add(20);
+        test10.add(12);
+        test10.add(0);
+        testBoard.PossibleStraightJump(10, testingBuffer);
+        assertEquals(test10, testingBuffer);
+        test10.add(22);
+        test10.add(2);
+        testBoard.PossibleDiagonalJump(10, testingBuffer);
+        assertEquals(test10, testingBuffer);
+        testingBuffer.clear();
+    }
+    //////////////////////////////////////////////////////
 
 }
