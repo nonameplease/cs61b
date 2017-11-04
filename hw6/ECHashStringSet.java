@@ -58,7 +58,7 @@ class ECHashStringSet implements StringSet {
     public void resize() {
         LinkedList<LinkedList<String>> old = buckets;
         buckets = new LinkedList<LinkedList<String>>();
-        for (int i = 0; i < old.size() * 2; i += 1) {
+        for (int i = 0; i < old.size() * 5; i += 1) {
             buckets.add(new LinkedList<String>());
         }
         size = 0;
@@ -135,8 +135,8 @@ class ECHashStringSet implements StringSet {
      */
     public List<String> asList() {
         List<String> returnValue = new LinkedList<String>();
-        for (int i = 0; i < buckets.size(); i += 1) {
-            for (String s : buckets.get(i)) {
+        for (LinkedList<String> sl : buckets) {
+            for (String s : sl) {
                 returnValue.add(s);
             }
         }

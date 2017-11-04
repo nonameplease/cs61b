@@ -49,7 +49,7 @@ class Board extends Observable {
 
         // FIXME
         //////////
-        setPieces(defaultBoard, _whoseMove);
+        setPieces(defaultBoard.toString(), _whoseMove);
         //////////
 
         setChanged();
@@ -85,6 +85,7 @@ class Board extends Observable {
 
         // FIXME
 
+
         for (int k = 0; k < str.length(); k += 1) {
             switch (str.charAt(k)) {
             case '-':
@@ -101,7 +102,7 @@ class Board extends Observable {
             }
         }
 
-        _board = str;
+        _board = str.toCharArray();
         // FIXME
 
         setChanged();
@@ -125,9 +126,9 @@ class Board extends Observable {
     PieceColor get(int k) {
         assert validSquare(k);
         //return null; // FIXME
-        if (_board.charAt(k) == 'b') {
+        if (_board[k] == 'b') {
             return BLACK;
-        } else if (_board.charAt(k) == 'w') {
+        } else if (_board[k] == 'w') {
             return WHITE;
         } else {
             return EMPTY;
@@ -145,7 +146,8 @@ class Board extends Observable {
     private void set(int k, PieceColor v) {
         assert validSquare(k);
         // FIXME
-        _board =  _board.substring(0, k) + v.shortName() + _board.substring(k + 1);
+        //_board =  _board.toString().substring(0, ) + v.shortName() + _board.substring(k + 1);
+        _board[k] = v.shortName().toCharArray()[0];
     }
 
     /** Return true iff MOV is legal on the current board. */
@@ -435,10 +437,12 @@ class Board extends Observable {
     }
 
     //////////
-    private String defaultBoard =
-            "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
 
-    private String _board;
+    String defaultPattern = "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
+    private char[] defaultBoard = defaultPattern.toCharArray();
+           // "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
+
+    private char[] _board;
 
     //////////
 
