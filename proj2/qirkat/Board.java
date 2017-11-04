@@ -252,10 +252,32 @@ class Board extends Observable {
     private void getMoves(ArrayList<Move> moves, int k) {
         // FIXME
 
+        ArrayList<Integer> possible = new ArrayList<Integer>();
+        PossibleStraightMove(k, possible);
+        PossibleDiagonalMove(k, possible);
+        for (int i = 0; i < possible.size(); i += 1) {
+            if (get(k) == BLACK) {
+                int destk = possible.get(i);
+                if (Row(k) >= Row(destk)) {
+                    if (get(possible.get(i)) == EMPTY) {
+                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                    }
+                }
+            } else if (get(k) == WHITE) {
+                int destk = possible.get(i);
+                if (Row(k) <= Row(destk)) {
+                    if (get(possible.get(i)) == EMPTY) {
+                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                    }
+                }
+            }
+        }
+
+
         /**
          * Diagonal
          */
-        if (k % 2 == 0) {
+        /*if (k % 2 == 0) {
             if (get(k) == BLACK) {
                 if (validSquare(k - 4) && row(k) - 1 == row(k - 4) && get(k - 4) == EMPTY) {
                     moves.add(move(col(k), row(k), col(k - 4), row(k - 4)));
@@ -277,9 +299,9 @@ class Board extends Observable {
             }
         }
 
-        /**
+        *//**
          * Left and Right
-         */
+         *//*
         if (get(k) == BLACK || get(k) == WHITE) {
             if (validSquare(k - 1) && row(k) == row(k - 1) && get(k - 1) == EMPTY) {
                 moves.add(move(col(k), row(k), col(k - 1), row(k)));
@@ -290,9 +312,9 @@ class Board extends Observable {
             }
         }
 
-        /**
+        *//**
          * Up and Down
-         */
+         *//*
         if (get(k) == BLACK) {
             if (validSquare(k - 5) && get(k - 5) == EMPTY) {
                 moves.add(move(col(k), row(k), col(k - 5), row(k - 5)));
@@ -303,7 +325,7 @@ class Board extends Observable {
             if (validSquare(k + 5) && get(k + 5) == EMPTY) {
                 moves.add(move(col(k), row(k), col(k + 5), row(k + 5)));
             }
-        }
+        }*/
 
     }
 
@@ -313,10 +335,27 @@ class Board extends Observable {
         // FIXME
 
 
-        if (get(k) == BLACK || get(k) == WHITE) {
-            /**
+        ArrayList<Integer> possible = new ArrayList<Integer>();
+        PossibleStraightJump(k, possible);
+        PossibleDiagonalJump(k, possible);
+        for (int i = 0; i < possible.size(); i += 1) {
+            if (get(k) != EMPTY) {
+                int destk = possible.get(i);
+                if (get(destk) == EMPTY) {
+                    int jumpedcol = (Col(k) + Col(destk)) / 2;
+                    int jumpedrow = (Row(k) + Row(destk)) / 2;
+                    int jumpedk = Linearize(jumpedcol, jumpedrow);
+                    if (get(k).opposite().equals(get(jumpedk))) {
+                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                    }
+                }
+            }
+        }
+
+       /* if (get(k) == BLACK || get(k) == WHITE) {
+            *//**
              * Left and Right
-             */
+             *//*
             if (validSquare(k - 2) && row(k) == row(k - 2) && get(k - 1) == get(k).opposite() && get(k - 2) == EMPTY) {
                 moves.add(move(col(k), row(k), col(k - 2), row(k - 2)));
             }
@@ -325,9 +364,9 @@ class Board extends Observable {
                 moves.add(move(col(k), row(k), col(k + 2), row(k + 2)));
             }
 
-            /**
+            *//**
              * Up and Down
-             */
+             *//*
             if (validSquare(k - 10) && get(k - 5) == get(k).opposite() && get(k - 10) == EMPTY) {
                 moves.add(move(col(k), row(k), col(k - 10), row(k - 10)));
             }
@@ -336,9 +375,9 @@ class Board extends Observable {
                 moves.add(move(col(k), row(k), col(k + 10), row(k + 10)));
             }
 
-            /**
+            *//**
              * Diagonal
-             */
+             *//*
             if (k % 2 == 0) {
                 if (validSquare(k - 8) && row(k) - 2 == row(k - 8) && get(k - 4) == get(k).opposite() && get(k - 8) == EMPTY) {
                     moves.add(move(col(k), row(k), col(k - 8), row(k - 8)));
@@ -356,7 +395,7 @@ class Board extends Observable {
                     moves.add(move(col(k), row(k), col(k + 12), row(k + 12)));
                 }
             }
-        }
+        }*/
     }
 
     /** Return true iff MOV is a valid jump sequence on the current board.
@@ -366,7 +405,24 @@ class Board extends Observable {
         if (mov == null) {
             return true;
         }
-        return false; // FIXME
+        //return false; // FIXME
+        Move mov2 = mov;
+        while (mov != null) {
+            ArrayList<Move> moves = new ArrayList<Move>();
+            int k = index(mov2.col0(), mov2.row0());
+            int deskk = index(mov2.col1(), mov2.row1());
+            getJumps(moves, k);
+            if (moves.contains(move(mov2.col0(), mov2.row0(), mov2.col1(), mov2.row1()))) {
+                mov2 = mov2.jumpTail();
+            } else {
+                if (allowPartial) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /** Return true iff a jump is possible for a piece at position C R. */
@@ -378,30 +434,14 @@ class Board extends Observable {
      *  linearized index K. */
     boolean jumpPossible(int k) {
         //return false; // FIXME
-        // row = k / 5
-        //column = k % 5;
-
-        int range = 4;
-        if (k % 2 == 0) {
-            range = 8;
+        ArrayList<Integer> possible = new ArrayList<Integer>();
+        PossibleDiagonalJump(k, possible);
+        PossibleStraightJump(k, possible);
+        if (possible.size() > 0) {
+            return true;
+        } else {
+            return false;
         }
-
-        for (int i = 0; i < range; i += 1) {
-            int desk = k + direction.get(i) * 2;
-            int jumpedk = k + direction.get(i);
-            int Row = k / 5;
-            int Col = k % 5;
-            int desRow = desk / 5;
-            int desCol = desk % 5;
-            if (desRow >= 0 && desRow <= 4 && Math.abs(Row - desRow) == 2) {
-                if (get(k).isPiece() && get(jumpedk).isPiece() && !get(desk).isPiece()) {
-                    if (get(k).opposite().equals(get(jumpedk))) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     /** Return true iff a jump is possible from the current board. */
@@ -517,6 +557,11 @@ class Board extends Observable {
      */
     private ArrayList<Integer> direction = new ArrayList<Integer>(Arrays.asList(5, -5, -1, 1, 4, 6, -6, -4));
 
+    /**
+     * A integer array representing direction of addition. Even for column, odd for row.
+     */
+    private Integer[] toThat = new Integer[]{0, 1, 1, 0, 0, -1, -1, 0, 1, 1, 1, -1, -1, -1, -1, 1};
+
     private boolean inside(int k) {
         List<Integer> temp = new ArrayList<Integer>();
         for (int i = 0; i < 5; i += 1) {
@@ -531,7 +576,106 @@ class Board extends Observable {
         return false;
     }
 
+    /**
+     * @param k Linearized index.
+     * @return column assuming on board.
+     */
+    private int Col(int k) {
+        return k & 5;
+    }
 
+    /**
+     * @param k Linearized index.
+     * @return row assuming on board.
+     */
+    private int Row(int k) {
+        return k / 5;
+    }
+
+    /**
+     * @param col index.
+     * @param row index.
+     * @return Linearized index k.
+     */
+    private int Linearize(int col, int row) {
+        return row * 5 + col;
+    }
+
+    /**
+     * Put all linearized index destination that is ON board in a ArrayList.
+     * @param k linearized index.
+     * @param possible ArrayList contains the linearized destination.
+     */
+    private void PossibleStraightMove(int k, ArrayList<Integer> possible) {
+        int col = Col(k);
+        int row = Row(k);
+        for (int i = 0; i < 8; i += 2) {
+            int destcol = col + toThat[i];
+            int destrow = row + toThat[i + 1];
+            if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
+                int destk = Linearize(destcol, destrow);
+                possible.add(destk);
+            }
+        }
+    }
+
+    /**
+     * Put all linearized index destination that is ON board in a ArrayList.
+     * @param k linearized index.
+     * @param possible ArrayList contains the linearized destination.
+     */
+    private void PossibleDiagonalMove(int k, ArrayList<Integer> possible) {
+        int col = Col(k);
+        int row = Row(k);
+        for (int i = 8; i < 16; i += 2) {
+            int destcol = col + toThat[i];
+            int destrow = row + toThat[i + 1];
+            if (k % 2 == 0) {
+                if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
+                    int destk = Linearize(destcol, destrow);
+                    possible.add(destk);
+                }
+            }
+        }
+    }
+
+    /**
+     * Put all linearized index destination that is ON board in a ArrayList.
+     * @param k linearized index.
+     * @param possible ArrayList contains the linearized destination.
+     */
+    private void PossibleStraightJump(int k, ArrayList<Integer> possible) {
+        int col = Col(k);
+        int row = Row(k);
+        for (int i = 0; i < 8; i += 2) {
+            int destcol = col + toThat[i] * 2;
+            int destrow = row + toThat[i + 1] * 2;
+            if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
+                int destk = Linearize(destcol, destrow);
+                possible.add(destk);
+            }
+        }
+    }
+
+    /**
+     * Put all linearized index destination that is ON board in a ArrayList.
+     * @param k linearized index.
+     * @param possible ArrayList contains the linearized destination.
+     */
+    private void PossibleDiagonalJump(int k, ArrayList<Integer> possible) {
+        int col = Col(k);
+        int row = Row(k);
+        for (int i = 8; i < 16; i += 2) {
+            int destcol = col + toThat[i] * 2;
+            int destrow = row + toThat[i + 1] * 2;
+            if (k % 2 == 0) {
+                if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
+                    int destk = Linearize(destcol, destrow);
+                    possible.add(destk);
+                }
+            }
+        }
+    }
 
     //////////
 
