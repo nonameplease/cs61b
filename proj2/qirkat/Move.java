@@ -108,13 +108,15 @@ class Move {
             return move0;
         }
         if (move0.isVestigial()) {
-            return null; // FIXME
-
+            //return null; // FIXME
+            return move(move(move0.col0(), move0.row0(), move1.col1(), move1.row1(), move1._nextJump), move1);
         }
         if (move0.jumpTail() == null) {
-            return null; // FIXME
+            //return null; // FIXME
+            return move(move0.col0(), move0.row0(), move0.col1(), move0.row1(), move1);
         } else {
-            return null; // FIXME
+            //return null; // FIXME
+            return move(move0.col0(), move0.row0(), move0.col1(), move0.row1(), move(move0.jumpTail(), move1));
         }
 
     }
@@ -293,10 +295,16 @@ class Move {
     /** Write my string representation into OUT. */
     private void toString(Formatter out) {
         //out.format("???"); // FIXME
-        out.format("%s%s-%s%s", _col0, _row0, _col1, _row1);
-        if (_staged != null && _staged._nextJump != null) {
+        /*out.format("%s%s-%s%s", _col0, _row0, _col1, _row1);
+        if (this.jumpTail() != null) {
             _staged._nextJump.toString();
+        }*/
+        String result = col0() + "" + row0() + "-" + col1() + "" + row1();
+        while(this._nextJump != null) {
+            result += "-" + this._nextJump.col1() + this._nextJump.row1();
+            this._nextJump = this.jumpTail().jumpTail();
         }
+        out.format(result);
     }
 
     /** Set me to COL0 ROW0 - COL1 ROW1 - NEXTJUMP. */

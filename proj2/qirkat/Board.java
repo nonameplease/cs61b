@@ -164,6 +164,19 @@ class Board extends Observable {
         assert validSquare(k);
         // FIXME
         //_board =  _board.toString().substring(0, ) + v.shortName() + _board.substring(k + 1);
+        int destk = 0;
+        if (k >= 0 && k <= 4) {
+            destk = k + 20;
+        } else if (k >= 5 && k <= 9) {
+            destk = k + 10;
+        } else if (k >= 10 && k <= 14){
+            destk = k;
+        } else if (k >= 15 && k <= 19) {
+            destk = k - 10;
+        } else if (k >= 20 && k <= 24) {
+            destk = k - 20;
+        }
+
         _board[k] = v.shortName().charAt(0);
     }
 
@@ -345,9 +358,48 @@ class Board extends Observable {
 
     /** Add all legal captures from the position with linearized index K
      *  to MOVES. */
-    private void getJumps(ArrayList<Move> moves, int k) {
+    public void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
 
+        /**
+         * Finding one jump works. This is testing finding a series of jumps.
+         */
+        /*Board tempBoard = new Board();
+        tempBoard.setPieces(toString(), BLACK);
+        System.out.println(tempBoard.toString());
+        System.out.println("recursion");
+        while (jumpPossible(k)) {
+            ArrayList<Integer> possible = new ArrayList<Integer>();
+            PossibleStraightJump(k, possible);
+            PossibleDiagonalJump(k, possible);
+            for (int i = 0; i < possible.size(); i += 1) {
+                if (get(k) != EMPTY) {
+                    int destk = possible.get(i);
+                    if (get(destk) == EMPTY) {
+                        int jumpedcol = (Col(k) + Col(destk)) / 2;
+                        int jumpedrow = (Row(k) + Row(destk)) / 2;
+                        int jumpedk = Linearize(jumpedcol, jumpedrow);
+                        if (get(k).opposite().equals(get(jumpedk))) {
+                            ArrayList<Move> temp = new ArrayList<Move>();
+                            System.out.println("jumpedk: " + jumpedk + " " + get(jumpedk));
+                            tempBoard.set(jumpedk, EMPTY);
+                            System.out.println("destk: " + destk + " " + get(destk));
+                            tempBoard.set(destk, get(k));
+                            System.out.println("k: " + k + " " + get(k));
+                            tempBoard.set(k, EMPTY);
+                            tempBoard.getJumps(temp, destk);
+                            if (temp == null) {
+                                moves.add(move(col(k), row(k), col(destk), row(destk), null));
+                            } else {
+                                for (Move recmove : temp) {
+                                    moves.add(move(col(k), row(k), col(destk), row(destk), recmove));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
 
         ArrayList<Integer> possible = new ArrayList<Integer>();
         PossibleStraightJump(k, possible);
@@ -366,50 +418,6 @@ class Board extends Observable {
             }
         }
 
-       /* if (get(k) == BLACK || get(k) == WHITE) {
-            *//**
-             * Left and Right
-             *//*
-            if (validSquare(k - 2) && row(k) == row(k - 2) && get(k - 1) == get(k).opposite() && get(k - 2) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k - 2), row(k - 2)));
-            }
-
-            if (validSquare(k + 2) && row(k) == row(k + 2) && get(k + 1) == get(k).opposite() && get(k + 2) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k + 2), row(k + 2)));
-            }
-
-            *//**
-             * Up and Down
-             *//*
-            if (validSquare(k - 10) && get(k - 5) == get(k).opposite() && get(k - 10) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k - 10), row(k - 10)));
-            }
-
-            if (validSquare(k + 10) && get(k + 5) == get(k).opposite() && get(k + 10) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k + 10), row(k + 10)));
-            }
-
-            *//**
-             * Diagonal
-             *//*
-            if (k % 2 == 0) {
-                if (validSquare(k - 8) && row(k) - 2 == row(k - 8) && get(k - 4) == get(k).opposite() && get(k - 8) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k - 8), row(k - 8)));
-                }
-
-                if (validSquare(k - 12) && row(k) - 2 == row(k - 12) && get(k - 6) == get(k).opposite() && get(k - 12) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k - 12), row(k - 12)));
-                }
-
-                if (validSquare(k + 8) && row(k) - 2 == row(k + 8) && get(k + 4) == get(k).opposite() && get(k + 8) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k + 8), row(k + 8)));
-                }
-
-                if (validSquare(k + 12) && row(k) + 2 == row(k + 12) && get(k + 6) == get(k).opposite() && get(k + 12) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k + 12), row(k + 12)));
-                }
-            }
-        }*/
     }
 
     /** Return true iff MOV is a valid jump sequence on the current board.
@@ -451,11 +459,20 @@ class Board extends Observable {
         ArrayList<Integer> possible = new ArrayList<Integer>();
         PossibleDiagonalJump(k, possible);
         PossibleStraightJump(k, possible);
-        if (possible.size() > 0) {
-            return true;
-        } else {
-            return false;
+        for (int i = 0; i < possible.size(); i += 1) {
+            if (get(k) != EMPTY) {
+                int destk = possible.get(i);
+                if (get(destk) == EMPTY) {
+                    int jumpedcol = (Col(k) + Col(destk)) / 2;
+                    int jumpedrow = (Row(k) + Row(destk)) / 2;
+                    int jumpedk = Linearize(jumpedcol, jumpedrow);
+                    if (get(k).opposite().equals(get(jumpedk))) {
+                        return true;
+                    }
+                }
+            }
         }
+        return false;
     }
 
     /** Return true iff a jump is possible from the current board. */
