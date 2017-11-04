@@ -91,16 +91,6 @@ class Board extends Observable {
         _board = str.toCharArray();
 
         for (int k = 0; k < str.length(); k += 1) {
-            int destk = 0;
-            if (k >= 0 && k <= 4) {
-                destk = k + 20;
-            } else if (k >= 5 && k <= 9) {
-                destk = k + 10;
-            } else if (k >= 15 && k <= 19) {
-                destk = k - 10;
-            } else if (k >= 20 && k <= 24) {
-                destk = k - 20;
-            }
 
             switch (str.charAt(k)) {
             case '-':
@@ -141,9 +131,19 @@ class Board extends Observable {
     PieceColor get(int k) {
         assert validSquare(k);
         //return null; // FIXME
-        if (_board[k] == 'b') {
+        int destk = 0;
+        if (k >= 0 && k <= 4) {
+            destk = k + 20;
+        } else if (k >= 5 && k <= 9) {
+            destk = k + 10;
+        } else if (k >= 15 && k <= 19) {
+            destk = k - 10;
+        } else if (k >= 20 && k <= 24) {
+            destk = k - 20;
+        }
+        if (_board[destk] == 'b') {
             return BLACK;
-        } else if (_board[k] == 'w') {
+        } else if (_board[destk] == 'w') {
             return WHITE;
         } else {
             return EMPTY;

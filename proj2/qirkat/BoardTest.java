@@ -122,7 +122,9 @@ public class BoardTest {
         b0.setPieces(GAME1_BOARD, PieceColor.BLACK);
         assertEquals(GAME1_BOARD, b0.toString());
         System.out.println(b0.toString());
-        assertEquals(PieceColor.WHITE, b0.get('a', '1'));
+        System.out.println(b0.get(0));
+        //System.out.println(b1.toString());
+        assertEquals(PieceColor.WHITE, b0.get(0));
     }
 
     @Test
