@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * Implementation of a BST based String Set.
- * @author
+ * @author Scott Shao
  */
 public class BSTStringSet implements SortedStringSet, Iterable<String> {
     /** Creates a new empty set. */
@@ -94,29 +94,39 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
 
     /** An iterator over BSTs. */
     private class BSTIterator implements Iterator<String> {
-        /** Stack of nodes to be delivered.  The values to be delivered
-         *  are (a) the label of the top of the stack, then (b)
-         *  the labels of the right child of the top of the stack inorder,
-         *  then (c) the nodes in the rest of the stack (i.e., the result
-         *  of recursively applying this rule to the result of popping
-         *  the stack. */
+        /**
+         * Stack of nodes to be delivered.  The values to be delivered
+         * are (a) the label of the top of the stack, then (b)
+         * the labels of the right child of the top of the stack inorder,
+         * then (c) the nodes in the rest of the stack (i.e., the result
+         * of recursively applying this rule to the result of popping
+         * the stack.
+         */
         private ArrayDeque<Node> _toDo = new ArrayDeque<>();
 
+        /**
+         * low bound and high bound.
+         */
         private String _low, _high;
 
-        private boolean bounded = false;
 
-
-        /** A new iterator over the labels in NODE. */
+        /**
+         * A new iterator over the labels in NODE.
+         */
         BSTIterator(Node node) {
             addTree(node);
         }
 
+        /**
+         * A constructor.
+         * @param low low bound.
+         * @param high high bound.
+         * @param n node.
+         */
         BSTIterator(String low, String high, Node n) {
             _low = low;
             _high = high;
             addTree(n);
-            bounded = true;
         }
 
         @Override
@@ -140,7 +150,9 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
             throw new UnsupportedOperationException();
         }
 
-        /** Add the relevant subtrees of the tree rooted at NODE. */
+        /**
+         * Add the relevant subtrees of the tree rooted at NODE.
+         */
         private void addTree(Node node) {
             if (false) {
                 while (node != null) {
@@ -161,9 +173,6 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
             }
         }
     }
-
-    // ADD A CLASS, PERHAPS?
-   // private static class BSTIteratorBound extends BSTIterator
 
     /** Root node of the tree. */
     private Node root;

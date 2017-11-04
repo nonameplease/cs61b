@@ -33,7 +33,8 @@ class ECHashStringSet implements StringSet {
 
     public void resize(int newCount) {
         ECHashStringSet newechss = new ECHashStringSet(newCount);
-        newechss.resizing = true;
+        newechss.resizing = false;
+        //newechss.resizing = true;
         for (int i = 0; i < buckets.length; i += 1) {
             for (String s : buckets[i]) {
                 newechss.put(s);
@@ -54,9 +55,9 @@ class ECHashStringSet implements StringSet {
                 buckets[whichBucket].add(s);
             } else if (size > bucketNum * MAX_LOAD_FACTOR && !resizing) {
                 resize(bucketNum * 5);
-            } else if (size < bucketNum / MAX_LOAD_FACTOR && !resizing) {
+            } /*else if (size < bucketNum / MAX_LOAD_FACTOR && !resizing) {
                 resize(bucketNum / 5);
-            }
+            }*/
             if (!temp.contains(s)) {
                 temp.add(s);
             }
