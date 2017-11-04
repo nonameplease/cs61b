@@ -142,7 +142,7 @@ public class BSTStringSet implements SortedStringSet, Iterable<String> {
 
         /** Add the relevant subtrees of the tree rooted at NODE. */
         private void addTree(Node node) {
-            if (!bounded) {
+            if (false) {
                 while (node != null) {
                     _toDo.push(node);
                     node = node.left;

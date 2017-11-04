@@ -44,21 +44,22 @@ class ECHashStringSet implements StringSet {
     }
 
     public void put(String s) {
-        size += 1;
-        int bucketNum = buckets.length;
-        if (size == 1) {
-            buckets[0].add(s);
-        } else if (size > bucketNum * MAX_LOAD_FACTOR && !resizing) {
-            resize(bucketNum * 5);
-        } else if (size < bucketNum / MAX_LOAD_FACTOR && !resizing) {
-            resize(bucketNum / 5);
-        }
-
-        int hashCode = s.hashCode() & REMOVE_TOP_BIT;
-        int whichBucket = hashCode % bucketNum;
-        LinkedList<String> temp = buckets[whichBucket];
-        if (!temp.contains(s)) {
-            temp.add(s);
+        if (s != null) {
+            size += 1;
+            int bucketNum = buckets.length;
+            int hashCode = s.hashCode() & REMOVE_TOP_BIT;
+            int whichBucket = hashCode % bucketNum;
+            LinkedList<String> temp = buckets[whichBucket];
+            if (size == 1) {
+                buckets[whichBucket].add(s);
+            } else if (size > bucketNum * MAX_LOAD_FACTOR && !resizing) {
+                resize(bucketNum * 5);
+            } else if (size < bucketNum / MAX_LOAD_FACTOR && !resizing) {
+                resize(bucketNum / 5);
+            }
+            if (!temp.contains(s)) {
+                temp.add(s);
+            }
         }
     }
 
