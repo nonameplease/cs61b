@@ -121,15 +121,33 @@ public class BoardTest {
         Board b1 = new Board(b0);
         b0.setPieces(GAME1_BOARD, PieceColor.BLACK);
         assertEquals(GAME1_BOARD, b0.toString());
-        System.out.println(b0.toString());
-        System.out.println(b0.get(0));
+        //System.out.println(b0.toString());
+        //System.out.println(b0.get(10));
         //System.out.println(b1.toString());
         assertEquals(PieceColor.WHITE, b0.get(0));
     }
 
-    @Test
-    public void testGetMove() {
 
+    /**
+     * Test
+     * Add all legal non-capturing moves from the position
+     *  with linearized index K to MOVES.
+     *  Both are private method. Had changed them to public and tested,
+     *  both of them passed.
+     */
+    @Test
+    public void testGetJumps() {
+        Board b0 = new Board();
+        b0.setPieces(GAME1_BOARD, PieceColor.BLACK);
+        ArrayList<Move> testingBuffer = new ArrayList<Move>();
+        ArrayList<Move> movesc3 = new ArrayList<Move>();
+        //movesc3.add(Move.move('c', '3', 'c', '4'));
+        //movesc3.add(Move.move('c', '3', 'c', '2'));
+        //movesc3.add(Move.move('c', '3', 'b', '3'));
+        //movesc3.add(Move.move('c', '3', 'b', '2'));
+        movesc3.add(Move.move('d', '4', 'b', '2'));
+        b0.getJumps(testingBuffer, 18);
+        assertEquals(movesc3, testingBuffer);
     }
     //////////////////////////////////////////////////////
 

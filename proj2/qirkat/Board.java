@@ -136,6 +136,8 @@ class Board extends Observable {
             destk = k + 20;
         } else if (k >= 5 && k <= 9) {
             destk = k + 10;
+        } else if (k >= 10 && k <= 14){
+            destk = k;
         } else if (k >= 15 && k <= 19) {
             destk = k - 10;
         } else if (k >= 20 && k <= 24) {
