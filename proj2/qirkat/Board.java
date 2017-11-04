@@ -378,11 +378,30 @@ class Board extends Observable {
      *  linearized index K. */
     boolean jumpPossible(int k) {
         //return false; // FIXME
-        int range = 8;
-        if (k % 2 == 1) {
-            range = 4;
+        // row = k / 5
+        //column = k % 5;
+
+        int range = 4;
+        if (k % 2 == 0) {
+            range = 8;
         }
 
+        for (int i = 0; i < range; i += 1) {
+            int desk = k + direction.get(i) * 2;
+            int jumpedk = k + direction.get(i);
+            int Row = k / 5;
+            int Col = k % 5;
+            int desRow = desk / 5;
+            int desCol = desk % 5;
+            if (desRow >= 0 && desRow <= 4 && Math.abs(Row - desRow) == 2) {
+                if (get(k).isPiece() && get(jumpedk).isPiece() && !get(desk).isPiece()) {
+                    if (get(k).opposite().equals(get(jumpedk))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /** Return true iff a jump is possible from the current board. */
@@ -499,7 +518,17 @@ class Board extends Observable {
     private ArrayList<Integer> direction = new ArrayList<Integer>(Arrays.asList(5, -5, -1, 1, 4, 6, -6, -4));
 
     private boolean inside(int k) {
-        
+        List<Integer> temp = new ArrayList<Integer>();
+        for (int i = 0; i < 5; i += 1) {
+            temp.add(i);
+            temp.add(i + 15);
+            temp.add(i * 5);
+            temp.add(i * 5 + 4);
+        }
+        if (temp.contains(k)) {
+            return true;
+        }
+        return false;
     }
 
 
