@@ -301,61 +301,6 @@ class Board extends Observable {
                 }
             }
         }
-
-
-        /**
-         * Diagonal
-         */
-        /*if (k % 2 == 0) {
-            if (get(k) == BLACK) {
-                if (validSquare(k - 4) && row(k) - 1 == row(k - 4) && get(k - 4) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k - 4), row(k - 4)));
-                }
-
-                if (validSquare(k - 6) && row(k) - 1 == row(k - 6) && get(k - 6) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k - 6), row(k - 6)));
-                }
-            }
-
-            if (get(k) == WHITE) {
-                if (validSquare(k + 4) && row(k) + 1 == row(k + 4) && get(k + 4) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k + 4), row(k + 4)));
-                }
-
-                if (validSquare(k + 6) && row(k) + 1 == row(k + 6) && get(k + 6) == EMPTY) {
-                    moves.add(move(col(k), row(k), col(k + 6), row(k + 6)));
-                }
-            }
-        }
-
-        *//**
-         * Left and Right
-         *//*
-        if (get(k) == BLACK || get(k) == WHITE) {
-            if (validSquare(k - 1) && row(k) == row(k - 1) && get(k - 1) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k - 1), row(k)));
-            }
-
-            if (validSquare(k + 1) && row(k) == row(k + 1) && get(k + 1) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k + 1), row(k)));
-            }
-        }
-
-        *//**
-         * Up and Down
-         *//*
-        if (get(k) == BLACK) {
-            if (validSquare(k - 5) && get(k - 5) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k - 5), row(k - 5)));
-            }
-        }
-
-        if (get(k) == WHITE) {
-            if (validSquare(k + 5) && get(k + 5) == EMPTY) {
-                moves.add(move(col(k), row(k), col(k + 5), row(k + 5)));
-            }
-        }*/
-
     }
 
     /** Add all legal captures from the position with linearized index K

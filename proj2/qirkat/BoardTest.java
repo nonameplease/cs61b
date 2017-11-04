@@ -162,6 +162,15 @@ public class BoardTest {
         testBoard.setPieces(GAME2_BOARD, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
+
+        /**
+         * Test multiple jump concatenation.
+         */
+        String GAME3_BOARD =
+                "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
+        testBoard.setPieces(GAME3_BOARD, PieceColor.BLACK);
+        System.out.println(testBoard);
+        System.out.println(testBoard.getMoves());
     }
     //////////////////////////////////////////////////////
 
