@@ -354,12 +354,14 @@ class Board extends Observable {
                             ////////////////////////
                             if (!tempBoard.toString().equals(toString())) {
                                 tempBoard.getJumps(temp, destk);
+                                System.out.println("temp: " + temp);
                                 if (temp != null) {
                                     for (Move recmove : temp) {
+                                        //System.out.println("recmove: " + recmove);
                                         moves.add(move(col(k), row(k), col(destk), row(destk), recmove));
                                     }
                                     System.out.println("Access temp != null");
-                                    System.out.println("Moves size: " + moves.size());
+                                    System.out.println("Moves size in temp != null: " + moves.size());
                                 }
                             }
                         }
@@ -369,6 +371,10 @@ class Board extends Observable {
         }
 
 
+
+        /**
+         * Algorithm to get only one jump.
+         */
         /*ArrayList<Integer> possible = new ArrayList<Integer>();
         PossibleStraightJump(k, possible);
         PossibleDiagonalJump(k, possible);
@@ -476,8 +482,20 @@ class Board extends Observable {
         assert legalMove(mov);
 
         // FIXME
-        set(mov.col1(), mov.row1(), get(mov.col0(), mov.row0()));
-        set(mov.col0(), mov.row0(), EMPTY);
+        //set(mov.col1(), mov.row1(), get(mov.col0(), mov.row0()));
+        //set(mov.col0(), mov.row0(), EMPTY);
+        if (mov.isJump()) {
+            while (mov != null) {
+                set(mov.col1(), mov.row1(), get(mov.col0(), mov.row0()));
+                set(mov.col0(), mov.row0(), EMPTY);
+                int jumpedIndex = (index(mov.col0(), mov.row0()) + index(mov.col0(), mov.row1())) / 2;
+                set(jumpedIndex, EMPTY);
+                mov = mov.jumpTail();
+            }
+        } else {
+            set(mov.col1(), mov.row1(), get(mov.col0(), mov.row0()));
+            set(mov.col0(), mov.row0(), EMPTY);
+        }
 
         setChanged();
         notifyObservers();
