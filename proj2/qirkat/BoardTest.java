@@ -135,20 +135,27 @@ public class BoardTest {
      *  Both are private method. Had changed them to public and tested,
      *  both of them passed.
      */
-    @Test(timeout = 4000)
+    @Test(timeout = 200)
     public void testGetJumps() {
-        Board b0 = new Board();
-        b0.setPieces(GAME1_BOARD, PieceColor.BLACK);
         ArrayList<Move> testingBuffer = new ArrayList<Move>();
-        ArrayList<Move> movesc3 = new ArrayList<Move>();
-        //movesc3.add(Move.move('c', '3', 'c', '4'));
-        //movesc3.add(Move.move('c', '3', 'c', '2'));
-        //movesc3.add(Move.move('c', '3', 'b', '3'));
-        //movesc3.add(Move.move('c', '3', 'b', '2'));
-        movesc3.add(Move.move('d', '4', 'b', '2'));
-        b0.getJumps(testingBuffer, 18);
-        //System.out.println(testingBuffer);
-        //assertEquals(movesc3, testingBuffer);
+
+        System.out.println("One possible traverse path: ");
+        Board testBoard = new Board();
+        String GAME3_BOARD =
+                "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
+        testBoard.setPieces(GAME3_BOARD, PieceColor.BLACK);
+        System.out.println("test board layout: " +"\n" + testBoard.toString());
+        testBoard.getJumps(testingBuffer, 2);
+        System.out.println("Move steps: " + testingBuffer);
+
+        System.out.println("\n\n\n\n\n\n");
+        System.out.println("Two possible traverse path: ");
+        String GAME4_BOARD =
+                "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
+        testBoard.setPieces(GAME4_BOARD, PieceColor.BLACK);
+        System.out.println("test board layout: " +"\n" + testBoard.toString());
+        testBoard.getJumps(testingBuffer, 2);
+        System.out.println("Move steps: " + testingBuffer);
     }
 
     @Test

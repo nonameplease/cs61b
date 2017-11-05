@@ -2,6 +2,7 @@ package qirkat;
 
 import com.sun.tools.javac.code.Attribute;
 
+import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.util.*;
 
 import static qirkat.PieceColor.*;
@@ -94,15 +95,28 @@ class Board extends Observable {
 
         for (int k = 0; k < str.length(); k += 1) {
 
+            int destk = 0;
+            if (k >= 0 && k <= 4) {
+                destk = k + 20;
+            } else if (k >= 5 && k <= 9) {
+                destk = k + 10;
+            } else if (k >= 10 && k <= 14){
+                destk = k;
+            } else if (k >= 15 && k <= 19) {
+                destk = k - 10;
+            } else if (k >= 20 && k <= 24) {
+                destk = k - 20;
+            }
+
             switch (str.charAt(k)) {
             case '-':
-                set(k, EMPTY);
+                set(destk, EMPTY);
                 break;
             case 'b': case 'B':
-                set(k, BLACK);
+                set(destk, BLACK);
                 break;
             case 'w': case 'W':
-                set(k, WHITE);
+                set(destk, WHITE);
                 break;
             default:
                 break;
@@ -145,9 +159,9 @@ class Board extends Observable {
         } else if (k >= 20 && k <= 24) {
             destk = k - 20;
         }
-        if (_board[destk] == 'b') {
+        if (_board[k] == 'b') {
             return BLACK;
-        } else if (_board[destk] == 'w') {
+        } else if (_board[k] == 'w') {
             return WHITE;
         } else {
             return EMPTY;
@@ -311,11 +325,12 @@ class Board extends Observable {
         /**
          * Finding one jump works. This is testing finding a series of jumps.
          */
-        /*Board tempBoard = new Board();
+        Board tempBoard = new Board();
         tempBoard.setPieces(toString(), BLACK);
         System.out.println(tempBoard.toString());
         System.out.println("recursion");
-        while (jumpPossible(k)) {
+
+        if (jumpPossible(k)) {
             ArrayList<Integer> possible = new ArrayList<Integer>();
             PossibleStraightJump(k, possible);
             PossibleDiagonalJump(k, possible);
@@ -334,21 +349,27 @@ class Board extends Observable {
                             tempBoard.set(destk, get(k));
                             System.out.println("k: " + k + " " + get(k));
                             tempBoard.set(k, EMPTY);
-                            tempBoard.getJumps(temp, destk);
-                            if (temp == null) {
-                                moves.add(move(col(k), row(k), col(destk), row(destk), null));
-                            } else {
-                                for (Move recmove : temp) {
-                                    moves.add(move(col(k), row(k), col(destk), row(destk), recmove));
+                            ////////////////////////
+                            moves.add(move(col(k), row(k), col(destk), row(destk)));
+                            ////////////////////////
+                            if (!tempBoard.toString().equals(toString())) {
+                                tempBoard.getJumps(temp, destk);
+                                if (temp != null) {
+                                    for (Move recmove : temp) {
+                                        moves.add(move(col(k), row(k), col(destk), row(destk), recmove));
+                                    }
+                                    System.out.println("Access temp != null");
+                                    System.out.println("Moves size: " + moves.size());
                                 }
                             }
                         }
                     }
                 }
             }
-        }*/
+        }
 
-        ArrayList<Integer> possible = new ArrayList<Integer>();
+
+        /*ArrayList<Integer> possible = new ArrayList<Integer>();
         PossibleStraightJump(k, possible);
         PossibleDiagonalJump(k, possible);
         for (int i = 0; i < possible.size(); i += 1) {
@@ -363,7 +384,7 @@ class Board extends Observable {
                     }
                 }
             }
-        }
+        }*/
 
     }
 
@@ -481,12 +502,12 @@ class Board extends Observable {
         Formatter out = new Formatter();
         // FIXME
         if (legend == false) {
-            for (int i = 0; i < 25; i += 5) {
+            for (int i = 20; i >= 0; i -= 5) {
                 out.format(" ");
                 for (int j = 0; j < 5; j +=1) {
                     out.format("%2s", String.valueOf(_board[i + j]));
                 }
-                if (i < 20) {
+                if (i > 4) {
                     out.format("\n");
                 }
             }
