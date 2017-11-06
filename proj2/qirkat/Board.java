@@ -26,7 +26,7 @@ class Board extends Observable {
         // FIXME?
 
         //////////
-        _board = defaultBoard;
+        _board = new char[25];
         _allMoves = new MoveList();
         //////////
         clear();
@@ -51,9 +51,8 @@ class Board extends Observable {
 
         // FIXME
         //////////
-        //System.out.println(defaultBoard);
-        //System.out.println(String.valueOf(defaultBoard));
-        setPieces(String.valueOf(defaultBoard), _whoseMove);
+        //setPieces(String.valueOf(defaultBoard), _whoseMove);
+        setPieces(String.valueOf(linearizedBoard), _whoseMove);
         //////////
 
         setChanged();
@@ -92,12 +91,12 @@ class Board extends Observable {
 
         // FIXME
 
-        _board = str.toCharArray();
+        //_board = str.toCharArray();
 
         for (int k = 0; k < str.length(); k += 1) {
 
             int destk = 0;
-            if (k >= 0 && k <= 4) {
+            /*if (k >= 0 && k <= 4) {
                 destk = k + 20;
             } else if (k >= 5 && k <= 9) {
                 destk = k + 10;
@@ -107,7 +106,8 @@ class Board extends Observable {
                 destk = k - 10;
             } else if (k >= 20 && k <= 24) {
                 destk = k - 20;
-            }
+            }*/
+            destk = k;
 
             switch (str.charAt(k)) {
             case '-':
@@ -125,7 +125,7 @@ class Board extends Observable {
         }
 
         // FIXME
-        _whoseMove = nextMove.opposite();
+        _whoseMove = nextMove;
 
         setChanged();
         notifyObservers();
@@ -605,6 +605,9 @@ class Board extends Observable {
     String defaultPattern = "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
     private char[] defaultBoard = defaultPattern.toCharArray();
            // "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
+
+    String linearizedPattern = "wwwww wwwww bb-ww wwwww wwwww";
+    private char[] linearizedBoard = linearizedPattern.toCharArray();
 
     private char[] _board;
 

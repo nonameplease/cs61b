@@ -221,9 +221,9 @@ class Game {
     void doSet(String[] operands) {
         // FIXME
         _state = SETUP;
-        if (operands[0] == "white") {
+        if (operands[0].toLowerCase().equals("white")) {
             _board.setPieces(operands[1], WHITE);
-        } else if (operands[0] == "black") {
+        } else if (operands[0].toLowerCase().equals("black")) {
             _board.setPieces(operands[1], BLACK);
         }
     }

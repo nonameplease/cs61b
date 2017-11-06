@@ -33,6 +33,7 @@ public class BoardTest {
     @Test
     public void testInit1() {
         Board b0 = new Board();
+        b0.setPieces(INIT_BOARD, PieceColor.BLACK);
         assertEquals(INIT_BOARD, b0.toString());
     }
 
