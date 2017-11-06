@@ -142,18 +142,18 @@ public class BoardTest {
 
         System.out.println("One possible traverse path: ");
         Board testBoard = new Board();
-        String gAME3_BOARD =
+        String game3Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(gAME3_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(game3Board, PieceColor.BLACK);
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         testBoard.getJumps(testingBuffer, 2);
         System.out.println("Move steps: " + testingBuffer);
 
         System.out.println("\n\n\n\n\n\n");
         System.out.println("Two possible traverse path: ");
-        String gAME4_BOARD =
+        String game4Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
-        testBoard.setPieces(gAME4_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(game4Board, PieceColor.BLACK);
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         testingBuffer.clear();
         testBoard.getJumps(testingBuffer, 2);
@@ -163,9 +163,9 @@ public class BoardTest {
     @Test
     public void testCheckJump() {
         Board testBoard = new Board();
-        String gAME4_BOARD =
+        String game4Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
-        testBoard.setPieces(gAME4_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(game4Board, PieceColor.BLACK);
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         boolean falseCheckJump =
                 testBoard.checkJump(Move.move('c', '1', 'e', '1',
@@ -186,18 +186,18 @@ public class BoardTest {
         testBoard.setPieces(GAME1_BOARD, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
-        String gAME2_BOARD =
+        String game2Board =
                 "b b b b b\n  b b b b b\n  - b - b -\n  w - w - w\n  w w w w w";
-        testBoard.setPieces(gAME2_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(game2Board, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
 
         /**
          * Test multiple jump concatenation.
          */
-        String game3_BOARD =
+        String game3Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(game3_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(game3Board, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
     }

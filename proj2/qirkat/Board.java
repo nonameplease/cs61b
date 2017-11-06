@@ -3,8 +3,14 @@ package qirkat;
 //import com.sun.tools.javac.code.Attribute;
 
 //import javax.swing.plaf.synth.SynthEditorPaneUI;
-import java.util.*;
+//import java.util.*;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Formatter;
+import java.util.Observable;
+import java.util.Observer;
 
 import static qirkat.PieceColor.*;
 import static qirkat.Move.*;
@@ -151,13 +157,13 @@ class Board extends Observable {
         assert validSquare(k);
         //return null; // FIXME
         int destk = 0;
-        int row1 = 0;
-        int row2 = 5;
-        int row3 = 10;
-        int row4 = 15;
-        int row5 = 20;
+        int row1 = SIDE * 0;
+        int row2 = SIDE * 1;
+        int row3 = SIDE * 2;
+        int row4 = SIDE * 3;
+        int row5 = SIDE * 4;
         if (k >= row1 && k <= SIDE - 1) {
-            destk = k + 20;
+            destk = k + row5;
         } else if (k >= row2 && k <= row2 + SIDE - 1) {
             destk = k + 10;
         } else if (k >= row3 && k <= row3 + SIDE - 1) {
@@ -165,7 +171,7 @@ class Board extends Observable {
         } else if (k >= row4 && k <= row4 + SIDE - 1) {
             destk = k - 10;
         } else if (k >= row5 && k <= row5 + SIDE - 1) {
-            destk = k - 20;
+            destk = k - row5;
         }
         if (_board[k] == 'b') {
             return BLACK;
@@ -190,13 +196,13 @@ class Board extends Observable {
         //_board =  _board.toString().substring(0, )
         // + v.shortName() + _board.substring(k + 1);
         int destk = 0;
-        int row1 = 0;
-        int row2 = 5;
-        int row3 = 10;
-        int row4 = 15;
-        int row5 = 20;
+        int row1 = SIDE * 0;
+        int row2 = SIDE * 1;
+        int row3 = SIDE * 2;
+        int row4 = SIDE * 3;
+        int row5 = SIDE * 4;
         if (k >= row1 && k <= SIDE - 1) {
-            destk = k + 20;
+            destk = k + row5;
         } else if (k >= row2 && k <= row2 + SIDE - 1) {
             destk = k + 10;
         } else if (k >= row3 && k <= row3 + SIDE - 1) {
@@ -204,7 +210,7 @@ class Board extends Observable {
         } else if (k >= row4 && k <= row4 + SIDE - 1) {
             destk = k - 10;
         } else if (k >= row5 && k <= row5 + SIDE - 1) {
-            destk = k - 20;
+            destk = k - row5;
         }
 
         _board[k] = v.shortName().charAt(0);
@@ -484,7 +490,7 @@ class Board extends Observable {
     String toString(boolean legend) {
         Formatter out = new Formatter();
         // FIXME
-        int cutoff = 20;
+        int cutoff = SIDE * (SIDE - 1);
         if (!legend) {
             for (int i = cutoff; i >= 0; i -= 5) {
                 out.format(" ");
@@ -575,7 +581,7 @@ class Board extends Observable {
      */
     private Integer[] toThat =
             new Integer[] {0, 1, 1, 0, 0, -1, -1, 0,
-                    1, 1, 1, -1, -1, -1, -1, 1};
+            1, 1, 1, -1, -1, -1, -1, 1};
 
     /**
      * @param k Linearized index.
