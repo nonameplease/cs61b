@@ -109,14 +109,18 @@ class Move {
         }
         if (move0.isVestigial()) {
             //return null; // FIXME
-            return move(move(move0.col0(), move0.row0(), move1.col1(), move1.row1(), move1._nextJump), move1);
+            return move(move(move0.col0(), move0.row0(),
+                    move1.col1(), move1.row1(), move1._nextJump), move1);
         }
         if (move0.jumpTail() == null) {
             //return null; // FIXME
-            return move(move0.col0(), move0.row0(), move0.col1(), move0.row1(), move1);
+            return move(move0.col0(), move0.row0(),
+                    move0.col1(), move0.row1(), move1);
         } else {
             //return null; // FIXME
-            return move(move0.col0(), move0.row0(), move0.col1(), move0.row1(), move(move0.jumpTail(), move1));
+            return move(move0.col0(), move0.row0(),
+                    move0.col1(), move0.row1(),
+                    move(move0.jumpTail(), move1));
         }
 
     }
@@ -292,7 +296,7 @@ class Move {
             _staged._nextJump.toString();
         }*/
         String result = col0() + "" + row0() + "-" + col1() + "" + row1();
-        while(this._nextJump != null) {
+        while (this._nextJump != null) {
             result += "-" + this._nextJump.col1() + this._nextJump.row1();
             this._nextJump = this.jumpTail().jumpTail();
         }
@@ -348,10 +352,19 @@ class Move {
 
 
     /////////////////////////////////////////////////
+
+    /**
+     * Useless.
+     * @param move A move.
+     */
     void setJumpTail(Move move) {
         _nextJump = move;
     }
 
+    /**
+     * Useless.
+     * @return index jumped to.
+     */
     int toJumpedIndex() {
         Move temp = this;
         while (temp.jumpTail() != null) {

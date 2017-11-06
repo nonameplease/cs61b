@@ -297,8 +297,8 @@ class Board extends Observable {
         // FIXME
 
         ArrayList<Integer> possible = new ArrayList<Integer>();
-        PossibleStraightMove(k, possible);
-        PossibleDiagonalMove(k, possible);
+        possibleStraightMove(k, possible);
+        possibleDiagonalMove(k, possible);
         for (int i = 0; i < possible.size(); i += 1) {
             if (get(k) == BLACK) {
                 int destk = possible.get(i);
@@ -456,8 +456,8 @@ class Board extends Observable {
     boolean jumpPossible(int k) {
         //return false; // FIXME
         ArrayList<Integer> possible = new ArrayList<Integer>();
-        PossibleDiagonalJump(k, possible);
-        PossibleStraightJump(k, possible);
+        possibleDiagonalJump(k, possible);
+        possibleStraightJump(k, possible);
         for (int i = 0; i < possible.size(); i += 1) {
             if (get(k) != EMPTY) {
                 int destk = possible.get(i);
@@ -681,7 +681,7 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    public void PossibleStraightMove(int k, ArrayList<Integer> possible) {
+    public void possibleStraightMove(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 0; i < 8; i += 2) {
@@ -699,14 +699,15 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    public void PossibleDiagonalMove(int k, ArrayList<Integer> possible) {
+    public void possibleDiagonalMove(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 8; i < 16; i += 2) {
             int destcol = col + toThat[i];
             int destrow = row + toThat[i + 1];
             if (k % 2 == 0) {
-                if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
+                if (destcol >= 0 && destcol <= 4 &&
+                        destrow >= 0 && destrow <= 4) {
                     int destk = Linearize(destcol, destrow);
                     possible.add(destk);
                 }
@@ -719,7 +720,7 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    public void PossibleStraightJump(int k, ArrayList<Integer> possible) {
+    public void possibleStraightJump(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 0; i < 8; i += 2) {
@@ -737,14 +738,15 @@ class Board extends Observable {
      * @param k linearized index.
      * @param possible ArrayList contains the linearized destination.
      */
-    public void PossibleDiagonalJump(int k, ArrayList<Integer> possible) {
+    public void possibleDiagonalJump(int k, ArrayList<Integer> possible) {
         int col = Col(k);
         int row = Row(k);
         for (int i = 8; i < 16; i += 2) {
             int destcol = col + toThat[i] * 2;
             int destrow = row + toThat[i + 1] * 2;
             if (k % 2 == 0) {
-                if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
+                if (destcol >= 0 && destcol <= 4 &&
+                        destrow >= 0 && destrow <= 4) {
                     int destk = Linearize(destcol, destrow);
                     possible.add(destk);
                 }
@@ -752,6 +754,11 @@ class Board extends Observable {
         }
     }
 
+    /**
+     * Another helper method for getJumps.
+     * @param moves ArrayList to hold all moves.
+     * @param k Linearized index.
+     */
     private void getJumpsHelper(ArrayList<Move> moves, int k) {
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), BLACK);
@@ -760,11 +767,11 @@ class Board extends Observable {
         //System.out.println();
         if (jumpPossible(k)) {
             ArrayList<Integer> possible = new ArrayList<Integer>();
-            PossibleStraightJump(k, possible);
-            PossibleDiagonalJump(k, possible);
-            /////////////////////////////////////////////////////////////////////////////////////////
+            possibleStraightJump(k, possible);
+            possibleDiagonalJump(k, possible);
+            /////////////////////////////////////////////////////////////////
             Move tester = null;
-            /////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////
             for (int i = 0; i < possible.size(); i += 1) {
                 if (get(k) != EMPTY) {
                     int destk = possible.get(i);
@@ -773,9 +780,11 @@ class Board extends Observable {
                         int jumpedrow = (Row(k) + Row(destk)) / 2;
                         int jumpedk = Linearize(jumpedcol, jumpedrow);
                         if (get(k).opposite().equals(get(jumpedk))) {
-                            //System.out.println("jumpedk: " + jumpedk + " " + get(jumpedk));
+                            //System.out.println("jumpedk: " + jumpedk +
+                            // " " + get(jumpedk));
                             tempBoard.set(jumpedk, EMPTY);
-                            //System.out.println("destk: " + destk + " " + get(destk));
+                            //System.out.println("destk: " + destk +
+                            // " " + get(destk));
                             tempBoard.set(destk, get(k));
                             //System.out.println("k: " + k + " " + get(k));
                             tempBoard.set(k, EMPTY);
@@ -783,20 +792,27 @@ class Board extends Observable {
 
                             ////////////////
                             if (!tempBoard.toString().equals(toString())) {
-                                Move thisstep = Move.move(col(k), row(k), col(destk), row(destk));
+                                Move thisstep = Move.move(col(k), row(k),
+                                        col(destk), row(destk));
                                 //moves.add(thisstep);
-                                System.out.println("thisstep before recursion: " + thisstep);
-                                //System.out.println("move before recursion: " + moves);
+                                System.out.println("thisstep before recursion: " +
+                                        thisstep);
+                                //System.out.println("move before recursion: " +
+                                // moves);
                                 tempBoard.getJumpsHelper(moves, destk);
-                                //System.out.println("move after recursion: " + moves);
-                                System.out.println("thisstep after recursion: " + thisstep);
+                                //System.out.println("move after recursion: " +
+                                // moves);
+                                System.out.println("thisstep after recursion: " +
+                                        thisstep);
                                 moves.add(thisstep);
-                                System.out.println("move after recursion: " + moves);
+                                System.out.println("move after recursion: " +
+                                        moves);
 
 
                             }
                             /*for (Move moveadd : temp) {
-                                moves.add(move(col(k), row(k), col(destk), row(destk), moveadd));
+                                moves.add(move(col(k), row(k), col(destk),
+                                row(destk), moveadd));
                             }*/
                         }
                     }
@@ -805,11 +821,19 @@ class Board extends Observable {
         }
     }
 
-    private void getJumpsHelper(ArrayList<Move> moves, int k, Board tempBoard, Move lastMove) {
+    /**
+     * A helper method for getJumps.
+     * @param moves A ArrayList to contains all moves.
+     * @param k Linearized index.
+     * @param tempBoard A Board to hold current board state.
+     * @param lastMove All the moves so far.
+     */
+    private void getJumpsHelper(ArrayList<Move> moves, int k,
+                                Board tempBoard, Move lastMove) {
         if (jumpPossible(k)) {
             ArrayList<Integer> possible = new ArrayList<Integer>();
-            PossibleStraightJump(k, possible);
-            PossibleDiagonalJump(k, possible);
+            possibleStraightJump(k, possible);
+            possibleDiagonalJump(k, possible);
             Board temp = new Board();
             temp.copy(tempBoard);
             for (int i = 0; i < possible.size(); i += 1) {
@@ -830,22 +854,30 @@ class Board extends Observable {
 
                             ////////////////
                             if (!tempBoard.toString().equals(temp.toString())) {
-                                //Move thisstep = Move.move(col(k), row(k), col(destk), row(destk));
+                                //Move thisstep = Move.move(col(k), row(k),
+                                // col(destk), row(destk));
                                 //moves.add(thisstep);
 
 
-                                System.out.println("lastMove before recursion: " + lastMove);
+                                System.out.println("lastMove before recursion: " +
+                                        lastMove);
                                 //copy(tempBoard);
-                                tempBoard.getJumpsHelper(moves, destk, tempBoard, lastMove);
-                                System.out.println("lastMove after recursion: " + lastMove);
-                                lastMove = Move.move(Move.move(col(k), row(k), col(destk), row(destk)), lastMove);
-                                System.out.println("lastMove after addition: " + lastMove);
+                                tempBoard.getJumpsHelper(moves, destk,
+                                        tempBoard, lastMove);
+                                System.out.println("lastMove after recursion: " +
+                                        lastMove);
+                                lastMove = Move.move(Move.move(col(k), row(k),
+                                        col(destk), row(destk)), lastMove);
+                                System.out.println("lastMove after addition: " +
+                                        lastMove);
                                 //System.out.println("lastMove: " + lastMove);
-                                //System.out.println("move after recursion: " + moves);
+                                //System.out.println("move after recursion: " +
+                                // moves);
 
                             }
                             /*for (Move moveadd : temp) {
-                                moves.add(move(col(k), row(k), col(destk), row(destk), moveadd));
+                                moves.add(move(col(k), row(k),
+                                col(destk), row(destk), moveadd));
                             }*/
                         }
                     }

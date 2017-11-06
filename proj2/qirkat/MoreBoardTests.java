@@ -4,7 +4,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MoreBoardTests {
-	
 	// the string representation of this is
 	// "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w"
 	// feel free to modify this to however you want to represent your board.
@@ -20,11 +19,11 @@ public class MoreBoardTests {
 
     /**
      * @return the String representation of the initial state. This will
-     * be a string in which we concatenate the values from the bottom of 
+     * be a string in which we concatenate the values from the bottom of
      * board upwards, so we can pass it into setPieces. Read the comments
      * in Board#setPieces for more information.
-     * 
-     * For our current boardRepr, the String returned by getInitialRepresentation is
+     * For our current boardRepr, the String returned by
+     * getInitialRepresentation is
      * "  w w w w w\n  w w w w w\n  b b - w w\n  b b b b b\n  b b b b b"
      *
      * We use a StringBuilder to avoid recreating Strings (because Strings
@@ -60,12 +59,6 @@ public class MoreBoardTests {
     @Test
     public void testSomething() {
     	Board b = getBoard();
-        String[] GAME1 =
-                { "c2-c3", "c4-c2",
-                        "c1-c3", "a3-c1",
-                        "c3-a3", "c5-c4",
-                        "a3-c5-c3",
-                };
     	// write things to test here
         //makeMove(b, GAME1);
     }

@@ -170,7 +170,8 @@ class Game {
         try {
             FileReader reader = new FileReader(operands[0]);
             // FIXME
-            //load file Reads the given file and in effect substitutes its contents for the load command itself.
+            //load file Reads the given file and in effect
+            // substitutes its contents for the load command itself.
         } catch (IOException e) {
             throw error("Cannot open file %s", operands[0]);
         }

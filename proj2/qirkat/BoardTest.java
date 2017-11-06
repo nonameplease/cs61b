@@ -68,21 +68,21 @@ public class BoardTest {
         ArrayList<Integer> test0 = new ArrayList<Integer>();
         test0.add(5);
         test0.add(1);
-        testBoard.PossibleStraightMove(0, testingBuffer);
+        testBoard.possibleStraightMove(0, testingBuffer);
         assertEquals(test0, testingBuffer);
         testingBuffer.clear();
         ArrayList<Integer> test2 = new ArrayList<Integer>();
         test2.add(7);
         test2.add(3);
         test2.add(1);
-        testBoard.PossibleStraightMove(2, testingBuffer);
+        testBoard.possibleStraightMove(2, testingBuffer);
         assertEquals(test2, testingBuffer);
         test2.add(8);
         test2.add(6);
         /**
          * Testing PossibleDiagonalMove and concatenation of ArrayList.
          */
-        testBoard.PossibleDiagonalMove(2, testingBuffer);
+        testBoard.possibleDiagonalMove(2, testingBuffer);
         assertEquals(test2, testingBuffer);
         testingBuffer.clear();
     }
@@ -94,21 +94,21 @@ public class BoardTest {
         ArrayList<Integer> test0 = new ArrayList<Integer>();
         test0.add(10);
         test0.add(2);
-        testBoard.PossibleStraightJump(0, testingBuffer);
+        testBoard.possibleStraightJump(0, testingBuffer);
         assertEquals(test0, testingBuffer);
         testingBuffer.clear();
         ArrayList<Integer> test10 = new ArrayList<Integer>();
         test10.add(20);
         test10.add(12);
         test10.add(0);
-        testBoard.PossibleStraightJump(10, testingBuffer);
+        testBoard.possibleStraightJump(10, testingBuffer);
         assertEquals(test10, testingBuffer);
         test10.add(22);
         test10.add(2);
         /**
          * Testing PossibleDiagonalJump and concatenation of ArrayList.
          */
-        testBoard.PossibleDiagonalJump(10, testingBuffer);
+        testBoard.possibleDiagonalJump(10, testingBuffer);
         assertEquals(test10, testingBuffer);
         testingBuffer.clear();
     }
@@ -142,19 +142,19 @@ public class BoardTest {
 
         System.out.println("One possible traverse path: ");
         Board testBoard = new Board();
-        String GAME3_BOARD =
+        String gAME3_BOARD =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(GAME3_BOARD, PieceColor.BLACK);
-        System.out.println("test board layout: " +"\n" + testBoard.toString());
+        testBoard.setPieces(gAME3_BOARD, PieceColor.BLACK);
+        System.out.println("test board layout: " + "\n" + testBoard.toString());
         testBoard.getJumps(testingBuffer, 2);
         System.out.println("Move steps: " + testingBuffer);
 
         System.out.println("\n\n\n\n\n\n");
         System.out.println("Two possible traverse path: ");
-        String GAME4_BOARD =
+        String gAME4_BOARD =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
-        testBoard.setPieces(GAME4_BOARD, PieceColor.BLACK);
-        System.out.println("test board layout: " +"\n" + testBoard.toString());
+        testBoard.setPieces(gAME4_BOARD, PieceColor.BLACK);
+        System.out.println("test board layout: " + "\n" + testBoard.toString());
         testingBuffer.clear();
         testBoard.getJumps(testingBuffer, 2);
         System.out.println("Move steps: " + testingBuffer);
@@ -163,13 +163,17 @@ public class BoardTest {
     @Test
     public void testCheckJump() {
         Board testBoard = new Board();
-        String GAME4_BOARD =
+        String gAME4_BOARD =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
-        testBoard.setPieces(GAME4_BOARD, PieceColor.BLACK);
-        System.out.println("test board layout: " +"\n" + testBoard.toString());
-        boolean falseCheckJump = testBoard.checkJump(Move.move('c', '1', 'e', '1', Move.move('e', '1', 'e', '3')), false);
+        testBoard.setPieces(gAME4_BOARD, PieceColor.BLACK);
+        System.out.println("test board layout: " + "\n" + testBoard.toString());
+        boolean falseCheckJump =
+                testBoard.checkJump(Move.move('c', '1', 'e', '1',
+                        Move.move('e', '1', 'e', '3')),
+                        false);
         assertEquals(false, falseCheckJump);
-        boolean trueCheckJump = testBoard.checkJump(Move.move('c', '1', 'e', '1',
+        boolean trueCheckJump =
+                testBoard.checkJump(Move.move('c', '1', 'e', '1',
                 Move.move('e', '1', 'e', '3',
                         Move.move('e', '3', 'c', '5',
                                 Move.move('c', '5', 'a', '5')))), false);
@@ -182,18 +186,18 @@ public class BoardTest {
         testBoard.setPieces(GAME1_BOARD, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
-        String GAME2_BOARD =
-                "  b b b b b\n  b b b b b\n  - b - b -\n  w - w - w\n  w w w w w";
-        testBoard.setPieces(GAME2_BOARD, PieceColor.BLACK);
+        String gAME2_BOARD =
+                "b b b b b\n  b b b b b\n  - b - b -\n  w - w - w\n  w w w w w";
+        testBoard.setPieces(gAME2_BOARD, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
 
         /**
          * Test multiple jump concatenation.
          */
-        String GAME3_BOARD =
+        String gAME3_BOARD =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(GAME3_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(gAME3_BOARD, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
     }
