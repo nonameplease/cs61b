@@ -1,8 +1,8 @@
 package qirkat;
 
-import com.sun.tools.javac.code.Attribute;
+//import com.sun.tools.javac.code.Attribute;
 
-import javax.swing.plaf.synth.SynthEditorPaneUI;
+//import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.util.*;
 
 import static qirkat.PieceColor.*;
