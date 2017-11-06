@@ -3,7 +3,7 @@ package qirkat;
 import static qirkat.PieceColor.*;
 
 /** A Player that computes its own moves.
- *  @author
+ *  @author Scott Shao
  */
 class AI extends Player {
 

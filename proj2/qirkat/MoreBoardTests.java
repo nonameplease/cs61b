@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MoreBoardTests {
-	// the string representation of this is
+    // the string representation of this is
 	// "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w"
 	// feel free to modify this to however you want to represent your board.
     private final char[][] boardRepr = new char[][]{
