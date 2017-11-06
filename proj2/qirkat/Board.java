@@ -59,8 +59,8 @@ class Board extends Observable {
 
         // FIXME
         //////////
-        //setPieces(String.valueOf(defaultBoard), _whoseMove);
-        setPieces(String.valueOf(linearizedBoard), _whoseMove);
+        setPieces(String.valueOf(defaultBoard), _whoseMove);
+        //setPieces(String.valueOf(linearizedBoard), _whoseMove);
         //////////
 
         setChanged();
@@ -104,7 +104,7 @@ class Board extends Observable {
         for (int k = 0; k < str.length(); k += 1) {
 
             int destk = 0;
-            /*if (k >= 0 && k <= 4) {
+            if (k >= 0 && k <= 4) {
                 destk = k + 20;
             } else if (k >= 5 && k <= 9) {
                 destk = k + 10;
@@ -114,8 +114,8 @@ class Board extends Observable {
                 destk = k - 10;
             } else if (k >= 20 && k <= 24) {
                 destk = k - 20;
-            }*/
-            destk = k;
+            }
+            //destk = k;
 
             switch (str.charAt(k)) {
             case '-':
@@ -156,23 +156,6 @@ class Board extends Observable {
     PieceColor get(int k) {
         assert validSquare(k);
         //return null; // FIXME
-        int destk = 0;
-        int row1 = SIDE * 0;
-        int row2 = SIDE * 1;
-        int row3 = SIDE * 2;
-        int row4 = SIDE * 3;
-        int row5 = SIDE * 4;
-        if (k >= row1 && k <= SIDE - 1) {
-            destk = k + row5;
-        } else if (k >= row2 && k <= row2 + SIDE - 1) {
-            destk = k + 10;
-        } else if (k >= row3 && k <= row3 + SIDE - 1) {
-            destk = k;
-        } else if (k >= row4 && k <= row4 + SIDE - 1) {
-            destk = k - 10;
-        } else if (k >= row5 && k <= row5 + SIDE - 1) {
-            destk = k - row5;
-        }
         if (_board[k] == 'b') {
             return BLACK;
         } else if (_board[k] == 'w') {
@@ -702,7 +685,9 @@ class Board extends Observable {
             possibleStraightJump(k, possible);
             possibleDiagonalJump(k, possible);
             /////////////////////////////////////////////////////////////////
-            Move tester = null;
+           ArrayList<Move> tester = new ArrayList<Move>();
+           tester.add(null);
+            Move thisstep = null;
             /////////////////////////////////////////////////////////////////
             for (int i = 0; i < possible.size(); i += 1) {
                 if (get(k) != EMPTY) {
@@ -724,11 +709,11 @@ class Board extends Observable {
 
                             ////////////////
                             if (!tempBoard.toString().equals(toString())) {
-                                Move thisstep = Move.move(col(k), row(k),
+                                thisstep = Move.move(col(k), row(k),
                                         col(destk), row(destk));
                                 //moves.add(thisstep);
-                                System.out.println("thisstep before recursion: "
-                                        + thisstep);
+                                //System.out.println("thisstep before recursion: "
+                                //        + thisstep);
                                 //System.out.println("move before recursion: "
                                 // + moves);
                                 tempBoard.getJumpsHelper(moves, destk);
@@ -748,6 +733,17 @@ class Board extends Observable {
                     }
                 }
             }
+            System.out.println("Outside for LOOP!!!");
+            ArrayList<Move> tempHolder = new ArrayList<Move>();
+            for (Move temp1 : moves) {
+                for (Move temp2 : tester) {
+                    tempHolder.add(move(temp1, temp2));
+                }
+            }
+            moves.clear();
+            //tester.clear();
+            tester = tempHolder;
+            System.out.println(tester);
         }
     }
 

@@ -48,5 +48,14 @@ public class MoveTest {
         System.out.println(Move.index('a', '1'));
         System.out.println(Move.index('e', '5'));
     }
+
+    @Test
+    public void testMove() {
+        Move step1 = move('c', '5', 'a', '5');
+        Move step2 = move('e', '5', 'c', '5');
+        Move stepnull = move('a','5');
+        assertEquals("e5-c5-a5", move(step2, step1).toString());
+        assertEquals("e5-c5-a5", move(step2, move(step1, null)).toString());
+    }
     /////////////////////////////////////////
 }
