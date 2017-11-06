@@ -610,7 +610,7 @@ class Board extends Observable {
     private char[] defaultBoard = defaultPattern.toCharArray();
            // "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
 
-    String linearizedPattern = "wwwww wwwww bb-ww wwwww wwwww";
+    String linearizedPattern = "wwwww wwwww bb-ww bbbbb bbbbb";
     private char[] linearizedBoard = linearizedPattern.toCharArray();
 
     private char[] _board;
