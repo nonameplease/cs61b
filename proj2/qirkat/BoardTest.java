@@ -135,7 +135,7 @@ public class BoardTest {
      *  Both are private method. Had changed them to public and tested,
      *  both of them passed.
      */
-    @Test(timeout = 200)
+    @Test(timeout = 100)
     public void testGetJumps() {
         ArrayList<Move> testingBuffer = new ArrayList<Move>();
 
@@ -154,8 +154,25 @@ public class BoardTest {
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
         testBoard.setPieces(GAME4_BOARD, PieceColor.BLACK);
         System.out.println("test board layout: " +"\n" + testBoard.toString());
+        testingBuffer.clear();
         testBoard.getJumps(testingBuffer, 2);
         System.out.println("Move steps: " + testingBuffer);
+    }
+
+    @Test
+    public void testCheckJump() {
+        Board testBoard = new Board();
+        String GAME4_BOARD =
+                "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
+        testBoard.setPieces(GAME4_BOARD, PieceColor.BLACK);
+        System.out.println("test board layout: " +"\n" + testBoard.toString());
+        boolean falseCheckJump = testBoard.checkJump(Move.move('c', '1', 'e', '1', Move.move('e', '1', 'e', '3')), false);
+        assertEquals(false, falseCheckJump);
+        boolean trueCheckJump = testBoard.checkJump(Move.move('c', '1', 'e', '1',
+                Move.move('e', '1', 'e', '3',
+                        Move.move('e', '3', 'c', '5',
+                                Move.move('c', '5', 'a', '5')))), false);
+        assertEquals(true, trueCheckJump);
     }
 
     @Test

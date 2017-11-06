@@ -200,11 +200,7 @@ class Move {
         if (!_isJump) {
             return _row1;
         } else {
-            if (_row0 < _row1) {
-                return (char) (_row0 + '1');
-            } else {
-                return (char) (_row0 - '1');
-            }
+            return (char) ((_row0 + _row1) / 2);
         }
     }
 
@@ -215,11 +211,7 @@ class Move {
         if (!_isJump) {
             return _col1;
         } else {
-            if (_col0 < _col1) {
-                return (char) (_col0 + 'a');
-            } else {
-                return (char) (_col0 - 'a');
-            }
+            return (char) ((_col0 + _col1) / 2);
         }
     }
 
@@ -353,5 +345,20 @@ class Move {
 
     /** The identity function on Moves. */
     static final Function<Move, Move> IDENTITY = k -> k;
+
+
+    /////////////////////////////////////////////////
+    void setJumpTail(Move move) {
+        _nextJump = move;
+    }
+
+    int toJumpedIndex() {
+        Move temp = this;
+        while (temp.jumpTail() != null) {
+            temp = temp.jumpTail();
+        }
+        return temp._toIndex;
+    }
+    /////////////////////////////////////////////////
 
 }
