@@ -51,8 +51,8 @@ class Board extends Observable {
 
         // FIXME
         //////////
-        setPieces(String.valueOf(defaultBoard), _whoseMove);
-        //setPieces(String.valueOf(linearizedBoard), _whoseMove);
+        //setPieces(String.valueOf(defaultBoard), _whoseMove);
+        setPieces(String.valueOf(linearizedBoard), _whoseMove);
         //////////
 
         setChanged();
@@ -96,7 +96,7 @@ class Board extends Observable {
         for (int k = 0; k < str.length(); k += 1) {
 
             int destk = 0;
-            if (k >= 0 && k <= 4) {
+            /*if (k >= 0 && k <= 4) {
                 destk = k + 20;
             } else if (k >= 5 && k <= 9) {
                 destk = k + 10;
@@ -106,8 +106,8 @@ class Board extends Observable {
                 destk = k - 10;
             } else if (k >= 20 && k <= 24) {
                 destk = k - 20;
-            }
-            //destk = k;
+            }*/
+            destk = k;
 
             switch (str.charAt(k)) {
             case '-':
