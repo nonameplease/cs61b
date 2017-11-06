@@ -581,7 +581,7 @@ class Board extends Observable {
      */
     private Integer[] toThat =
             new Integer[] {0, 1, 1, 0, 0, -1, -1, 0,
-            1, 1, 1, -1, -1, -1, -1, 1};
+                1, 1, 1, -1, -1, -1, -1, 1};
 
     /**
      * @param k Linearized index.
