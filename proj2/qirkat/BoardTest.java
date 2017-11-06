@@ -195,9 +195,9 @@ public class BoardTest {
         /**
          * Test multiple jump concatenation.
          */
-        String gAME3_BOARD =
+        String game3_BOARD =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(gAME3_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(game3_BOARD, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
     }

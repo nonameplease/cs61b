@@ -27,7 +27,8 @@ class Board extends Observable {
         // FIXME?
 
         //////////
-        _board = new char[25];
+        int boardSize = SIDE * SIDE;
+        _board = new char[boardSize];
         _allMoves = new MoveList();
         //////////
         clear();
@@ -150,15 +151,20 @@ class Board extends Observable {
         assert validSquare(k);
         //return null; // FIXME
         int destk = 0;
-        if (k >= 0 && k <= 4) {
+        int row1 = 0;
+        int row2 = 5;
+        int row3 = 10;
+        int row4 = 15;
+        int row5 = 20;
+        if (k >= row1 && k <= SIDE - 1) {
             destk = k + 20;
-        } else if (k >= 5 && k <= 9) {
+        } else if (k >= row2 && k <= row2 + SIDE - 1) {
             destk = k + 10;
-        } else if (k >= 10 && k <= 14) {
+        } else if (k >= row3 && k <= row3 + SIDE - 1) {
             destk = k;
-        } else if (k >= 15 && k <= 19) {
+        } else if (k >= row4 && k <= row4 + SIDE - 1) {
             destk = k - 10;
-        } else if (k >= 20 && k <= 24) {
+        } else if (k >= row5 && k <= row5 + SIDE - 1) {
             destk = k - 20;
         }
         if (_board[k] == 'b') {
@@ -184,15 +190,20 @@ class Board extends Observable {
         //_board =  _board.toString().substring(0, )
         // + v.shortName() + _board.substring(k + 1);
         int destk = 0;
-        if (k >= 0 && k <= 4) {
+        int row1 = 0;
+        int row2 = 5;
+        int row3 = 10;
+        int row4 = 15;
+        int row5 = 20;
+        if (k >= row1 && k <= SIDE - 1) {
             destk = k + 20;
-        } else if (k >= 5 && k <= 9) {
+        } else if (k >= row2 && k <= row2 + SIDE - 1) {
             destk = k + 10;
-        } else if (k >= 10 && k <= 14) {
+        } else if (k >= row3 && k <= row3 + SIDE - 1) {
             destk = k;
-        } else if (k >= 15 && k <= 19) {
+        } else if (k >= row4 && k <= row4 + SIDE - 1) {
             destk = k - 10;
-        } else if (k >= 20 && k <= 24) {
+        } else if (k >= row5 && k <= row5 + SIDE - 1) {
             destk = k - 20;
         }
 
@@ -206,37 +217,7 @@ class Board extends Observable {
          */
         return true; // FIXME
         //return (getMoves().contains(mov));
-        /*if (validSquare(mov.col0(), mov.row0())
-        && validSquare(mov.col1(), mov.row1())) {
-            if (get(mov.col0(), mov.row0()) != EMPTY) {
-                *//**
-                 * Up, Down, Left, Right
-                 *//*
-                if (Math.abs(mov.col0() - mov.col1())
-                + Math.abs(mov.row0() - mov.row1()) == 1) {
-                    if (get(mov.col1(), mov.row1()) == EMPTY) {
-                        *//**
-                         * Up, Down
-                         *//*
-                        if (get(mov.col0(), mov.row0()) == BLACK) {
-                            if (mov.row1() - mov.row0() <= 0) {
-                                return true;
-                            }
-                        }
-                        if (get(mov.col0(), mov.row0()) == WHITE) {
-                            if (mov.row1() - mov.row0() >= 0) {
-                                return true;
-                            }
-                        }
-                        *//**
-                         * Left, Right
-                         *//*
-                        if (Math.abs(mov.col0() - mov.col1()) == 1) {
-                            return true;
-                        }
-                    }
-                }
-                *//*
+/*
             }
         }
         return false;*/
@@ -302,14 +283,14 @@ class Board extends Observable {
         for (int i = 0; i < possible.size(); i += 1) {
             if (get(k) == BLACK) {
                 int destk = possible.get(i);
-                if (Row(k) >= Row(destk)) {
+                if (userRow(k) >= userRow(destk)) {
                     if (get(possible.get(i)) == EMPTY) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
                     }
                 }
             } else if (get(k) == WHITE) {
                 int destk = possible.get(i);
-                if (Row(k) <= Row(destk)) {
+                if (userRow(k) <= userRow(destk)) {
                     if (get(possible.get(i)) == EMPTY) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
                     }
@@ -328,56 +309,7 @@ class Board extends Observable {
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), WHITE);
         Move lastMove = null;
-        /**
-         * Finding one jump works. This is testing finding a series of jumps.
-         */
-        /*Board tempBoard = new Board();
-        tempBoard.setPieces(toString(), BLACK);
-        //System.out.println(tempBoard.toString());
-        //System.out.println("recursion");
-        if (jumpPossible(k)) {
-            ArrayList<Integer> possible = new ArrayList<Integer>();
-            PossibleStraightJump(k, possible);
-            PossibleDiagonalJump(k, possible);
-            for (int i = 0; i < possible.size(); i += 1) {
-                if (get(k) != EMPTY) {
-                    int destk = possible.get(i);
-                    if (get(destk) == EMPTY) {
-                        int jumpedcol = (Col(k) + Col(destk)) / 2;
-                        int jumpedrow = (Row(k) + Row(destk)) / 2;
-                        int jumpedk = Linearize(jumpedcol, jumpedrow);
-                        if (get(k).opposite().equals(get(jumpedk))) {
-                            ArrayList<Move> temp = new ArrayList<Move>();
-                            //System.out.println("jumpedk: " + jumpedk
-                            + " " + get(jumpedk));
-                            tempBoard.set(jumpedk, EMPTY);
-                            //System.out.println("destk: " + destk
-                            + " " + get(destk));
-                            tempBoard.set(destk, get(k));
-                            //System.out.println("k: " + k + " " + get(k));
-                            tempBoard.set(k, EMPTY);
-                            ////////////////////////
-                            moves.add(move(col(k), row(k),
-                            col(destk), row(destk)));
-                            ////////////////////////
-                            if (!tempBoard.toString().equals(toString())) {
-                                tempBoard.getJumps(temp, destk);
-                                //System.out.println("temp: " + temp);
-                                if (temp != null) {
-                                    for (Move recmove : temp) {
-                                        moves.add(move(col(k), row(k),
-                                        col(destk), row(destk), recmove));
-                                    }
-                                    //System.out.println("Access temp != null");
-                                    //System.out.println("Moves size: "
-                                    + moves.size());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
+
         /**
          * Working code finding one jump.
          */
@@ -417,9 +349,7 @@ class Board extends Observable {
                     mov2.col1(), mov2.row1()))) {
                 mov2 = mov2.jumpTail();
             } else {
-                if (allowPartial) {
-                    return true;
-                } else {
+                if (!allowPartial) {
                     return false;
                 }
             }
@@ -443,9 +373,9 @@ class Board extends Observable {
             if (get(k) != EMPTY) {
                 int destk = possible.get(i);
                 if (get(destk) == EMPTY) {
-                    int jumpedcol = (Col(k) + Col(destk)) / 2;
-                    int jumpedrow = (Row(k) + Row(destk)) / 2;
-                    int jumpedk = Linearize(jumpedcol, jumpedrow);
+                    int jumpedcol = (userCol(k) + userCol(destk)) / 2;
+                    int jumpedrow = (userRow(k) + userRow(destk)) / 2;
+                    int jumpedk = userLinearize(jumpedcol, jumpedrow);
                     if (get(k).opposite().equals(get(jumpedk))) {
                         return true;
                     }
@@ -554,8 +484,9 @@ class Board extends Observable {
     String toString(boolean legend) {
         Formatter out = new Formatter();
         // FIXME
+        int cutoff = 20;
         if (!legend) {
-            for (int i = 20; i >= 0; i -= 5) {
+            for (int i = cutoff; i >= 0; i -= 5) {
                 out.format(" ");
                 for (int j = 0; j < 5; j += 1) {
                     out.format("%2s", String.valueOf(_board[i + j]));
@@ -642,14 +573,15 @@ class Board extends Observable {
      * Up -> Right -> Down -> Left ->.
      * UpRight -> DownRight -> DownLeft -> UpLeft.
      */
-    private Integer[] toThat = new Integer[]
-            {0, 1, 1, 0, 0, -1, -1, 0, 1, 1, 1, -1, -1, -1, -1, 1};
+    private Integer[] toThat =
+            new Integer[] {0, 1, 1, 0, 0, -1, -1, 0,
+                    1, 1, 1, -1, -1, -1, -1, 1};
 
     /**
      * @param k Linearized index.
      * @return column assuming on board.
      */
-    private int Col(int k) {
+    private int userCol(int k) {
         return k % 5;
     }
 
@@ -657,7 +589,7 @@ class Board extends Observable {
      * @param k Linearized index.
      * @return row assuming on board.
      */
-    private int Row(int k) {
+    private int userRow(int k) {
         return k / 5;
     }
 
@@ -666,7 +598,7 @@ class Board extends Observable {
      * @param row index.
      * @return Linearized index k.
      */
-    private int Linearize(int col, int row) {
+    private int userLinearize(int col, int row) {
         return row * 5 + col;
     }
 
@@ -676,13 +608,13 @@ class Board extends Observable {
      * @param possible ArrayList contains the linearized destination.
      */
     public void possibleStraightMove(int k, ArrayList<Integer> possible) {
-        int col = Col(k);
-        int row = Row(k);
+        int col = userCol(k);
+        int row = userRow(k);
         for (int i = 0; i < 8; i += 2) {
             int destcol = col + toThat[i];
             int destrow = row + toThat[i + 1];
             if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
-                int destk = Linearize(destcol, destrow);
+                int destk = userLinearize(destcol, destrow);
                 possible.add(destk);
             }
         }
@@ -694,15 +626,15 @@ class Board extends Observable {
      * @param possible ArrayList contains the linearized destination.
      */
     public void possibleDiagonalMove(int k, ArrayList<Integer> possible) {
-        int col = Col(k);
-        int row = Row(k);
+        int col = userCol(k);
+        int row = userRow(k);
         for (int i = 8; i < 16; i += 2) {
             int destcol = col + toThat[i];
             int destrow = row + toThat[i + 1];
             if (k % 2 == 0) {
                 if (destcol >= 0 && destcol <= 4
                         && destrow >= 0 && destrow <= 4) {
-                    int destk = Linearize(destcol, destrow);
+                    int destk = userLinearize(destcol, destrow);
                     possible.add(destk);
                 }
             }
@@ -715,13 +647,13 @@ class Board extends Observable {
      * @param possible ArrayList contains the linearized destination.
      */
     public void possibleStraightJump(int k, ArrayList<Integer> possible) {
-        int col = Col(k);
-        int row = Row(k);
+        int col = userCol(k);
+        int row = userRow(k);
         for (int i = 0; i < 8; i += 2) {
             int destcol = col + toThat[i] * 2;
             int destrow = row + toThat[i + 1] * 2;
             if (destcol >= 0 && destcol <= 4 && destrow >= 0 && destrow <= 4) {
-                int destk = Linearize(destcol, destrow);
+                int destk = userLinearize(destcol, destrow);
                 possible.add(destk);
             }
         }
@@ -733,15 +665,15 @@ class Board extends Observable {
      * @param possible ArrayList contains the linearized destination.
      */
     public void possibleDiagonalJump(int k, ArrayList<Integer> possible) {
-        int col = Col(k);
-        int row = Row(k);
+        int col = userCol(k);
+        int row = userRow(k);
         for (int i = 8; i < 16; i += 2) {
             int destcol = col + toThat[i] * 2;
             int destrow = row + toThat[i + 1] * 2;
             if (k % 2 == 0) {
                 if (destcol >= 0 && destcol <= 4
                         && destrow >= 0 && destrow <= 4) {
-                    int destk = Linearize(destcol, destrow);
+                    int destk = userLinearize(destcol, destrow);
                     possible.add(destk);
                 }
             }
@@ -770,9 +702,9 @@ class Board extends Observable {
                 if (get(k) != EMPTY) {
                     int destk = possible.get(i);
                     if (get(destk) == EMPTY) {
-                        int jumpedcol = (Col(k) + Col(destk)) / 2;
-                        int jumpedrow = (Row(k) + Row(destk)) / 2;
-                        int jumpedk = Linearize(jumpedcol, jumpedrow);
+                        int jumpedcol = (userCol(k) + userCol(destk)) / 2;
+                        int jumpedrow = (userRow(k) + userRow(destk)) / 2;
+                        int jumpedk = userLinearize(jumpedcol, jumpedrow);
                         if (get(k).opposite().equals(get(jumpedk))) {
                             //System.out.println("jumpedk: " + jumpedk +
                             // " " + get(jumpedk));
@@ -832,9 +764,9 @@ class Board extends Observable {
                 if (get(k) != EMPTY) {
                     int destk = possible.get(i);
                     if (get(destk) == EMPTY) {
-                        int jumpedcol = (Col(k) + Col(destk)) / 2;
-                        int jumpedrow = (Row(k) + Row(destk)) / 2;
-                        int jumpedk = Linearize(jumpedcol, jumpedrow);
+                        int jumpedcol = (userCol(k) + userCol(destk)) / 2;
+                        int jumpedrow = (userRow(k) + userRow(destk)) / 2;
+                        int jumpedk = userLinearize(jumpedcol, jumpedrow);
                         if (get(k).opposite().equals(get(jumpedk))) {
                             tempBoard.set(jumpedk, EMPTY);
                             tempBoard.set(destk, get(k));
