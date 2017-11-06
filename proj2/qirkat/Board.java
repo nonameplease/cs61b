@@ -324,8 +324,8 @@ class Board extends Observable {
         // FIXME
 
         ArrayList<Move> temp = new ArrayList<Move>();
-        getJumpsHelper(temp, k);
-        System.out.println("Moves access within method: " + temp);
+        getJumpsHelper(moves, k);
+        /*System.out.println("Moves access within method: " + temp);
         Move tempholder = null;
         for (int i = 0; i < temp.size(); i += 1) {
             if  (tempholder == null || tempholder.toJumpedIndex() == temp.get(i).fromIndex()) {
@@ -341,7 +341,7 @@ class Board extends Observable {
                 }
             }
         }
-        System.out.println("Moves access within method: " + temp);
+        System.out.println("Moves access within method: " + temp);*/
 
         /**
          * Finding one jump works. This is testing finding a series of jumps.

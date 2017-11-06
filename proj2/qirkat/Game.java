@@ -2,6 +2,8 @@ package qirkat;
 
 /* Author: P. N. Hilfinger */
 
+import com.sun.source.tree.WhileLoopTree;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -17,7 +19,7 @@ import static qirkat.Command.Type.*;
 import static qirkat.GameException.error;
 
 /** Controls the play of the game.
- *  @author
+ *  @author Scott Shao
  */
 class Game {
 
@@ -127,6 +129,15 @@ class Game {
     /** Perform the command 'auto OPERANDS[0]'. */
     void doAuto(String[] operands) {
         _state = SETUP;
+        if (operands[0].equals("White")) {
+            //both white and black are AI
+            _whiteIsManual = false;
+            _blackIsManual = false;
+        } else {
+            //black AI white player
+            _whiteIsManual = true;
+            _blackIsManual = false;
+        }
         // FIXME
     }
 
@@ -159,6 +170,7 @@ class Game {
         try {
             FileReader reader = new FileReader(operands[0]);
             // FIXME
+            //load file Reads the given file and in effect substitutes its contents for the load command itself.
         } catch (IOException e) {
             throw error("Cannot open file %s", operands[0]);
         }
@@ -167,7 +179,17 @@ class Game {
     /** Perform the command 'manual OPERANDS[0]'. */
     void doManual(String[] operands) {
         _state = SETUP;
+        //opposite of doAuto.
         // FIXME
+        if (operands[0].equals("Black")) {
+            //both white and black are manual player
+            _whiteIsManual = true;
+            _blackIsManual = false;
+        } else {
+            //black AI white player
+            _whiteIsManual = true;
+            _blackIsManual = false;
+        }
     }
 
     /** Exit the program. */
@@ -184,21 +206,34 @@ class Game {
     /** Perform the move OPERANDS[0]. */
     void doMove(String[] operands) {
         // FIXME
+        _board.makeMove(Move.parseMove(operands[0]));
     }
 
     /** Perform the command 'clear'. */
     void doClear(String[] unused) {
         // FIXME
+        _board.clear();
+        _state = SETUP;
+        //resign?
     }
 
     /** Perform the command 'set OPERANDS[0] OPERANDS[1]'. */
     void doSet(String[] operands) {
         // FIXME
+        _state = SETUP;
+        if (operands[0] == "white") {
+            _board.setPieces(operands[1], WHITE);
+        } else if (operands[0] == "black") {
+            _board.setPieces(operands[1], BLACK);
+        }
     }
 
     /** Perform the command 'dump'. */
     void doDump(String[] unused) {
         // FIXME
+        System.out.println("===");
+        System.out.println(_board.toString());
+        System.out.println("===");
     }
 
     /** Execute 'seed OPERANDS[0]' command, where the operand is a string
@@ -221,6 +256,13 @@ class Game {
     void reportWinner() {
         String msg;
         msg = "Game over."; // FIXME
+        if (_board.gameOver()) {
+            if (_board.whoseMove() == BLACK) {
+                msg = "Black wins.";
+            } else if (_board.whoseMove() == WHITE) {
+                msg = "White wins.";
+            }
+        }
         _reporter.outcomeMsg(msg);
     }
 

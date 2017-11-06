@@ -135,7 +135,7 @@ public class BoardTest {
      *  Both are private method. Had changed them to public and tested,
      *  both of them passed.
      */
-    @Test(timeout = 100)
+    @Test(timeout = 200)
     public void testGetJumps() {
         ArrayList<Move> testingBuffer = new ArrayList<Move>();
 
