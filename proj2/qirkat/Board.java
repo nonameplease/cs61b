@@ -328,7 +328,7 @@ class Board extends Observable {
             return true;
         }
         //return false; // FIXME
-        Move mov2 = mov;
+        /*Move mov2 = mov;
         while (mov2 != null) {
             ArrayList<Move> moves = new ArrayList<Move>();
             int k = index(mov2.col0(), mov2.row0());
@@ -343,7 +343,33 @@ class Board extends Observable {
                 }
             }
         }
-        return true;
+        return true;*/
+        ArrayList<Move> moves = new ArrayList<Move>();
+        int fromIndex = mov.fromIndex();
+        int toIndex = mov.toIndex();
+        System.out.println(mov.toString());
+        getJumps(moves, fromIndex);
+        for (Move checking : moves) {
+            if (mov == null) {
+                return true;
+            } else if (fromIndex == checking.fromIndex() && toIndex == checking.toIndex()) {
+                if (mov.jumpTail() == null) {
+                    if (jumpPossible(mov.fromIndex())) {
+                        return false;
+                    } else {
+                        mov = mov.jumpTail();
+                    }
+                } else {
+                    mov = mov.jumpTail();
+                    fromIndex = mov.fromIndex();
+                    toIndex = mov.toIndex();
+                }
+            }
+        }
+
+
+        //getJumps(moves);
+        return false;
     }
 
     /** Return true iff a jump is possible for a piece at position C R. */
@@ -711,19 +737,19 @@ class Board extends Observable {
                             if (!tempBoard.toString().equals(toString())) {
                                 thisstep = Move.move(col(k), row(k),
                                         col(destk), row(destk));
-                                //moves.add(thisstep);
                                 //System.out.println("thisstep before recursion: "
                                 //        + thisstep);
+                                moves.add(thisstep);
                                 //System.out.println("move before recursion: "
-                                // + moves);
+                                 //+ moves);
                                 tempBoard.getJumpsHelper(moves, destk);
                                 //System.out.println("move after recursion: "
                                 // + moves);
-                                System.out.println("thisstep after recursion: "
-                                        + thisstep);
-                                moves.add(thisstep);
-                                System.out.println("move after recursion: "
-                                        + moves);
+                                //System.out.println("thisstep after recursion: "
+                                //        + thisstep);
+                                //moves.add(thisstep);
+                                //System.out.println("move after recursion: "
+                                //        + moves);
                             }
                             /*for (Move moveadd : temp) {
                                 moves.add(move(col(k), row(k), col(destk),
@@ -733,17 +759,17 @@ class Board extends Observable {
                     }
                 }
             }
-            System.out.println("Outside for LOOP!!!");
+            /*System.out.println("Outside for LOOP!!!");
             ArrayList<Move> tempHolder = new ArrayList<Move>();
             for (Move temp1 : moves) {
                 for (Move temp2 : tester) {
                     tempHolder.add(move(temp1, temp2));
                 }
-            }
-            moves.clear();
+            }*/
+            //moves.clear();
             //tester.clear();
-            tester = tempHolder;
-            System.out.println(tester);
+            //tester = tempHolder;
+            //System.out.println(tester);
         }
     }
 

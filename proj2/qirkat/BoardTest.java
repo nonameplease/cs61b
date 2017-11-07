@@ -158,6 +158,16 @@ public class BoardTest {
         testingBuffer.clear();
         testBoard.getJumps(testingBuffer, 2);
         System.out.println("Move steps: " + testingBuffer);
+
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println("Multi-traverse:");
+        String game5Board =
+                "----- ----- ----- bbbbb -bwb-";
+        testBoard.setPieces(game5Board, PieceColor.BLACK);
+        System.out.println("test board layout: " + "\n" + testBoard.toString());
+        testingBuffer.clear();
+        testBoard.getJumps(testingBuffer, 2);
+        System.out.println("Move steps: " + testingBuffer);
     }
 
     @Test
