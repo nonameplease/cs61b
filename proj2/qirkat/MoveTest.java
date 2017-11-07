@@ -56,6 +56,9 @@ public class MoveTest {
         Move stepnull = move('a','5');
         assertEquals("e5-c5-a5", move(step2, step1).toString());
         assertEquals("e5-c5-a5", move(step2, move(step1, null)).toString());
+        Move test3 = move(step2, step1);
+        assertEquals("e5-c5-a5", test3.toString());
+        System.out.println(test3.jumpTail());
     }
     /////////////////////////////////////////
 }

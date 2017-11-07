@@ -110,7 +110,7 @@ class Move {
         if (move0.isVestigial()) {
             //return null; // FIXME
             return move(move(move0.col0(), move0.row0(),
-                    move1.col1(), move1.row1(), move1._nextJump), move1);
+                    move1.col1(), move1.row1(), move1.jumpTail()), move1);
         }
         if (move0.jumpTail() == null) {
             //return null; // FIXME
@@ -295,10 +295,11 @@ class Move {
         if (this.jumpTail() != null) {
             _staged._nextJump.toString();
         }*/
-        String result = col0() + "" + row0() + "-" + col1() + "" + row1();
-        while (this._nextJump != null) {
-            result += "-" + this._nextJump.col1() + this._nextJump.row1();
-            this._nextJump = this.jumpTail().jumpTail();
+        Move temp = move(this, null);
+        String result = temp.col0() + "" + temp.row0() + "-" + temp.col1() + "" + temp.row1();
+        while (temp.jumpTail() != null) {
+            result += "-" + temp.jumpTail().col1() + temp.jumpTail().row1();
+            temp = temp.jumpTail();
         }
         out.format(result);
     }

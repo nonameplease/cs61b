@@ -6,6 +6,9 @@ package qirkat;
 //import java.util.*;
 
 
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
@@ -294,10 +297,15 @@ class Board extends Observable {
         // FIXME
 
         ArrayList<Move> temp = new ArrayList<Move>();
+        moves.add(null);
         getJumpsHelper(moves, k);
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), WHITE);
         Move lastMove = null;
+        DefaultMutableTreeNode pathTree = new DefaultMutableTreeNode();
+        ArrayList<Move> path = new ArrayList<Move>();
+
+
 
         /**
          * Working code finding one jump.
@@ -320,6 +328,25 @@ class Board extends Observable {
         }*/
     }
 
+    public void getOneJumps(ArrayList<Move> moves, int k) {
+        ArrayList<Integer> possible = new ArrayList<Integer>();
+        possibleStraightJump(k, possible);
+        possibleDiagonalJump(k, possible);
+        for (int i = 0; i < possible.size(); i += 1) {
+            if (get(k) != EMPTY) {
+                int destk = possible.get(i);
+                if (get(destk) == EMPTY) {
+                    int jumpedcol = (userCol(k) + userCol(destk)) / 2;
+                    int jumpedrow = (userRow(k) + userRow(destk)) / 2;
+                    int jumpedk = userLinearize(jumpedcol, jumpedrow);
+                    if (get(k).opposite().equals(get(jumpedk))) {
+                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                    }
+                }
+            }
+        }
+    }
+
     /** Return true iff MOV is a valid jump sequence on the current board.
      *  MOV must be a jump or null.  If ALLOWPARTIAL, allow jumps that
      *  could be continued and are valid as far as they go.  */
@@ -328,6 +355,32 @@ class Board extends Observable {
             return true;
         }
         //return false; // FIXME
+
+        Move mov2 = mov;
+        ArrayList<Move> oneJump = new ArrayList<Move>();
+        while(jumpPossible(mov2.fromIndex())) {
+            /*if (mov2 == null) {
+                return false;
+            }*/
+            getOneJumps(oneJump, mov2.fromIndex());
+            boolean state = false;
+            for (Move move : oneJump) {
+                if (mov2.toIndex() == move.toIndex()) {
+                    mov2 = mov2.jumpTail();
+                    state = true;
+                }
+            }
+            oneJump.clear();
+            if (state == false) {
+                return false;
+            }
+        }
+        if (mov2 == null) {
+            return true;
+        } else {
+            return false;
+        }
+
         /*Move mov2 = mov;
         while (mov2 != null) {
             ArrayList<Move> moves = new ArrayList<Move>();
@@ -344,7 +397,9 @@ class Board extends Observable {
             }
         }
         return true;*/
-        ArrayList<Move> moves = new ArrayList<Move>();
+
+
+        /*ArrayList<Move> moves = new ArrayList<Move>();
         int fromIndex = mov.fromIndex();
         int toIndex = mov.toIndex();
         System.out.println(mov.toString());
@@ -365,11 +420,11 @@ class Board extends Observable {
                     toIndex = mov.toIndex();
                 }
             }
-        }
+        }*/
 
 
         //getJumps(moves);
-        return false;
+        //return false;
     }
 
     /** Return true iff a jump is possible for a piece at position C R. */
@@ -712,8 +767,9 @@ class Board extends Observable {
             possibleDiagonalJump(k, possible);
             /////////////////////////////////////////////////////////////////
            ArrayList<Move> tester = new ArrayList<Move>();
-           tester.add(null);
             Move thisstep = null;
+            ArrayList<Move> tempHolder = new ArrayList<Move>();
+            tempHolder.add(null);
             /////////////////////////////////////////////////////////////////
             for (int i = 0; i < possible.size(); i += 1) {
                 if (get(k) != EMPTY) {
@@ -735,41 +791,37 @@ class Board extends Observable {
 
                             ////////////////
                             if (!tempBoard.toString().equals(toString())) {
-                                thisstep = Move.move(col(k), row(k),
+                                thisstep = move(col(k), row(k),
                                         col(destk), row(destk));
-                                //System.out.println("thisstep before recursion: "
-                                //        + thisstep);
-                                moves.add(thisstep);
+                                System.out.println("thisstep before recursion: "
+                                        + thisstep);
+                               //moves.add(thisstep);
                                 //System.out.println("move before recursion: "
-                                 //+ moves);
-                                tempBoard.getJumpsHelper(moves, destk);
-                                //System.out.println("move after recursion: "
                                 // + moves);
-                                //System.out.println("thisstep after recursion: "
-                                //        + thisstep);
-                                //moves.add(thisstep);
-                                //System.out.println("move after recursion: "
-                                //        + moves);
+                                tempBoard.getJumpsHelper(moves, destk);
+                                //thisstep = Move.move(col(k), row(k),
+                                 //       col(destk), row(destk));
+                                System.out.println("thisstep after recursion: "
+                                       + thisstep);
+                                moves.add(thisstep);
+                                System.out.println("move after recursion: "
+                                        + moves);
+                                //moves.add(null);
+
                             }
                             /*for (Move moveadd : temp) {
                                 moves.add(move(col(k), row(k), col(destk),
                                 row(destk), moveadd));
                             }*/
+                            //moves.clear();
+
                         }
+
+
                     }
                 }
             }
-            /*System.out.println("Outside for LOOP!!!");
-            ArrayList<Move> tempHolder = new ArrayList<Move>();
-            for (Move temp1 : moves) {
-                for (Move temp2 : tester) {
-                    tempHolder.add(move(temp1, temp2));
-                }
-            }*/
             //moves.clear();
-            //tester.clear();
-            //tester = tempHolder;
-            //System.out.println(tester);
         }
     }
 

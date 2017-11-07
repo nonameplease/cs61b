@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import static qirkat.Move.move;
 
 /** Tests of the Board class.
  *  @author
@@ -178,15 +179,18 @@ public class BoardTest {
         testBoard.setPieces(game4Board, PieceColor.BLACK);
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         boolean falseCheckJump =
-                testBoard.checkJump(Move.move('c', '1', 'e', '1',
-                        Move.move('e', '1', 'e', '3')),
+                testBoard.checkJump(move('c', '1', 'e', '1',
+                        move('e', '1', 'e', '3')),
                         false);
         assertEquals(false, falseCheckJump);
+        Move tester = move('c', '1', 'e', '1',
+                move('e', '1', 'e', '3',
+                        move('e', '3', 'c', '5',
+                                move('c', '5', 'a', '5'))));
         boolean trueCheckJump =
-                testBoard.checkJump(Move.move('c', '1', 'e', '1',
-                Move.move('e', '1', 'e', '3',
-                        Move.move('e', '3', 'c', '5',
-                                Move.move('c', '5', 'a', '5')))), false);
+                testBoard.checkJump(tester, false);
+        System.out.println(tester.toString());
+        System.out.println(tester.jumpTail().toString());
         assertEquals(true, trueCheckJump);
     }
 
