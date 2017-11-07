@@ -795,7 +795,7 @@ class Board extends Observable {
                                         col(destk), row(destk));
                                 System.out.println("thisstep before recursion: "
                                         + thisstep);
-                               //moves.add(thisstep);
+                               moves.add(thisstep);
                                 //System.out.println("move before recursion: "
                                 // + moves);
                                 tempBoard.getJumpsHelper(moves, destk);
@@ -803,7 +803,7 @@ class Board extends Observable {
                                  //       col(destk), row(destk));
                                 System.out.println("thisstep after recursion: "
                                        + thisstep);
-                                moves.add(thisstep);
+                                //moves.add(thisstep);
                                 System.out.println("move after recursion: "
                                         + moves);
                                 //moves.add(null);

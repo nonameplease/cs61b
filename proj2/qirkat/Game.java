@@ -50,10 +50,23 @@ class Game {
             }
 
             // FIXME
+            if (_whiteIsManual) {
+                white = new Manual(this, WHITE);
+            } else {
+                white = new AI(this, WHITE);
+            }
+
+            if (_blackIsManual) {
+                black = new Manual(this, BLACK);
+            } else {
+                black = new AI(this, BLACK);
+            }
 
             while (_state != SETUP && !_board.gameOver()) {
                 Move move;
                 move = null; // FIXME
+                //_inputs.getLine();
+                // How to read the input command?
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
