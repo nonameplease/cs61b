@@ -1,5 +1,7 @@
 package qirkat;
 
+import java.util.ArrayList;
+
 import static qirkat.PieceColor.*;
 
 /** A Player that computes its own moves.
@@ -27,6 +29,7 @@ class AI extends Player {
         Main.endTiming();
 
         // FIXME
+        System.out.println(myColor() + " " + "moves" + " " + move.toString());
         return move;
     }
 
@@ -57,17 +60,67 @@ class AI extends Player {
         Move best;
         best = null;
 
-        // FIXME
-
-        if (saveMove) {
-            _lastFoundMove = best;
+        if (depth == 0 || board.getMoves().size() == 0) {
+            return staticScore(board);
         }
 
-        return 0; // FIXME
+        if (sense == 1) {
+            int v = -INFTY;
+            for (Move move : board.getMoves()) {
+                Board tempBoard = new Board(board);
+                tempBoard.makeMove(move);
+                v = Math.max(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
+                alpha = Math.max(alpha, v);
+                if (beta <= alpha) {
+                    best = move;
+                    break;
+                }
+            }
+            if (saveMove) {
+                _lastFoundMove = best;
+            }
+            return v;
+        } else {
+            int v = INFTY;
+            for (Move move : board.getMoves()) {
+                Board tempBoard = new Board(board);
+                tempBoard.makeMove(move);
+                v = Math.min(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
+                beta = Math.min(beta, v);
+                if (beta <= alpha) {
+                    best = move;
+                    break;
+                }
+            }
+            if (saveMove) {
+                _lastFoundMove = best;
+            }
+            return v;
+        }
+        // FIXME
+
+        /*if (saveMove) {
+            _lastFoundMove = best;
+        }*/
+
+        //return 0; // FIXME
     }
 
     /** Return a heuristic value for BOARD. */
     private int staticScore(Board board) {
-        return 0; // FIXME
+        //return 0; // FIXME
+        if (board.getMoves().size() == 0) {
+            return 100;
+        } else {
+            int returnValue = 0;
+            for (Move move : board.getMoves()) {
+                if (board.get(move.fromIndex()) == myColor()) {
+                    if (move.toString().length() > returnValue) {
+                        returnValue = move.toString().length();
+                    }
+                }
+            }
+            return returnValue;
+        }
     }
 }
