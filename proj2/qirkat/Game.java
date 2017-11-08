@@ -235,10 +235,21 @@ class Game {
     void doSet(String[] operands) {
         // FIXME
         _state = SETUP;
+        String board = operands[1].replaceAll("\\s", "");
+        int length = board.length();
+        if (length == 25) {
+            String row1 = board.substring(0, 5);
+            String row2 = board.substring(5, 10);
+            String row3 = board.substring(10, 15);
+            String row4 = board.substring(15, 20);
+            String row5 = board.substring(20, 25);
+            String boardLinearized = row5 + row4 + row3 + row2 + row1;
+            board = boardLinearized;
+        }
         if (operands[0].toLowerCase().equals("white")) {
-            _board.setPieces(operands[1], WHITE);
+            _board.setPieces(board, WHITE);
         } else if (operands[0].toLowerCase().equals("black")) {
-            _board.setPieces(operands[1], BLACK);
+            _board.setPieces(board, BLACK);
         }
     }
 
