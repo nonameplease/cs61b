@@ -207,8 +207,9 @@ class Board extends Observable {
         /**
          * Need to be fixed since it is used to check for legal moves.
          */
-        return true; // FIXME
+        //return true; // FIXME
         //return (getMoves().contains(mov));
+        return getMoves().contains(mov);
 /*
             }
         }
@@ -365,75 +366,23 @@ class Board extends Observable {
         }
         //return false; // FIXME
 
-        Move mov2 = mov;
-        ArrayList<Move> oneJump = new ArrayList<Move>();
-        while(jumpPossible(mov2.fromIndex())) {
-            /*if (mov2 == null) {
-                return false;
-            }*/
-            getOneJumps(oneJump, mov2.fromIndex());
-            boolean state = false;
-            for (Move move : oneJump) {
-                if (mov2.toIndex() == move.toIndex()) {
-                    mov2 = mov2.jumpTail();
-                    state = true;
+        Move mov2 = move(mov, null);
+        ArrayList<Move> allMoves = new ArrayList<Move>();
+        getJumps(allMoves, mov2.fromIndex());
+        if (!allowPartial) {
+            for (Move move : allMoves) {
+                if (mov2.toString().equals(move.toString())) {
+                    return true;
                 }
             }
-            oneJump.clear();
-            if (state == false) {
-                return false;
-            }
-        }
-        if (mov2 == null) {
-            return true;
         } else {
-            return false;
-        }
-
-        /*Move mov2 = mov;
-        while (mov2 != null) {
-            ArrayList<Move> moves = new ArrayList<Move>();
-            int k = index(mov2.col0(), mov2.row0());
-            int deskk = index(mov2.col1(), mov2.row1());
-            getJumps(moves, k);
-            if (moves.contains(move(mov2.col0(), mov2.row0(),
-                    mov2.col1(), mov2.row1()))) {
-                mov2 = mov2.jumpTail();
-            } else {
-                if (!allowPartial) {
-                    return false;
+            for (Move move : allMoves) {
+                if (mov2.toString().substring(0, 6).equals(move.toString().substring(0, 6))) {
+                    return true;
                 }
             }
         }
-        return true;*/
-
-
-        /*ArrayList<Move> moves = new ArrayList<Move>();
-        int fromIndex = mov.fromIndex();
-        int toIndex = mov.toIndex();
-        System.out.println(mov.toString());
-        getJumps(moves, fromIndex);
-        for (Move checking : moves) {
-            if (mov == null) {
-                return true;
-            } else if (fromIndex == checking.fromIndex() && toIndex == checking.toIndex()) {
-                if (mov.jumpTail() == null) {
-                    if (jumpPossible(mov.fromIndex())) {
-                        return false;
-                    } else {
-                        mov = mov.jumpTail();
-                    }
-                } else {
-                    mov = mov.jumpTail();
-                    fromIndex = mov.fromIndex();
-                    toIndex = mov.toIndex();
-                }
-            }
-        }*/
-
-
-        //getJumps(moves);
-        //return false;
+        return false;
     }
 
     /** Return true iff a jump is possible for a piece at position C R. */

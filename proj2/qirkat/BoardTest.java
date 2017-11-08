@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import static qirkat.Move.move;
 
 /** Tests of the Board class.
- *  @author
+ *  @author Scott Shao
  */
 public class BoardTest {
 
