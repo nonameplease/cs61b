@@ -436,20 +436,22 @@ class Board extends Observable {
         assert legalMove(mov);
 
         // FIXME
-        Move mov2 = mov;
-        _allMoves.add(mov);
-        while (mov2 != null) {
-            if (mov2.isJump()) {
-                set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
-                set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
-                set(mov2.col0(), mov2.row0(), EMPTY);
-            } else {
-                set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
-                set(mov2.col0(), mov2.row0(), EMPTY);
+        if (legalMove(mov)) {
+            Move mov2 = mov;
+            _allMoves.add(mov);
+            while (mov2 != null) {
+                if (mov2.isJump()) {
+                    set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
+                    set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
+                    set(mov2.col0(), mov2.row0(), EMPTY);
+                } else {
+                    set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
+                    set(mov2.col0(), mov2.row0(), EMPTY);
+                }
+                mov2 = mov2.jumpTail();
             }
-            mov2 = mov2.jumpTail();
+            _whoseMove = _whoseMove.opposite();
         }
-        _whoseMove = _whoseMove.opposite();
 
         setChanged();
         notifyObservers();
@@ -688,81 +690,6 @@ class Board extends Observable {
     }
 
     /**
-     * Another helper method for getJumps.
-     * @param moves ArrayList to hold all moves.
-     * @param k Linearized index.
-     */
-    private void getJumpsHelper(ArrayList<Move> moves, int k) {
-        Board tempBoard = new Board();
-        tempBoard.setPieces(toString(), BLACK);
-        ArrayList<Move> temp = new ArrayList<Move>();
-        //System.out.println(tempBoard.toString());
-        //System.out.println();
-        if (jumpPossible(k)) {
-            ArrayList<Integer> possible = new ArrayList<Integer>();
-            possibleStraightJump(k, possible);
-            possibleDiagonalJump(k, possible);
-            /////////////////////////////////////////////////////////////////
-           ArrayList<Move> tester = new ArrayList<Move>();
-            Move thisstep = null;
-            ArrayList<Move> tempHolder = new ArrayList<Move>();
-            tempHolder.add(null);
-            /////////////////////////////////////////////////////////////////
-            for (int i = 0; i < possible.size(); i += 1) {
-                if (get(k) != EMPTY) {
-                    int destk = possible.get(i);
-                    if (get(destk) == EMPTY) {
-                        int jumpedcol = (userCol(k) + userCol(destk)) / 2;
-                        int jumpedrow = (userRow(k) + userRow(destk)) / 2;
-                        int jumpedk = userLinearize(jumpedcol, jumpedrow);
-                        if (get(k).opposite().equals(get(jumpedk))) {
-                            //System.out.println("jumpedk: " + jumpedk +
-                            // " " + get(jumpedk));
-                            tempBoard.set(jumpedk, EMPTY);
-                            //System.out.println("destk: " + destk +
-                            // " " + get(destk));
-                            tempBoard.set(destk, get(k));
-                            //System.out.println("k: " + k + " " + get(k));
-                            tempBoard.set(k, EMPTY);
-                            ////////////////
-
-                            ////////////////
-                            if (!tempBoard.toString().equals(toString())) {
-                                thisstep = move(col(k), row(k),
-                                        col(destk), row(destk));
-                                System.out.println("thisstep before recursion: "
-                                        + thisstep);
-                               moves.add(thisstep);
-                                //System.out.println("move before recursion: "
-                                // + moves);
-                                tempBoard.getJumpsHelper(moves, destk);
-                                //thisstep = Move.move(col(k), row(k),
-                                 //       col(destk), row(destk));
-                                System.out.println("thisstep after recursion: "
-                                       + thisstep);
-                                //moves.add(thisstep);
-                                System.out.println("move after recursion: "
-                                        + moves);
-                                //moves.add(null);
-
-                            }
-                            /*for (Move moveadd : temp) {
-                                moves.add(move(col(k), row(k), col(destk),
-                                row(destk), moveadd));
-                            }*/
-                            //moves.clear();
-
-                        }
-
-
-                    }
-                }
-            }
-            //moves.clear();
-        }
-    }
-
-    /**
      * A helper method for getJumps.
      * @param moves A ArrayList to contains all moves.
      * @param k Linearized index.
@@ -785,20 +712,12 @@ class Board extends Observable {
                         int jumpedcol = (userCol(k) + userCol(destk)) / 2;
                         int jumpedrow = (userRow(k) + userRow(destk)) / 2;
                         int jumpedk = userLinearize(jumpedcol, jumpedrow);
-                        //System.out.println("jumpedcol: " + jumpedcol + "jumpedrow: " + jumpedrow);
                         if (temp.get(k).opposite().equals(temp.get(jumpedk))) {
-                            //System.out.println("Inside loop:" + "\n" + temp.toString());
                             hasNextJump = true;
                             temp.set(jumpedk, EMPTY);
                             temp.set(destk, temp.get(k));
                             temp.set(k, EMPTY);
-                            //System.out.println("after set: " + "\n" + temp.toString());
                             getJumpsHelper(moves, destk, temp, move(lastMove, move(col(k), row(k), col(destk), row(destk))));
-                            //System.out.println("after recursion" + "\n" + temp.toString());
-
-                            ////////////////
-
-                            ////////////////
                         }
                     }
                 }

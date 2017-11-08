@@ -190,6 +190,7 @@ class Game {
             // FIXME
             //load file Reads the given file and in effect
             // substitutes its contents for the load command itself.
+            _inputs.addSource(new ReaderSource(reader, false));
         } catch (IOException e) {
             throw error("Cannot open file %s", operands[0]);
         }
@@ -296,6 +297,7 @@ class Game {
             } else if (_board.whoseMove() == WHITE) {
                 msg = "White wins.";
             }
+            _state = SETUP;
         }
         _reporter.outcomeMsg(msg);
     }
