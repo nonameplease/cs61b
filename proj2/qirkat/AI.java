@@ -29,7 +29,9 @@ class AI extends Player {
         Main.endTiming();
 
         // FIXME
-        System.out.println(myColor() + " " + "moves" + " " + move.toString());
+        System.out.println(myColor() + " " + "moves" + " " + move);
+        //System.out.println(game().board().toString());
+        //System.out.println(move.jumpTail());
         return move;
     }
 
@@ -37,11 +39,13 @@ class AI extends Player {
      *  is a move. */
     private Move findMove() {
         Board b = new Board(board());
+        //System.out.println(board().toString());
         if (myColor() == WHITE) {
             findMove(b, MAX_DEPTH, true, 1, -INFTY, INFTY);
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
+        //System.out.println(board().toString());
         return _lastFoundMove;
     }
 
@@ -59,8 +63,9 @@ class AI extends Player {
                          int alpha, int beta) {
         Move best;
         best = null;
+        //System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board);
 
-        if (depth == 0 || board.getMoves().size() == 0) {
+        if (depth == 0 || board.getMoves() == null) {
             return staticScore(board);
         }
 
@@ -110,13 +115,15 @@ class AI extends Player {
     private int staticScore(Board board) {
         //return 0; // FIXME
         if (board.getMoves().size() == 0) {
-            return 100;
+            return WINNING_VALUE;
         } else {
             int returnValue = 0;
             for (Move move : board.getMoves()) {
-                if (board.get(move.fromIndex()) == myColor()) {
-                    if (move.toString().length() > returnValue) {
-                        returnValue = move.toString().length();
+                if (move != null) {
+                    if (board.get(move.fromIndex()) == myColor()) {
+                        if (move.toString().length() > returnValue) {
+                            returnValue = move.toString().length();
+                        }
                     }
                 }
             }

@@ -80,15 +80,12 @@ class Board extends Observable {
     private void internalCopy(Board b) {
         // FIXME
         //System.out.println(b.toString().replaceAll("\\s", ""));
-        _whoseMove = b.whoseMove();
-        _board = b._board;
-        _gameOver = b.gameOver();
-        _allMoves = b._allMoves;
-
-        defaultPattern = b.defaultPattern;
-        defaultBoard = b.defaultBoard;
-        linearizedBoard = b.linearizedBoard;
-        linearizedPattern = b.linearizedPattern;
+        _board = new char[25];
+        _allMoves = new MoveList();
+        this._whoseMove = b.whoseMove();
+        this.setPieces(b.toString(), whoseMove());
+        this._gameOver = b.gameOver();
+        this._allMoves = b._allMoves;
     }
 
     /** Set my contents as defined by STR.  STR consists of 25 characters,
@@ -198,6 +195,9 @@ class Board extends Observable {
         //return true; // FIXME
         //return (getMoves().contains(mov));
         ArrayList<Move> legalMoves = getMoves();
+        if (mov == null) {
+            return false;
+        }
         return legalMoves.contains(mov);
 /*
             }
@@ -262,19 +262,21 @@ class Board extends Observable {
         ArrayList<Integer> possible = new ArrayList<Integer>();
         possibleStraightMove(k, possible);
         possibleDiagonalMove(k, possible);
-        for (int i = 0; i < possible.size(); i += 1) {
-            if (get(k) == BLACK) {
-                int destk = possible.get(i);
-                if (userRow(k) >= userRow(destk)) {
-                    if (get(possible.get(i)) == EMPTY) {
-                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+        if (get(k) == whoseMove()) {
+            for (int i = 0; i < possible.size(); i += 1) {
+                if (get(k) == BLACK) {
+                    int destk = possible.get(i);
+                    if (userRow(k) >= userRow(destk)) {
+                        if (get(possible.get(i)) == EMPTY) {
+                            moves.add(move(col(k), row(k), col(destk), row(destk)));
+                        }
                     }
-                }
-            } else if (get(k) == WHITE) {
-                int destk = possible.get(i);
-                if (userRow(k) <= userRow(destk)) {
-                    if (get(possible.get(i)) == EMPTY) {
-                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                } else if (get(k) == WHITE) {
+                    int destk = possible.get(i);
+                    if (userRow(k) <= userRow(destk)) {
+                        if (get(possible.get(i)) == EMPTY) {
+                            moves.add(move(col(k), row(k), col(destk), row(destk)));
+                        }
                     }
                 }
             }
@@ -292,7 +294,9 @@ class Board extends Observable {
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), whoseMove());
         //System.out.println("in getJump" + "\n" + tempBoard);
-        getJumpsHelper(moves, k, tempBoard, null);
+        if (get(k) == whoseMove()) {
+            getJumpsHelper(moves, k, tempBoard, null);
+        }
 
 
         /*ArrayList<Move> temp = new ArrayList<Move>();
@@ -438,7 +442,7 @@ class Board extends Observable {
         // FIXME
         if (legalMove(mov)) {
             Move mov2 = mov;
-            _allMoves.add(mov);
+            _allMoves.add(mov2);
             while (mov2 != null) {
                 if (mov2.isJump()) {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
