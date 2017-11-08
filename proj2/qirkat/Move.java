@@ -109,8 +109,10 @@ class Move {
         }
         if (move0.isVestigial()) {
             //return null; // FIXME
-            return move(move(move0.col0(), move0.row0(),
-                    move1.col1(), move1.row1(), move1.jumpTail()), move1);
+            //return move(move(move0.col0(), move0.row0(),
+            //        move1.col1(), move1.row1(), move1.jumpTail()), move1);
+            return move(move0.col0(), move0.row0(),
+                    move1.col0(), move1.row0(), move1.jumpTail());
         }
         if (move0.jumpTail() == null) {
             //return null; // FIXME

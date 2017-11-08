@@ -145,7 +145,7 @@ public class BoardTest {
         Board testBoard = new Board();
         String game3Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(game3Board, PieceColor.BLACK);
+        testBoard.setPieces(game3Board, testBoard.whoseMove());
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         testBoard.getJumps(testingBuffer, 2);
         System.out.println("Move steps: " + testingBuffer);
@@ -154,7 +154,7 @@ public class BoardTest {
         System.out.println("Two possible traverse path: ");
         String game4Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
-        testBoard.setPieces(game4Board, PieceColor.BLACK);
+        testBoard.setPieces(game4Board, testBoard.whoseMove());
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         testingBuffer.clear();
         testBoard.getJumps(testingBuffer, 2);
@@ -164,7 +164,7 @@ public class BoardTest {
         System.out.println("Multi-traverse:");
         String game5Board =
                 "----- ----- ----- bbbbb -bwb-";
-        testBoard.setPieces(game5Board, PieceColor.BLACK);
+        testBoard.setPieces(game5Board, testBoard.whoseMove());
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         testingBuffer.clear();
         testBoard.getJumps(testingBuffer, 2);

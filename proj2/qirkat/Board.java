@@ -296,14 +296,23 @@ class Board extends Observable {
     public void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
 
-        ArrayList<Move> temp = new ArrayList<Move>();
+        //if (get(k) != whoseMove()) {
+        //   return;
+        //}
+        Board tempBoard = new Board();
+        tempBoard.setPieces(toString(), whoseMove());
+        //System.out.println("in getJump" + "\n" + tempBoard);
+        getJumpsHelper(moves, k, tempBoard, null);
+
+
+        /*ArrayList<Move> temp = new ArrayList<Move>();
         moves.add(null);
         getJumpsHelper(moves, k);
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), WHITE);
         Move lastMove = null;
         DefaultMutableTreeNode pathTree = new DefaultMutableTreeNode();
-        ArrayList<Move> path = new ArrayList<Move>();
+        ArrayList<Move> path = new ArrayList<Move>();*/
 
 
 
@@ -834,60 +843,42 @@ class Board extends Observable {
      */
     private void getJumpsHelper(ArrayList<Move> moves, int k,
                                 Board tempBoard, Move lastMove) {
-        if (jumpPossible(k)) {
+        boolean hasNextJump = false;
+        //if (jumpPossible(k)) {
             ArrayList<Integer> possible = new ArrayList<Integer>();
             possibleStraightJump(k, possible);
             possibleDiagonalJump(k, possible);
-            Board temp = new Board();
-            temp.copy(tempBoard);
             for (int i = 0; i < possible.size(); i += 1) {
-                if (get(k) != EMPTY) {
+                Board temp = new Board();
+                temp.setPieces(tempBoard.toString(), tempBoard.whoseMove());
+                if (temp.get(k) != EMPTY) {
                     int destk = possible.get(i);
-                    if (get(destk) == EMPTY) {
+                    if (temp.get(destk) == EMPTY) {
                         int jumpedcol = (userCol(k) + userCol(destk)) / 2;
                         int jumpedrow = (userRow(k) + userRow(destk)) / 2;
                         int jumpedk = userLinearize(jumpedcol, jumpedrow);
-                        if (get(k).opposite().equals(get(jumpedk))) {
-                            tempBoard.set(jumpedk, EMPTY);
-                            tempBoard.set(destk, get(k));
-                            tempBoard.set(k, EMPTY);
-                            System.out.println("");
-                            System.out.println(tempBoard.toString());
+                        //System.out.println("jumpedcol: " + jumpedcol + "jumpedrow: " + jumpedrow);
+                        if (temp.get(k).opposite().equals(temp.get(jumpedk))) {
+                            //System.out.println("Inside loop:" + "\n" + temp.toString());
+                            hasNextJump = true;
+                            temp.set(jumpedk, EMPTY);
+                            temp.set(destk, temp.get(k));
+                            temp.set(k, EMPTY);
+                            //System.out.println("after set: " + "\n" + temp.toString());
+                            getJumpsHelper(moves, destk, temp, move(lastMove, move(col(k), row(k), col(destk), row(destk))));
+                            //System.out.println("after recursion" + "\n" + temp.toString());
 
                             ////////////////
 
                             ////////////////
-                            if (!tempBoard.toString().equals(temp.toString())) {
-                                //Move thisstep = Move.move(col(k), row(k),
-                                // col(destk), row(destk));
-                                //moves.add(thisstep);
-
-
-                                System.out.println("lastMove before recursion: "
-                                        + lastMove);
-                                //copy(tempBoard);
-                                tempBoard.getJumpsHelper(moves, destk,
-                                        tempBoard, lastMove);
-                                System.out.println("lastMove after recursion: "
-                                        + lastMove);
-                                lastMove = Move.move(Move.move(col(k), row(k),
-                                        col(destk), row(destk)), lastMove);
-                                System.out.println("lastMove after addition: "
-                                        + lastMove);
-                                //System.out.println("lastMove: " + lastMove);
-                                //System.out.println("move after recursion: " +
-                                // moves);
-
-                            }
-                            /*for (Move moveadd : temp) {
-                                moves.add(move(col(k), row(k),
-                                col(destk), row(destk), moveadd));
-                            }*/
                         }
                     }
                 }
             }
-        }
+            if (!hasNextJump && lastMove != null) {
+                moves.add(lastMove);
+            }
+        //}
     }
 
     //////////
