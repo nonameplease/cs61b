@@ -64,9 +64,14 @@ class Game {
 
             while (_state != SETUP && !_board.gameOver()) {
                 Move move;
-                move = null; // FIXME
-                //_inputs.getLine();
-                // How to read the input command?
+                //move = null; // FIXME
+
+
+                if (_board.whoseMove() == WHITE) {
+                    move = white.myMove();
+                } else {
+                    move = black.myMove();
+                }
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
@@ -198,7 +203,7 @@ class Game {
         if (operands[0].equals("Black")) {
             //both white and black are manual player
             _whiteIsManual = true;
-            _blackIsManual = false;
+            _blackIsManual = true;
         } else {
             //black AI white player
             _whiteIsManual = true;
@@ -227,7 +232,11 @@ class Game {
     void doClear(String[] unused) {
         // FIXME
         _board.clear();
+        //reset the board?
+        _whiteIsManual = true;
+        _blackIsManual = false;
         _state = SETUP;
+
         //resign?
     }
 
@@ -257,7 +266,7 @@ class Game {
     void doDump(String[] unused) {
         // FIXME
         System.out.println("===");
-        System.out.println(_board.toString());
+        System.out.println(board().toString());
         System.out.println("===");
     }
 

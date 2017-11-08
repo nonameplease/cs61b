@@ -59,6 +59,7 @@ class Board extends Observable {
     void clear() {
         _whoseMove = WHITE;
         _gameOver = false;
+        _allMoves.clear();
 
         // FIXME
         //////////
@@ -78,9 +79,16 @@ class Board extends Observable {
     /** Copy B into me. */
     private void internalCopy(Board b) {
         // FIXME
-        _board = b.toString().toCharArray();
+        //System.out.println(b.toString().replaceAll("\\s", ""));
         _whoseMove = b.whoseMove();
+        _board = b._board;
         _gameOver = b.gameOver();
+        _allMoves = b._allMoves;
+
+        defaultPattern = b.defaultPattern;
+        defaultBoard = b.defaultBoard;
+        linearizedBoard = b.linearizedBoard;
+        linearizedPattern = b.linearizedPattern;
     }
 
     /** Set my contents as defined by STR.  STR consists of 25 characters,
@@ -179,26 +187,6 @@ class Board extends Observable {
     private void set(int k, PieceColor v) {
         assert validSquare(k);
         // FIXME
-        //_board =  _board.toString().substring(0, )
-        // + v.shortName() + _board.substring(k + 1);
-        int destk = 0;
-        int row1 = SIDE * 0;
-        int row2 = SIDE * 1;
-        int row3 = SIDE * 2;
-        int row4 = SIDE * 3;
-        int row5 = SIDE * 4;
-        if (k >= row1 && k <= SIDE - 1) {
-            destk = k + row5;
-        } else if (k >= row2 && k <= row2 + SIDE - 1) {
-            destk = k + 10;
-        } else if (k >= row3 && k <= row3 + SIDE - 1) {
-            destk = k;
-        } else if (k >= row4 && k <= row4 + SIDE - 1) {
-            destk = k - 10;
-        } else if (k >= row5 && k <= row5 + SIDE - 1) {
-            destk = k - row5;
-        }
-
         _board[k] = v.shortName().charAt(0);
     }
 
@@ -209,7 +197,8 @@ class Board extends Observable {
          */
         //return true; // FIXME
         //return (getMoves().contains(mov));
-        return getMoves().contains(mov);
+        ArrayList<Move> legalMoves = getMoves();
+        return legalMoves.contains(mov);
 /*
             }
         }
@@ -297,9 +286,9 @@ class Board extends Observable {
     public void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
 
-        if (get(k) != whoseMove()) {
-           return;
-        }
+        //if (get(k) != whoseMove()) {
+        //   return;
+        //}
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), whoseMove());
         //System.out.println("in getJump" + "\n" + tempBoard);
@@ -369,7 +358,7 @@ class Board extends Observable {
         Move mov2 = move(mov, null);
         ArrayList<Move> allMoves = new ArrayList<Move>();
         getJumps(allMoves, mov2.fromIndex());
-        System.out.println(allMoves);
+        //System.out.println(allMoves);
         if (!allowPartial) {
             for (Move move : allMoves) {
                 if (mov2.toString().equals(move.toString())) {
@@ -447,10 +436,8 @@ class Board extends Observable {
         assert legalMove(mov);
 
         // FIXME
-        //set(mov.col1(), mov.row1(), get(mov.col0(), mov.row0()));
-        //set(mov.col0(), mov.row0(), EMPTY);
         Move mov2 = mov;
-        _allMoves.add(mov2);
+        _allMoves.add(mov);
         while (mov2 != null) {
             if (mov2.isJump()) {
                 set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
@@ -462,6 +449,7 @@ class Board extends Observable {
             }
             mov2 = mov2.jumpTail();
         }
+        _whoseMove = _whoseMove.opposite();
 
         setChanged();
         notifyObservers();
@@ -470,35 +458,14 @@ class Board extends Observable {
     /** Undo the last move, if any. */
     void undo() {
         // FIXME
-        if (_allMoves != null) {
-            Move lastMove = _allMoves.get(_allMoves.size() - 1);
-            _allMoves.remove(_allMoves.size() - 1);
-            System.out.println(lastMove);
-            //System.out.println(_allMoves);
-            String temp = lastMove.toString();
-            System.out.println(lastMove);
-            temp.replaceAll("-", "");
-            String newString = "";
-            for (int i = temp.length() - 2; i >= 0; i -= 2) {
-                String location = temp.substring(i, i + 2);
-                newString += location;
-                newString += "-";
-            }
-            System.out.println(newString);
-            if (lastMove.isJump()) {
-                set(lastMove.jumpedCol(), lastMove.jumpedRow(),
-                        get(lastMove.col1(), lastMove.row1()).opposite());
-                set(lastMove.col0(), lastMove.row0(),
-                        get(lastMove.col1(), lastMove.row1()));
-                set(lastMove.col1(), lastMove.row1(), EMPTY);
-            } else {
-                set(lastMove.col0(), lastMove.row0(),
-                        get(lastMove.col1(), lastMove.row1()));
-                set(lastMove.col1(), lastMove.row1(), EMPTY);
-            }
-
-
+        ArrayList<Move> newAllMove = new ArrayList<Move>(_allMoves);
+        newAllMove.remove(_allMoves.size() - 1);
+        clear();
+        for (Move moves : newAllMove) {
+            makeMove(moves);
         }
+
+
         setChanged();
         notifyObservers();
     }
@@ -530,7 +497,18 @@ class Board extends Observable {
 
     /** Return true iff there is a move for the current player. */
     private boolean isMove() {
-        return false;  // FIXME
+        //return false;  // FIXME
+        ArrayList<Move> allMoves = new ArrayList<Move>();
+        for (int k = 0; k <= MAX_INDEX; k += 1) {
+            if (get(k).equals(whoseMove())) {
+                getMoves(allMoves, k);
+            }
+        }
+        if (allMoves.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
