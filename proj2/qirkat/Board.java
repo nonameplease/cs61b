@@ -297,9 +297,9 @@ class Board extends Observable {
     public void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
 
-        //if (get(k) != whoseMove()) {
-        //   return;
-        //}
+        if (get(k) != whoseMove()) {
+           return;
+        }
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), whoseMove());
         //System.out.println("in getJump" + "\n" + tempBoard);
@@ -369,6 +369,7 @@ class Board extends Observable {
         Move mov2 = move(mov, null);
         ArrayList<Move> allMoves = new ArrayList<Move>();
         getJumps(allMoves, mov2.fromIndex());
+        System.out.println(allMoves);
         if (!allowPartial) {
             for (Move move : allMoves) {
                 if (mov2.toString().equals(move.toString())) {

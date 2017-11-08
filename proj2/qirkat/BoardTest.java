@@ -34,7 +34,7 @@ public class BoardTest {
     @Test
     public void testInit1() {
         Board b0 = new Board();
-        b0.setPieces(INIT_BOARD, PieceColor.BLACK);
+        b0.setPieces(INIT_BOARD, PieceColor.WHITE);
         assertEquals(INIT_BOARD, b0.toString());
     }
 
@@ -121,7 +121,7 @@ public class BoardTest {
          */
         Board b0 = new Board();
         Board b1 = new Board(b0);
-        b0.setPieces(GAME1_BOARD, PieceColor.BLACK);
+        b0.setPieces(GAME1_BOARD, PieceColor.WHITE);
         assertEquals(GAME1_BOARD, b0.toString());
         System.out.println(b0.toString());
         //System.out.println(b0.get(10));
@@ -176,7 +176,7 @@ public class BoardTest {
         Board testBoard = new Board();
         String game4Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - b \n - - w b -";
-        testBoard.setPieces(game4Board, PieceColor.BLACK);
+        testBoard.setPieces(game4Board, PieceColor.WHITE);
         System.out.println("test board layout: " + "\n" + testBoard.toString());
         boolean falseCheckJump =
                 testBoard.checkJump(move('c', '1', 'e', '1',
@@ -197,12 +197,12 @@ public class BoardTest {
     @Test
     public void testGetMoves() {
         Board testBoard = new Board();
-        testBoard.setPieces(GAME1_BOARD, PieceColor.BLACK);
+        testBoard.setPieces(GAME1_BOARD, PieceColor.WHITE);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
         String game2Board =
                 "b b b b b\n  b b b b b\n  - b - b -\n  w - w - w\n  w w w w w";
-        testBoard.setPieces(game2Board, PieceColor.BLACK);
+        testBoard.setPieces(game2Board, PieceColor.WHITE);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
 
@@ -211,7 +211,7 @@ public class BoardTest {
          */
         String game3Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(game3Board, PieceColor.BLACK);
+        testBoard.setPieces(game3Board, PieceColor.WHITE);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
     }
