@@ -39,6 +39,7 @@ class Board extends Observable {
         int boardSize = SIDE * SIDE;
         _board = new char[boardSize];
         _allMoves = new MoveList();
+        _previous = new int[boardSize];
         //////////
         clear();
     }
@@ -60,6 +61,9 @@ class Board extends Observable {
         _whoseMove = WHITE;
         _gameOver = false;
         _allMoves.clear();
+        for (int i = 0; i < 25; i += 1) {
+            _previous[i] = -1;
+        }
 
         // FIXME
         //////////
@@ -81,11 +85,16 @@ class Board extends Observable {
         // FIXME
         //System.out.println(b.toString().replaceAll("\\s", ""));
         _board = new char[25];
+        _previous = new int[25];
         _allMoves = new MoveList();
         this._whoseMove = b.whoseMove();
         this.setPieces(b.toString(), whoseMove());
         this._gameOver = b.gameOver();
         this._allMoves = b._allMoves;
+        for (int i = 0; i < 25; i += 1) {
+            _previous[i] = b._previous[i];
+        }
+
     }
 
     /** Set my contents as defined by STR.  STR consists of 25 characters,
@@ -267,14 +276,14 @@ class Board extends Observable {
                 if (get(k) == BLACK) {
                     int destk = possible.get(i);
                     if (userRow(k) >= userRow(destk)) {
-                        if (get(possible.get(i)) == EMPTY) {
+                        if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
                             moves.add(move(col(k), row(k), col(destk), row(destk)));
                         }
                     }
                 } else if (get(k) == WHITE) {
                     int destk = possible.get(i);
                     if (userRow(k) <= userRow(destk)) {
-                        if (get(possible.get(i)) == EMPTY) {
+                        if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
                             moves.add(move(col(k), row(k), col(destk), row(destk)));
                         }
                     }
@@ -448,9 +457,11 @@ class Board extends Observable {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
                     set(mov2.col0(), mov2.row0(), EMPTY);
+                    _previous[index(mov2.col1(), mov2.row1())] = -1;
                 } else {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.col0(), mov2.row0(), EMPTY);
+                    _previous[index(mov2.col1(), mov2.row1())] = index(mov2.col0(), mov2.row0());
                 }
                 mov2 = mov2.jumpTail();
             }
@@ -560,6 +571,8 @@ class Board extends Observable {
      * Current board.
      */
     private char[] _board;
+
+    private int[] _previous;
 
     /**
      * A MoveList contains all move so far.

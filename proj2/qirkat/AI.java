@@ -39,7 +39,7 @@ class AI extends Player {
      *  is a move. */
     private Move findMove() {
         Board b = new Board(board());
-        //System.out.println(board().toString());
+        System.out.println(board().toString());
         if (myColor() == WHITE) {
             findMove(b, MAX_DEPTH, true, 1, -INFTY, INFTY);
         } else {
@@ -63,7 +63,7 @@ class AI extends Player {
                          int alpha, int beta) {
         Move best;
         best = null;
-        //System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board);
+        System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board + "\n" + "moves: " + board.getMoves());
 
         if (depth == 0 || board.getMoves() == null) {
             return staticScore(board);
