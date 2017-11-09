@@ -60,10 +60,6 @@ public class BoardTest {
         makeMoves(b0, GAME1);
         assertEquals("second pass failed to reach same position", b2, b0);
     }
-
-
-
-    //////////////////////////////////////////////////////
     @Test
     public void testPossibleStraightMove() {
         Board testBoard = new Board();
@@ -82,9 +78,7 @@ public class BoardTest {
         assertEquals(test2, testingBuffer);
         test2.add(8);
         test2.add(6);
-        /**
-         * Testing PossibleDiagonalMove and concatenation of ArrayList.
-         */
+
         testBoard.possibleDiagonalMove(2, testingBuffer);
         assertEquals(test2, testingBuffer);
         testingBuffer.clear();
@@ -108,9 +102,7 @@ public class BoardTest {
         assertEquals(test10, testingBuffer);
         test10.add(22);
         test10.add(2);
-        /**
-         * Testing PossibleDiagonalJump and concatenation of ArrayList.
-         */
+
         testBoard.possibleDiagonalJump(10, testingBuffer);
         assertEquals(test10, testingBuffer);
         testingBuffer.clear();
@@ -126,8 +118,6 @@ public class BoardTest {
         b0.setPieces(GAME1_BOARD, PieceColor.WHITE);
         assertEquals(GAME1_BOARD, b0.toString());
         System.out.println(b0.toString());
-        //System.out.println(b0.get(10));
-        //System.out.println(b1.toString());
         assertEquals(PieceColor.WHITE, b0.get(0));
     }
 
@@ -208,18 +198,11 @@ public class BoardTest {
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
 
-        /**
-         * Test multiple jump concatenation.
-         */
         String game3Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
         testBoard.setPieces(game3Board, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
-
-        /**
-         * Buggy test
-         */
 
         String game4Board =
                 "bbbbb bbb-- bb--- wwwwb www-w";
@@ -227,6 +210,4 @@ public class BoardTest {
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
     }
-    //////////////////////////////////////////////////////
-
 }

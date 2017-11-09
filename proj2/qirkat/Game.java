@@ -246,6 +246,7 @@ class Game {
     void doSet(String[] operands) {
         // FIXME
         _state = SETUP;
+        _board.clear();
         String board = operands[1].replaceAll("\\s", "");
         int length = board.length();
         if (length == 25) {

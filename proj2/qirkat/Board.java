@@ -1,20 +1,10 @@
 package qirkat;
 
-//import com.sun.tools.javac.code.Attribute;
-
-//import javax.swing.plaf.synth.SynthEditorPaneUI;
-//import java.util.*;
-
-
-import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Observable;
 import java.util.Observer;
-
 import static qirkat.PieceColor.*;
 import static qirkat.Move.*;
 
@@ -33,14 +23,10 @@ class Board extends Observable {
 
     /** A new, cleared board at the start of the game. */
     Board() {
-        // FIXME?
-
-        //////////
-        int boardSize = SIDE * SIDE;
+        int boardSize = _boardSize;
         _board = new char[boardSize];
         _allMoves = new MoveList();
         _previous = new int[boardSize];
-        //////////
         clear();
     }
 
@@ -61,15 +47,10 @@ class Board extends Observable {
         _whoseMove = WHITE;
         _gameOver = false;
         _allMoves = new MoveList();
-        for (int i = 0; i < 25; i += 1) {
+        for (int i = 0; i < _boardSize; i += 1) {
             _previous[i] = -1;
         }
-
-        // FIXME
-        //////////
         setPieces(String.valueOf(defaultBoard), _whoseMove);
-        //setPieces(String.valueOf(linearizedBoard), _whoseMove);
-        //////////
 
         setChanged();
         notifyObservers();
@@ -82,16 +63,14 @@ class Board extends Observable {
 
     /** Copy B into me. */
     private void internalCopy(Board b) {
-        // FIXME
-        //System.out.println(b.toString().replaceAll("\\s", ""));
-        this._board = new char[25];
-        this._previous = new int[25];
+        this._board = new char[_boardSize];
+        this._previous = new int[_boardSize];
         this._allMoves = new MoveList();
         this._whoseMove = b.whoseMove();
         this.setPieces(b.toString(), whoseMove());
         this._gameOver = b.gameOver();
         this._allMoves = b._allMoves;
-        for (int i = 0; i < 25; i += 1) {
+        for (int i = 0; i < _boardSize; i += 1) {
             _previous[i] = b._previous[i];
         }
 
@@ -113,26 +92,20 @@ class Board extends Observable {
         if (!str.matches("[bw-]{25}")) {
             throw new IllegalArgumentException("bad board description");
         }
-
-        // FIXME
-
-        //_board = str.toCharArray();
-
         for (int k = 0; k < str.length(); k += 1) {
 
             int destk = 0;
-            if (k >= 0 && k <= 4) {
-                destk = k + 20;
-            } else if (k >= 5 && k <= 9) {
-                destk = k + 10;
-            } else if (k >= 10 && k <= 14){
+            if (k >= 0 && k < _rowlength) {
+                destk = k + _rowlength * 4;
+            } else if (k >= _rowlength && k < _rowlength * 2) {
+                destk = k + _rowlength * 2;
+            } else if (k >= _rowlength * 2 && k < _rowlength * 3) {
                 destk = k;
-            } else if (k >= 15 && k <= 19) {
-                destk = k - 10;
-            } else if (k >= 20 && k <= 24) {
-                destk = k - 20;
+            } else if (k >= _rowlength * 2 && k < _rowlength * 4) {
+                destk = k - _rowlength * 2;
+            } else if (k >= _rowlength * 4 && k < _boardSize) {
+                destk = k - _rowlength * 4;
             }
-            //destk = k;
 
             switch (str.charAt(k)) {
             case '-':
@@ -148,8 +121,6 @@ class Board extends Observable {
                 break;
             }
         }
-
-        // FIXME
         _whoseMove = nextMove;
 
         setChanged();
@@ -166,13 +137,12 @@ class Board extends Observable {
      *  and '1' <= R <= '5'.  */
     PieceColor get(char c, char r) {
         assert validSquare(c, r);
-        return get(index(c, r)); // FIXME?
+        return get(index(c, r));
     }
 
     /** Return the current contents of the square at linearized index K. */
     PieceColor get(int k) {
         assert validSquare(k);
-        //return null; // FIXME
         if (_board[k] == 'b') {
             return BLACK;
         } else if (_board[k] == 'w') {
@@ -186,13 +156,12 @@ class Board extends Observable {
      *  '1' <= R <= '5'. */
     private void set(char c, char r, PieceColor v) {
         assert validSquare(c, r);
-        set(index(c, r), v);  // FIXME?
+        set(index(c, r), v);
     }
 
     /** Set get(K) to V, where K is the linearized index of a square. */
     private void set(int k, PieceColor v) {
         assert validSquare(k);
-        // FIXME
         _board[k] = v.shortName().charAt(0);
     }
 
@@ -201,43 +170,11 @@ class Board extends Observable {
         /**
          * Need to be fixed since it is used to check for legal moves.
          */
-        //return true; // FIXME
-        //return (getMoves().contains(mov));
         ArrayList<Move> legalMoves = getMoves();
         if (mov == null) {
             return false;
         }
         return legalMoves.contains(mov);
-/*
-            }
-        }
-        return false;*/
-        //assume all move in mov is on board.
-        /*if (!mov.isJump()) {
-            if (get(mov.col0(), mov.row0()).isPiece()
-            && !get(mov.col1(), mov.row1()).isPiece()) {
-                if (Math.abs(mov.row0() - mov.row1()) == 1
-                || Math.abs(mov.col0() - mov.col1()) == 1) {
-                    if (get(mov.col0(), mov.row0()) == BLACK) {
-                        if (mov.row1() <= mov.row0()) {
-                            return true;
-                        }
-                    } else if (get(mov.col0(), mov.row0()) == WHITE) {
-                        if (mov.row1() >= mov.row0()) {
-                            return true;
-                        }
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        } else {
-            if (get(mov.col0(), mov.row0()).isPiece()
-            && !get(mov.col1(), mov.row1()).isPiece()) {
-                if ()
-            }
-        }
-        return false;*/
     }
 
     /** Return a list of all legal moves from the current position. */
@@ -269,8 +206,6 @@ class Board extends Observable {
     /** Add all legal non-capturing moves from the position
      *  with linearized index K to MOVES. */
     private void getMoves(ArrayList<Move> moves, int k) {
-        // FIXME
-
         if (get(k) != _whoseMove) {
             return;
         }
@@ -281,17 +216,17 @@ class Board extends Observable {
             if (get(k) == BLACK) {
                 int destk = possible.get(i);
                 if (userRow(k) >= userRow(destk)) {
-                    if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
+                    if (get(possible.get(i)) == EMPTY
+                            && _previous[k] != destk) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
-                        //_previous[destk] = k;
                     }
                 }
             } else if (get(k) == WHITE) {
                 int destk = possible.get(i);
                 if (userRow(k) <= userRow(destk)) {
-                    if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
+                    if (get(possible.get(i)) == EMPTY
+                            && _previous[k] != destk) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
-                        //_previous[destk] = k;
                     }
                 }
             }
@@ -301,51 +236,20 @@ class Board extends Observable {
     /** Add all legal captures from the position with linearized index K
      *  to MOVES. */
     public void getJumps(ArrayList<Move> moves, int k) {
-        // FIXME
-
         if (get(k) != whoseMove()) {
-           return;
+            return;
         }
         Board tempBoard = new Board(this);
-        //tempBoard.setPieces(toString(), whoseMove());
-        //System.out.println("in getJump" + "\n" + tempBoard);
         if (get(k) == whoseMove()) {
             getJumpsHelper(moves, k, tempBoard, null);
         }
-
-
-        /*ArrayList<Move> temp = new ArrayList<Move>();
-        moves.add(null);
-        getJumpsHelper(moves, k);
-        Board tempBoard = new Board();
-        tempBoard.setPieces(toString(), WHITE);
-        Move lastMove = null;
-        DefaultMutableTreeNode pathTree = new DefaultMutableTreeNode();
-        ArrayList<Move> path = new ArrayList<Move>();*/
-
-
-
-        /**
-         * Working code finding one jump.
-         */
-        /*ArrayList<Integer> possible = new ArrayList<Integer>();
-        PossibleStraightJump(k, possible);
-        PossibleDiagonalJump(k, possible);
-        for (int i = 0; i < possible.size(); i += 1) {
-            if (get(k) != EMPTY) {
-                int destk = possible.get(i);
-                if (get(destk) == EMPTY) {
-                    int jumpedcol = (Col(k) + Col(destk)) / 2;
-                    int jumpedrow = (Row(k) + Row(destk)) / 2;
-                    int jumpedk = Linearize(jumpedcol, jumpedrow);
-                    if (get(k).opposite().equals(get(jumpedk))) {
-                        moves.add(move(col(k), row(k), col(destk), row(destk)));
-                    }
-                }
-            }
-        }*/
     }
 
+    /**
+     * Method to get all possible one step jumps.
+     * @param moves An ArrayList contains all the possible jumps.
+     * @param k Linearized index k.
+     */
     public void getOneJumps(ArrayList<Move> moves, int k) {
         ArrayList<Integer> possible = new ArrayList<Integer>();
         possibleStraightJump(k, possible);
@@ -372,12 +276,9 @@ class Board extends Observable {
         if (mov == null) {
             return true;
         }
-        //return false; // FIXME
-
         Move mov2 = move(mov, null);
         ArrayList<Move> allMoves = new ArrayList<Move>();
         getJumps(allMoves, mov2.fromIndex());
-        //System.out.println(allMoves);
         if (!allowPartial) {
             for (Move move : allMoves) {
                 if (mov2.toString().equals(move.toString())) {
@@ -386,7 +287,8 @@ class Board extends Observable {
             }
         } else {
             for (Move move : allMoves) {
-                if (mov2.toString().substring(0, 6).equals(move.toString().substring(0, 6))) {
+                if (mov2.toString().substring(0, 6).
+                        equals(move.toString().substring(0, 6))) {
                     return true;
                 }
             }
@@ -402,27 +304,6 @@ class Board extends Observable {
     /** Return true iff a jump is possible for a piece at position with
      *  linearized index K. */
     boolean jumpPossible(int k) {
-        //return false; // FIXME
-        /*if (get(k) != _whoseMove) {
-            return false;
-        }
-        ArrayList<Integer> possible = new ArrayList<Integer>();
-        possibleDiagonalJump(k, possible);
-        possibleStraightJump(k, possible);
-        for (int i = 0; i < possible.size(); i += 1) {
-            if (get(k) != EMPTY) {
-                int destk = possible.get(i);
-                if (get(destk) == EMPTY) {
-                    int jumpedcol = (userCol(k) + userCol(destk)) / 2;
-                    int jumpedrow = (userRow(k) + userRow(destk)) / 2;
-                    int jumpedk = userLinearize(jumpedcol, jumpedrow);
-                    if (get(k).opposite().equals(get(jumpedk))) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;*/
         ArrayList<Move> moves = new ArrayList<Move>();
         getJumps(moves, k);
         return !moves.isEmpty();
@@ -458,23 +339,22 @@ class Board extends Observable {
 
     /** Make the Move MOV on this Board, assuming it is legal. */
     void makeMove(Move mov) {
-        //assert legalMove(mov);
-
-        // FIXME
-
         if (legalMove(mov)) {
             Move mov2 = mov;
             _allMoves.add(mov2);
             while (mov2 != null) {
                 if (mov2.isJump()) {
-                    set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
+                    set(mov2.col1(), mov2.row1(),
+                            get(mov2.col0(), mov2.row0()));
                     set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
                     set(mov2.col0(), mov2.row0(), EMPTY);
                     _previous[index(mov2.col0(), mov2.row0())] = -1;
                 } else {
-                    set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
+                    set(mov2.col1(), mov2.row1(),
+                            get(mov2.col0(), mov2.row0()));
                     set(mov2.col0(), mov2.row0(), EMPTY);
-                    _previous[index(mov2.col1(), mov2.row1())] = index(mov2.col0(), mov2.row0());
+                    _previous[index(mov2.col1(), mov2.row1())] =
+                            index(mov2.col0(), mov2.row0());
                 }
                 mov2 = mov2.jumpTail();
             }
@@ -487,7 +367,6 @@ class Board extends Observable {
 
     /** Undo the last move, if any. */
     void undo() {
-        // FIXME
         ArrayList<Move> newAllMove = new ArrayList<Move>(_allMoves);
         newAllMove.remove(_allMoves.size() - 1);
         clear();
@@ -509,7 +388,6 @@ class Board extends Observable {
      *  column numbers around the edges. */
     String toString(boolean legend) {
         Formatter out = new Formatter();
-        // FIXME
         int cutoff = SIDE * (SIDE - 1);
         if (!legend) {
             for (int i = cutoff; i >= 0; i -= 5) {
@@ -527,7 +405,6 @@ class Board extends Observable {
 
     /** Return true iff there is a move for the current player. */
     private boolean isMove() {
-        //return false;  // FIXME
         ArrayList<Move> allMoves = new ArrayList<Move>();
         for (int k = 0; k <= MAX_INDEX; k += 1) {
             if (get(k).equals(whoseMove())) {
@@ -536,9 +413,8 @@ class Board extends Observable {
         }
         if (allMoves.size() > 0) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
 
@@ -556,8 +432,6 @@ class Board extends Observable {
     private static class MoveList extends ArrayList<Move> {
     }
 
-    //////////
-
     /**
      * The pattern of defaultPatter.
      */
@@ -568,7 +442,6 @@ class Board extends Observable {
      * Default board ordered in String order.
      */
     private char[] defaultBoard = defaultPattern.toCharArray();
-           // "  b b b b b\n  b b b b b\n  b b - w w\n  w w w w w\n  w w w w w";
 
     /**
      * The pattern of linearizedPatter.
@@ -585,6 +458,19 @@ class Board extends Observable {
      */
     private char[] _board;
 
+    /**
+     * Size of the board.
+     */
+    private int _boardSize = SIDE * SIDE;
+
+    /**
+     * Length of one row.
+     */
+    private int _rowlength = SIDE;
+
+    /**
+     * Previous occupied index for each index.
+     */
     private int[] _previous;
 
     /**
@@ -729,39 +615,60 @@ class Board extends Observable {
     private void getJumpsHelper(ArrayList<Move> moves, int k,
                                 Board tempBoard, Move lastMove) {
         boolean hasNextJump = false;
-        //if (jumpPossible(k)) {
-            ArrayList<Integer> possible = new ArrayList<Integer>();
-            possibleStraightJump(k, possible);
-            possibleDiagonalJump(k, possible);
-            for (int i = 0; i < possible.size(); i += 1) {
-                Board temp = new Board(tempBoard);
-                //temp.setPieces(tempBoard.toString(), tempBoard.whoseMove());
-                if (temp.get(k) != EMPTY) {
-                    int destk = possible.get(i);
-                    if (temp.get(destk) == EMPTY) {
-                        int jumpedcol = (userCol(k) + userCol(destk)) / 2;
-                        int jumpedrow = (userRow(k) + userRow(destk)) / 2;
-                        int jumpedk = userLinearize(jumpedcol, jumpedrow);
-                        if (temp.get(k).opposite().equals(temp.get(jumpedk))) {
-                            hasNextJump = true;
-                            ///////////////////////////
-                            _previous[k] = -1;
-                            //////////////////////////
-                            temp.set(jumpedk, EMPTY);
-                            temp.set(destk, temp.get(k));
-                            temp.set(k, EMPTY);
-                            getJumpsHelper(moves, destk, temp, move(lastMove, move(col(k), row(k), col(destk), row(destk))));
-                        }
+        ArrayList<Integer> possible = new ArrayList<Integer>();
+        possibleStraightJump(k, possible);
+        possibleDiagonalJump(k, possible);
+        for (int i = 0; i < possible.size(); i += 1) {
+            Board temp = new Board(tempBoard);
+            if (temp.get(k) != EMPTY) {
+                int destk = possible.get(i);
+                if (temp.get(destk) == EMPTY) {
+                    int jumpedcol = (userCol(k) + userCol(destk)) / 2;
+                    int jumpedrow = (userRow(k) + userRow(destk)) / 2;
+                    int jumpedk = userLinearize(jumpedcol, jumpedrow);
+                    if (temp.get(k).opposite().equals(temp.get(jumpedk))) {
+                        hasNextJump = true;
+                        _previous[k] = -1;
+                        temp.set(jumpedk, EMPTY);
+                        temp.set(destk, temp.get(k));
+                        temp.set(k, EMPTY);
+                        getJumpsHelper(moves, destk, temp,
+                                move(lastMove,
+                                        move(col(k), row(k),
+                                                col(destk), row(destk))));
                     }
                 }
             }
-            if (!hasNextJump && lastMove != null) {
-                moves.add(lastMove);
-            }
-        //}
+        }
+        if (!hasNextJump && lastMove != null) {
+            moves.add(lastMove);
+        }
     }
 
-    //////////
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Board) {
+            final Board other = (Board) obj;
+            if (this.whoseMove() == other.whoseMove()) {
+                return true;
+            }
+            if (this.gameOver() == other.gameOver()) {
+                return true;
+            }
+            if (this._previous == other._previous) {
+                return true;
+            }
+            if (!this._board.toString().equals(other._board.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     /** A read-only view of a Board. */
     private class ConstantBoard extends Board implements Observer {

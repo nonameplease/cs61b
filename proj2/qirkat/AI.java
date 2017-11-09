@@ -33,10 +33,8 @@ class AI extends Player {
         } else {
 
 
-            // FIXME
-            System.out.println(myColor() + " " + "moves" + " " + move.toString());
-            //System.out.println(game().board().toString());
-            //System.out.println(move.jumpTail());
+            System.out.println(myColor() + " " + "moves" + " "
+                    + move.toString());
             return move;
         }
     }
@@ -45,14 +43,11 @@ class AI extends Player {
      *  is a move. */
     private Move findMove() {
         Board b = new Board(board());
-        //System.out.println(board().toString());
         if (myColor() == WHITE) {
             findMove(b, MAX_DEPTH, true, 1, -INFTY, INFTY);
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
-        //System.out.println(b.getMoves() + "\n" + "lastFoundMove: " + _lastFoundMove);
-        //return _lastFoundMove;
         if (_lastFoundMove == null) {
             if (b.getMoves().isEmpty()) {
                 return null;
@@ -77,7 +72,6 @@ class AI extends Player {
                          int alpha, int beta) {
         Move best;
         best = null;
-        //System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board + "\n" + "moves: " + board.getMoves());
         ArrayList<Move> possibleMoves = board.getMoves();
 
         if (depth == 0 || possibleMoves.isEmpty()) {
@@ -89,7 +83,9 @@ class AI extends Player {
             for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
-                v = Math.max(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
+                v = Math.max(v, findMove(tempBoard, depth - 1,
+                        saveMove, sense * -1,
+                        alpha, beta));
                 alpha = Math.max(alpha, v);
                 if (beta <= alpha) {
                     best = move;
@@ -105,7 +101,10 @@ class AI extends Player {
             for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
-                v = Math.min(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
+                v = Math.min(v, findMove
+                        (tempBoard, depth - 1,
+                                saveMove, sense * -1,
+                                alpha, beta));
                 beta = Math.min(beta, v);
                 if (beta <= alpha) {
                     best = move;
@@ -117,18 +116,10 @@ class AI extends Player {
             }
             return v;
         }
-        // FIXME
-
-        /*if (saveMove) {
-            _lastFoundMove = best;
-        }*/
-
-        //return 0; // FIXME
     }
 
     /** Return a heuristic value for BOARD. */
     private int staticScore(Board board) {
-        //return 0; // FIXME
         if (board.getMoves().size() == 0) {
             return WINNING_VALUE;
         } else {
@@ -138,10 +129,14 @@ class AI extends Player {
                     if (board.get(move.fromIndex()) == myColor()) {
                         if (move.toString().length() > returnValue) {
                             if (game().board().whoseMove() == BLACK) {
-                                if (move.toString().charAt(move.toString().length() - 1) == '1') {
+                                if (move.toString().charAt
+                                        (move.toString().length() - 1)
+                                        == '1') {
                                     return 100;
                                 } else {
-                                    if (move.toString().charAt(move.toString().length() - 1) == '5') {
+                                    if (move.toString().charAt
+                                            (move.toString().length() - 1)
+                                            == '5') {
                                         return 100;
                                     }
                                 }

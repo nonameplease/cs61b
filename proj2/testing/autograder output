@@ -1,0 +1,1790 @@
+
+make -f /home/ff/cs61b/testing-files/proj2/testing.mk --no-print-directory prepare
+find . -name '*.class' -exec rm -f {} \;
+find . -name '*~' -exec rm -f {} \;
+find . -name sentinel -exec rm -f {} \;
+rm -f -r style61b python3 python make load-files
+ln -s /home/ff/cs61b/testing-files/proj2/testing load-files
+
+=============================================
+
+I. Compiling your program with 'make'.
+
+
+make -C qirkat default
+javac -Xlint:unchecked -encoding utf-8 -cp "..:.:/home/ff/cs61b/lib/*:;..;.:/home/ff/cs61b/lib/*" AI.java Board.java BoardTest.java BoardWidget.java Command.java CommandSource.java CommandSources.java CommandTest.java GUI.java Game.java GameException.java Main.java Manual.java Move.java MoveTest.java PieceColor.java Player.java ReaderSource.java Reporter.java TextReporter.java UnitTest.java
+touch sentinel
+
+=============================================
+
+II. Running style61b on ALL .java files found, whether or not used.
+
+style61b ./qirkat/AI.java ./qirkat/PieceColor.java ./qirkat/Player.java ./qirkat/Manual.java ./qirkat/BoardWidget.java ./qirkat/GameException.java ./qirkat/ReaderSource.java ./qirkat/Command.java ./qirkat/Move.java ./qirkat/CommandSource.java ./qirkat/CommandSources.java ./qirkat/BoardTest.java ./qirkat/Game.java ./qirkat/CommandTest.java ./qirkat/TextReporter.java ./qirkat/Reporter.java ./qirkat/MoveTest.java ./qirkat/UnitTest.java ./qirkat/GUI.java ./qirkat/Board.java ./qirkat/Main.java
+Starting audit...
+qirkat/AI.java:36:13: '//'-style comments are not allowed.
+qirkat/AI.java:37: Line is longer than 80 characters (found 82).
+qirkat/AI.java:38:13: '//'-style comments are not allowed.
+qirkat/AI.java:39:13: '//'-style comments are not allowed.
+qirkat/AI.java:48:9: '//'-style comments are not allowed.
+qirkat/AI.java:54: Line is longer than 80 characters (found 87).
+qirkat/AI.java:54:9: '//'-style comments are not allowed.
+qirkat/AI.java:55:9: '//'-style comments are not allowed.
+qirkat/AI.java:80: Line is longer than 80 characters (found 123).
+qirkat/AI.java:80:9: '//'-style comments are not allowed.
+qirkat/AI.java:92: Line is longer than 80 characters (found 99).
+qirkat/AI.java:108: Line is longer than 80 characters (found 99).
+qirkat/AI.java:120:9: '//'-style comments are not allowed.
+qirkat/AI.java:122:9: Bad format for '/*'-style comment.
+qirkat/AI.java:126:9: '//'-style comments are not allowed.
+qirkat/AI.java:131:9: '//'-style comments are not allowed.
+qirkat/AI.java:141: Line is longer than 80 characters (found 98).
+qirkat/AI.java:144: Line is longer than 80 characters (found 102).
+qirkat/Manual.java:20:9: '//'-style comments are not allowed.
+qirkat/Manual.java:24:13: '//'-style comments are not allowed.
+qirkat/BoardWidget.java:66:9: '//'-style comments are not allowed.
+qirkat/BoardWidget.java:89:5: '//'-style comments are not allowed.
+qirkat/Move.java:111:13: '//'-style comments are not allowed.
+qirkat/Move.java:112:13: '//'-style comments are not allowed.
+qirkat/Move.java:113:13: '//'-style comments are not allowed.
+qirkat/Move.java:118:13: '//'-style comments are not allowed.
+qirkat/Move.java:122:13: '//'-style comments are not allowed.
+qirkat/Move.java:171:9: '//'-style comments are not allowed.
+qirkat/Move.java:178:9: '//'-style comments are not allowed.
+qirkat/Move.java:205:9: '//'-style comments are not allowed.
+qirkat/Move.java:216:9: '//'-style comments are not allowed.
+qirkat/Move.java:295:9: '//'-style comments are not allowed.
+qirkat/Move.java:301: Line is longer than 80 characters (found 94).
+qirkat/Move.java:357:5: '//'-style comments are not allowed.
+qirkat/Move.java:378:5: '//'-style comments are not allowed.
+qirkat/BoardTest.java:66:5: '//'-style comments are not allowed.
+qirkat/BoardTest.java:85:9: Bad format for '/*'-style comment.
+qirkat/BoardTest.java:111:9: Bad format for '/*'-style comment.
+qirkat/BoardTest.java:129:9: '//'-style comments are not allowed.
+qirkat/BoardTest.java:130:9: '//'-style comments are not allowed.
+qirkat/BoardTest.java:211:9: Bad format for '/*'-style comment.
+qirkat/BoardTest.java:220:9: Bad format for '/*'-style comment.
+qirkat/BoardTest.java:230:5: '//'-style comments are not allowed.
+qirkat/Game.java:5:1: '//'-style comments are not allowed.
+qirkat/Game.java:52:13: '//'-style comments are not allowed.
+qirkat/Game.java:67:17: '//'-style comments are not allowed.
+qirkat/Game.java:78:21: '//'-style comments are not allowed.
+qirkat/Game.java:152:13: '//'-style comments are not allowed.
+qirkat/Game.java:156:13: '//'-style comments are not allowed.
+qirkat/Game.java:160:9: '//'-style comments are not allowed.
+qirkat/Game.java:191:13: '//'-style comments are not allowed.
+qirkat/Game.java:192:13: '//'-style comments are not allowed.
+qirkat/Game.java:193:13: '//'-style comments are not allowed.
+qirkat/Game.java:203:9: '//'-style comments are not allowed.
+qirkat/Game.java:204:9: '//'-style comments are not allowed.
+qirkat/Game.java:206:13: '//'-style comments are not allowed.
+qirkat/Game.java:210:13: '//'-style comments are not allowed.
+qirkat/Game.java:229:9: '//'-style comments are not allowed.
+qirkat/Game.java:235:9: '//'-style comments are not allowed.
+qirkat/Game.java:237:9: '//'-style comments are not allowed.
+qirkat/Game.java:242:9: '//'-style comments are not allowed.
+qirkat/Game.java:247:9: '//'-style comments are not allowed.
+qirkat/Game.java:251:23: magic.number
+qirkat/Game.java:255:47: magic.number
+qirkat/Game.java:256:43: magic.number
+qirkat/Game.java:256:47: magic.number
+qirkat/Game.java:269:9: '//'-style comments are not allowed.
+qirkat/Game.java:294: Don't use trailing comments.
+qirkat/Game.java:294:29: '//'-style comments are not allowed.
+qirkat/MoveTest.java:45:5: '//'-style comments are not allowed.
+qirkat/MoveTest.java:56:34: ',' is not followed by whitespace.
+qirkat/MoveTest.java:63:5: '//'-style comments are not allowed.
+qirkat/GUI.java:108:9: '//'-style comments are not allowed.
+qirkat/GUI.java:113:9: '//'-style comments are not allowed.
+qirkat/GUI.java:122:28: Must have at least one statement.
+qirkat/GUI.java:123:13: '//'-style comments are not allowed.
+qirkat/GUI.java:124:36: Must have at least one statement.
+qirkat/GUI.java:125:13: '//'-style comments are not allowed.
+qirkat/GUI.java:131:9: '//'-style comments are not allowed.
+qirkat/Board.java:3:1: '//'-style comments are not allowed.
+qirkat/Board.java:5:1: '//'-style comments are not allowed.
+qirkat/Board.java:6:1: '//'-style comments are not allowed.
+qirkat/Board.java:9: Using the '.*' form of import should be avoided - javax.swing.*.
+qirkat/Board.java:10:8: Unused import - javax.swing.tree.DefaultMutableTreeNode.
+qirkat/Board.java:11:8: Unused import - javax.swing.tree.TreeNode.
+qirkat/Board.java:36:9: '//'-style comments are not allowed.
+qirkat/Board.java:38:9: '//'-style comments are not allowed.
+qirkat/Board.java:43:9: '//'-style comments are not allowed.
+qirkat/Board.java:64:29: magic.number
+qirkat/Board.java:68:9: '//'-style comments are not allowed.
+qirkat/Board.java:69:9: '//'-style comments are not allowed.
+qirkat/Board.java:71:9: '//'-style comments are not allowed.
+qirkat/Board.java:72:9: '//'-style comments are not allowed.
+qirkat/Board.java:85:9: '//'-style comments are not allowed.
+qirkat/Board.java:86:9: '//'-style comments are not allowed.
+qirkat/Board.java:87:32: magic.number
+qirkat/Board.java:88:34: magic.number
+qirkat/Board.java:94:29: magic.number
+qirkat/Board.java:117:9: '//'-style comments are not allowed.
+qirkat/Board.java:119:9: '//'-style comments are not allowed.
+qirkat/Board.java:125:29: magic.number
+qirkat/Board.java:128:43: '{' is not preceded with whitespace.
+qirkat/Board.java:130:40: magic.number
+qirkat/Board.java:132:29: magic.number
+qirkat/Board.java:132:40: magic.number
+qirkat/Board.java:133:29: magic.number
+qirkat/Board.java:135:13: '//'-style comments are not allowed.
+qirkat/Board.java:152:9: '//'-style comments are not allowed.
+qirkat/Board.java:169: Don't use trailing comments.
+qirkat/Board.java:169:34: '//'-style comments are not allowed.
+qirkat/Board.java:175:9: '//'-style comments are not allowed.
+qirkat/Board.java:189: Don't use trailing comments.
+qirkat/Board.java:189:31: '//'-style comments are not allowed.
+qirkat/Board.java:195:9: '//'-style comments are not allowed.
+qirkat/Board.java:204:9: '//'-style comments are not allowed.
+qirkat/Board.java:205:9: '//'-style comments are not allowed.
+qirkat/Board.java:211:1: Bad format for '/*'-style comment.
+qirkat/Board.java:215:9: '//'-style comments are not allowed.
+qirkat/Board.java:216:9: Bad format for '/*'-style comment.
+qirkat/Board.java:272:9: '//'-style comments are not allowed.
+qirkat/Board.java:284: Line is longer than 80 characters (found 81).
+qirkat/Board.java:286:25: '//'-style comments are not allowed.
+qirkat/Board.java:292: Line is longer than 80 characters (found 81).
+qirkat/Board.java:294:25: '//'-style comments are not allowed.
+qirkat/Board.java:304:9: '//'-style comments are not allowed.
+qirkat/Board.java:307: 'if' child have incorrect indentation level 11, expected level should be 12.
+qirkat/Board.java:310:9: '//'-style comments are not allowed.
+qirkat/Board.java:311:9: '//'-style comments are not allowed.
+qirkat/Board.java:317:9: Bad format for '/*'-style comment.
+qirkat/Board.java:328:9: Bad format for '/*'-style comment.
+qirkat/Board.java:331:9: Bad format for '/*'-style comment.
+qirkat/Board.java:349:5: Missing a Javadoc comment.
+qirkat/Board.java:375:9: '//'-style comments are not allowed.
+qirkat/Board.java:380:9: '//'-style comments are not allowed.
+qirkat/Board.java:389: Line is longer than 80 characters (found 94).
+qirkat/Board.java:405:9: '//'-style comments are not allowed.
+qirkat/Board.java:461:9: '//'-style comments are not allowed.
+qirkat/Board.java:463:9: '//'-style comments are not allowed.
+qirkat/Board.java:470: Line is longer than 80 characters (found 81).
+qirkat/Board.java:475: Line is longer than 80 characters (found 81).
+qirkat/Board.java:477: Line is longer than 80 characters (found 97).
+qirkat/Board.java:490:9: '//'-style comments are not allowed.
+qirkat/Board.java:512:9: '//'-style comments are not allowed.
+qirkat/Board.java:530:9: '//'-style comments are not allowed.
+qirkat/Board.java:537:9: Conditional logic can be removed.
+qirkat/Board.java:559:5: '//'-style comments are not allowed.
+qirkat/Board.java:571:12: '//'-style comments are not allowed.
+qirkat/Board.java:588:5: Missing a Javadoc comment.
+qirkat/Board.java:732:9: '//'-style comments are not allowed.
+qirkat/Board.java:733: 'member def type' have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:733: 'method def' child have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:734: 'method def' child have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:735: 'method def' child have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:736: 'for' have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:737: 'for' child have incorrect indentation level 16, expected level should be 12.
+qirkat/Board.java:737: 'member def type' have incorrect indentation level 16, expected level should be 12.
+qirkat/Board.java:738:17: '//'-style comments are not allowed.
+qirkat/Board.java:739: 'if' have incorrect indentation level 16, expected level should be 12.
+qirkat/Board.java:740: 'if' child have incorrect indentation level 20, expected level should be 16.
+qirkat/Board.java:740: 'member def type' have incorrect indentation level 20, expected level should be 16.
+qirkat/Board.java:741: 'if' have incorrect indentation level 20, expected level should be 16.
+qirkat/Board.java:742: 'if' child have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:742: 'member def type' have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:743: 'if' child have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:743: 'member def type' have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:744: 'if' child have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:744: 'member def type' have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:745: 'if' have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:746: 'if' child have incorrect indentation level 28, expected level should be 24.
+qirkat/Board.java:747:29: '//'-style comments are not allowed.
+qirkat/Board.java:748: 'if' child have incorrect indentation level 28, expected level should be 24.
+qirkat/Board.java:749:29: '//'-style comments are not allowed.
+qirkat/Board.java:750: 'if' child have incorrect indentation level 28, expected level should be 24.
+qirkat/Board.java:751: 'if' child have incorrect indentation level 28, expected level should be 24.
+qirkat/Board.java:752: 'if' child have incorrect indentation level 28, expected level should be 24.
+qirkat/Board.java:753: 'if' child have incorrect indentation level 28, expected level should be 24.
+qirkat/Board.java:753: Line is longer than 80 characters (found 125).
+qirkat/Board.java:754: 'if rcurly' have incorrect indentation level 24, expected level should be 20.
+qirkat/Board.java:755: 'if rcurly' have incorrect indentation level 20, expected level should be 16.
+qirkat/Board.java:756: 'if rcurly' have incorrect indentation level 16, expected level should be 12.
+qirkat/Board.java:757: 'for rcurly' have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:758: 'if' have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:759: 'if' child have incorrect indentation level 16, expected level should be 12.
+qirkat/Board.java:760: 'if rcurly' have incorrect indentation level 12, expected level should be 8.
+qirkat/Board.java:761:9: '//'-style comments are not allowed.
+qirkat/Board.java:764:5: '//'-style comments are not allowed.
+qirkat/Main.java:39:17: '//'-style comments are not allowed.
+qirkat/Main.java:40:17: '//'-style comments are not allowed.
+Audit done.
+Checkstyle ends with 188 errors.
+
+=============================================
+
+III. Running our tests.
+
+
+Running testing scripts
+01-commands1.inp: OK
+01-moves1.inp: ERROR (output mismatch ( - w - - - /  w - - - -) near line 41)
+01-moves2.inp: ERROR (output mismatch ( - b - - - /  - - - - -) near line 170)
+01-moves3.inp: OK
+01-moves4.inp: OK
+01-win1.inp: ERROR (output mismatch (Black moves a1-b1 / White wins.) near line 72)
+02-moves1.inp: OK
+02-moves2.inp: ERROR (output mismatch ( - - - w - /  - - w - -) near line 16)
+02-moves3.inp: OK
+03-play1.inp: ERROR (invalid move for white (White moves b2-c3
+) near line 6)
+03-play2.inp: ERROR (other program fails to finish)
+03-play3.inp: ERROR (other program fails to finish)
+03-play4.inp: ERROR (other program fails to finish)
+04-commands2.inp: ERROR (timed out waiting for output near line 7)
+04-win1.inp: ERROR (invalid move for black (Black moves a2-b2
+) near line 41)
+04-win2.inp: ERROR (invalid move for white (White moves c1-c3-c5
+) near line 44)
+test01.inp: OK
+test02.inp: OK
+test03.inp: OK
+test04.inp: OK
+
+Summary:
+    20 tests
+     9 passed
+    11 errors
+     0 problematic tests
+
+
+===TEST 01-moves1.inp=== passed
+
+Test script 01-moves1.inp:
+--------------------------------------------------
+# Test all legal horizontal moves.
+java -ea qirkat.Main
+set white w---- ----- ----- ----- ----b
+a1-b1
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@<=== passed
+set white w---- ----- ----- ----- ----b
+a1-a2
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@< - - - - -
+@<=== passed
+set white -w--- ----- ----- ----- ----b
+b1-c1
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@<=== passed
+set white -w--- ----- ----- ----- ----b
+b1-a1
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<=== passed
+set white -w--- ----- ----- ----- ----b
+b1-b2
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@<=== passed
+set white --w-- ----- ----- ----- b----
+c1-d1
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@<=== passed
+set white --w-- ----- ----- ----- b----
+c1-b1
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@<=== passed
+set white --w-- ----- ----- ----- b----
+c1-c2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@<=== passed
+set white ---w- ----- ----- ----- b----
+d1-e1
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<=== passed
+set white ---w- ----- ----- ----- b----
+d1-c1
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@<=== passed
+set white ---w- ----- ----- ----- b----
+d1-d2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@<=== passed
+set white ----w ----- ----- ----- b----
+e1-d1
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@<=== passed
+set white ----w ----- ----- ----- b----
+e1-e2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@< - - - - -
+@<=== passed
+set white ----- w---- ----- ----- ----b
+a2-b2
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@<=== passed
+set white ----- w---- ----- ----- ----b
+a2-a3
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< w - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- -w--- ----- ----- ----b
+b2-c2
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@<===
+set white ----- -w--- ----- ----- ----b
+b2-a2
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@< - - - - -
+@<===
+set white ----- -w--- ----- ----- ----b
+b2-b3
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- --w-- ----- ----- b----
+c2-d2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@<===
+set white ----- --w-- ----- ----- b----
+c2-b2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@<===
+set white ----- --w-- ----- ----- b----
+c2-c3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ---w- ----- ----- b----
+d2-e2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@< - - - - -
+@<===
+set white ----- ---w- ----- ----- b----
+d2-c2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@<===
+set white ----- ---w- ----- ----- b----
+d2-d3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----w ----- ----- b----
+e2-d2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@<===
+set white ----- ----w ----- ----- b----
+e2-e3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - w
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- w---- ----- ----b
+a3-b3
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- w---- ----- ----b
+a3-a4
+dump
+@<===
+@< - - - - b
+@< w - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- -w--- ----- ----b
+b3-c3
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- -w--- ----- ----b
+b3-a3
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< w - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- -w--- ----- ----b
+b3-b4
+dump
+@<===
+@< - - - - b
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- --w-- ----- b----
+c3-d3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- --w-- ----- b----
+c3-b3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- --w-- ----- b----
+c3-c4
+dump
+@<===
+@< b - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ---w- ----- b----
+d3-e3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - w
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ---w- ----- b----
+d3-c3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ---w- ----- b----
+d3-d4
+dump
+@<===
+@< b - - - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----w ----- b----
+e3-d3
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----w ----- b----
+e3-e4
+dump
+@<===
+@< b - - - -
+@< - - - - w
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- w---- ----b
+a4-b4
+dump
+@<===
+@< - - - - b
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- w---- ----b
+a4-a5
+dump
+@<===
+@< w - - - b
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- -w--- ----b
+b4-c4
+dump
+@<===
+@< - - - - b
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- -w--- ----b
+b4-a4
+dump
+@<===
+@< - - - - b
+@< w - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- -w--- ----b
+b4-b5
+dump
+@<===
+@< - w - - b
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- --w-- b----
+c4-d4
+dump
+@<===
+@< b - - - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- --w-- b----
+c4-b4
+dump
+@<===
+@< b - - - -
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- --w-- b----
+c4-c5
+dump
+@<===
+@< b - w - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ---w- b----
+d4-e4
+dump
+@<===
+@< b - - - -
+@< - - - - w
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ---w- b----
+d4-c4
+dump
+@<===
+@< b - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ---w- b----
+d4-d5
+dump
+@<===
+@< b - - w -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ----w b----
+e4-d4
+dump
+@<===
+@< b - - - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ----w b----
+e4-e5
+dump
+@<===
+@< b - - - w
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set black ----w b---- ----- ----- -----
+a2-b2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< - - - - w
+@<===
+set black ----w b---- ----- ----- -----
+a2-a1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< b - - - w
+@<===
+set black ----w -b--- ----- ----- -----
+b2-c2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< - - - - w
+@<===
+set black ----w -b--- ----- ----- -----
+b2-a2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< b - - - -
+@< - - - - w
+@<===
+set black ----w -b--- ----- ----- -----
+b2-b1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - b - - w
+@<===
+set black w---- --b-- ----- ----- -----
+c2-d2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< w - - - -
+@<===
+set black w---- --b-- ----- ----- -----
+c2-b2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< w - - - -
+@<===
+set black w---- --b-- ----- ----- -----
+c2-c1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - b - -
+@<===
+set black w---- ---b- ----- ----- -----
+d2-e2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - b
+@< w - - - -
+@<===
+set black w---- ---b- ----- ----- -----
+d2-c2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< w - - - -
+@<===
+set black w---- ---b- ----- ----- -----
+d2-d1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - b -
+@<===
+set black w---- ----b ----- ----- -----
+e2-d2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< w - - - -
+@<===
+set black w---- ----b ----- ----- -----
+e2-e1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - b
+@<===
+set black ----w ----- b---- ----- -----
+a3-b3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- b---- ----- -----
+a3-a2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< b - - - -
+@< - - - - w
+@<===
+set black ----w ----- -b--- ----- -----
+b3-c3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- -b--- ----- -----
+b3-a3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< b - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- -b--- ----- -----
+b3-b2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< - - - - w
+@<===
+set black w---- ----- --b-- ----- -----
+c3-d3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- --b-- ----- -----
+c3-b3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- --b-- ----- -----
+c3-c2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< w - - - -
+@<===
+set black w---- ----- ---b- ----- -----
+d3-e3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - b
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ---b- ----- -----
+d3-c3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ---b- ----- -----
+d3-d2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< w - - - -
+@<===
+set black w---- ----- ----b ----- -----
+e3-d3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----b ----- -----
+e3-e2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - b
+@< w - - - -
+@<===
+set black ----w ----- ----- b---- -----
+a4-b4
+dump
+@<===
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- b---- -----
+a4-a3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< b - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- -b--- -----
+b4-c4
+dump
+@<===
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- -b--- -----
+b4-a4
+dump
+@<===
+@< - - - - -
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- -b--- -----
+b4-b3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black w---- ----- ----- --b-- -----
+c4-d4
+dump
+@<===
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- --b-- -----
+c4-b4
+dump
+@<===
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- --b-- -----
+c4-c3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ---b- -----
+d4-e4
+dump
+@<===
+@< - - - - -
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ---b- -----
+d4-c4
+dump
+@<===
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ---b- -----
+d4-d3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----b -----
+e4-d4
+dump
+@<===
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----b -----
+e4-e3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - b
+@< - - - - -
+@< w - - - -
+@<===
+set black ----w ----- ----- ----- b----
+a5-b5
+dump
+@<===
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- ----- b----
+a5-a4
+dump
+@<===
+@< - - - - -
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- ----- -b---
+b5-c5
+dump
+@<===
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- ----- -b---
+b5-a5
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black ----w ----- ----- ----- -b---
+b5-b4
+dump
+@<===
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+set black w---- ----- ----- ----- --b--
+c5-d5
+dump
+@<===
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- --b--
+c5-b5
+dump
+@<===
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- --b--
+c5-c4
+dump
+@<===
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- ---b-
+d5-e5
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- ---b-
+d5-c5
+dump
+@<===
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- ---b-
+d5-d4
+dump
+@<===
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- ----b
+e5-d5
+dump
+@<===
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+set black w---- ----- ----- ----- ----b
+e5-e4
+dump
+@<===
+@< - - - - -
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<===
+--------------------------------------------------
+
+===TEST 01-moves2.inp===
+
+Test script 01-moves2.inp:
+--------------------------------------------------
+# Test all legal diagonal moves.
+java -ea qirkat.Main
+set white w---- ----- ----- ----- b----
+a1-b2
+dump
+@<===
+@< b - - - -
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@<=== passed
+set white --w-- ----- ----- ----- --b--
+c1-d2
+dump
+@<===
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@<=== passed
+set white --w-- ----- ----- ----- --b--
+c1-b2
+dump
+@<===
+@< - - b - -
+@< - - - - -
+@< - - - - -
+@< - w - - -
+@< - - - - -
+@<=== passed
+set white ----w ----- ----- ----- ----b
+e1-d2
+dump
+@<===
+@< - - - - b
+@< - - - - -
+@< - - - - -
+@< - - - w -
+@< - - - - -
+@<===
+set white ----- -w--- ----- ----- -b---
+b2-c3
+dump
+@<===
+@< - b - - -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- -w--- ----- ----- -b---
+b2-a3
+dump
+@<===
+@< - b - - -
+@< - - - - -
+@< w - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ---w- ----- ----- ---b-
+d2-e3
+dump
+@<===
+@< - - - b -
+@< - - - - -
+@< - - - - w
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ---w- ----- ----- ---b-
+d2-c3
+dump
+@<===
+@< - - - b -
+@< - - - - -
+@< - - w - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- w---- ----- b----
+a3-b4
+dump
+@<===
+@< b - - - -
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- --w-- ----- --b--
+c3-d4
+dump
+@<===
+@< - - b - -
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- --w-- ----- --b--
+c3-b4
+dump
+@<===
+@< - - b - -
+@< - w - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----w ----- ----b
+e3-d4
+dump
+@<===
+@< - - - - b
+@< - - - w -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- -w--- -b---
+b4-c5
+dump
+@<===
+@< - b w - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- -w--- -b---
+b4-a5
+dump
+@<===
+@< w b - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ---w- ---b-
+d4-e5
+dump
+@<===
+@< - - - b w
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set white ----- ----- ----- ---w- ---b-
+d4-c5
+dump
+@<===
+@< - - w b -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@<===
+set black -w--- -b--- ----- ----- -----
+b2-c1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - w b - -
+@<=== passed
+set black -w--- -b--- ----- ----- -----
+b2-a1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< b w - - -
+@<===
+set black ---w- ---b- ----- ----- -----
+d2-e1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - w b
+@<===
+set black ---w- ---b- ----- ----- -----
+d2-c1
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - b w -
+@<===
+set black w---- ----- b---- ----- -----
+a3-b2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< w - - - -
+@<===
+set black --w-- ----- --b-- ----- -----
+c3-d2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< - - w - -
+@<===
+set black --w-- ----- --b-- ----- -----
+c3-b2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - b - - -
+@< - - w - -
+@<===
+set black ----w ----- ----b ----- -----
+e3-d2
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - -
+@< - - - b -
+@< - - - - w
+@<===
+set black -w--- ----- ----- -b--- -----
+b4-c3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< - w - - -
+@<===
+set black -w--- ----- ----- -b--- -----
+b4-a3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< b - - - -
+@< - - - - -
+@< - w - - -
+@<===
+set black ---w- ----- ----- ---b- -----
+d4-e3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - - - b
+@< - - - - -
+@< - - - w -
+@<===
+set black ---w- ----- ----- ---b- -----
+d4-c3
+dump
+@<===
+@< - - - - -
+@< - - - - -
+@< - - b - -
+@< - - - - -
+@< - - - w -
+@<===
+set black w---- ----- ----- ----- b----
+a5-b4
+dump
+@<===
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< w - - - -
+@<=== passed
+set black --w-- ----- ----- ----- --b--
+c5-d4
+dump
+@<===
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@<===
+set black --w-- ----- ----- ----- --b--
+c5-b4
+dump
+@<===
+@< - - - - -
+@< - b - - -
+@< - - - - -
+@< - - - - -
+@< - - w - -
+@<===
+set black ----w ----- ----- ----- ----b
+e5-d4
+dump
+@<===
+@< - - - - -
+@< - - - b -
+@< - - - - -
+@< - - - - -
+@< - - - - w
+@<===
+--------------------------------------------------
+
+Reached limit on number of error inputs/outputs shown (2)
+
+Summary: 11 errors detected
+
+=============================================
+
+IV. Running make check.
+
+
+make -C qirkat check
+java -ea -cp "..:.:/home/ff/cs61b/lib/*:;..;.:/home/ff/cs61b/lib/*" qirkat.UnitTest
+0
+24
+c5-a5
+One possible traverse path:
+test board layout:
+  - b - b -
+  - - - b -
+  - - - - -
+  - - b - -
+  - - w - -
+Move steps: [c1-c3-e5-c5-a5]
+
+
+
+
+
+
+
+Two possible traverse path:
+test board layout:
+  - b - b -
+  - - - b -
+  - - - - -
+  - - b - b
+  - - w b -
+Move steps: [c1-c3-e5-c5-a5, c1-e1-e3-c5-e5, c1-e1-e3-c5-a5]
+
+
+
+
+
+
+
+
+Multi-traverse:
+test board layout:
+  - - - - -
+  - - - - -
+  - - - - -
+  b b b b b
+  - b w b -
+Move steps: [c1-c3-e1-e3, c1-c3-e1-c1-a1-a3-c1, c1-c3-e1-c1-a1-c3, c1-c3-e1-c1-a3-a1-c1, c1-c3-a1-a3, c1-c3-a1-c1-e1-e3-c1, c1-c3-a1-c1-e1-c3, c1-c3-a1-c1-e3-e1-c1, c1-e1-e3-c1-c3-a1-a3, c1-e1-e3-c1-c3-a1-c1, c1-e1-e3-c1-a1-a3-c1-c3, c1-e1-e3-c1-a1-c3-c1, c1-e1-e3-c1-a3-a1-c1-c3, c1-e1-c3-c1-a1-a3-c1, c1-e1-c3-c1-a1-c3, c1-e1-c3-c1-a3-a1-c1, c1-e1-c3-a1-a3, c1-e1-c3-a1-c1-c3, c1-a1-a3-c1-c3-e1-e3, c1-a1-a3-c1-c3-e1-c1, c1-a1-a3-c1-e1-e3-c1-c3, c1-a1-a3-c1-e1-c3-c1, c1-a1-a3-c1-e3-e1-c1-c3, c1-a1-c3-c1-e1-e3-c1, c1-a1-c3-c1-e1-c3, c1-a1-c3-c1-e3-e1-c1, c1-a1-c3-e1-e3, c1-a1-c3-e1-c1-c3, c1-e3-e1-c1-c3-a1-a3, c1-e3-e1-c1-c3-a1-c1, c1-e3-e1-c1-a1-a3-c1-c3, c1-e3-e1-c1-a1-c3-c1, c1-e3-e1-c1-a3-a1-c1-c3, c1-a3-a1-c1-c3-e1-e3, c1-a3-a1-c1-c3-e1-c1, c1-a3-a1-c1-e1-e3-c1-c3, c1-a3-a1-c1-e1-c3-c1, c1-a3-a1-c1-e3-e1-c1-c3]
+  b b - b b
+  b - - b b
+  - - w w w
+  w - - w w
+  w w b w w
+[e3-c5]
+  b b b b b
+  b b b b b
+  - b - b -
+  w - w - w
+  w w w w w
+[a1-b2, b1-b2, c1-d2, c1-b2, d1-d2, e1-d2, a2-a3, a2-b2, c2-c3, c2-d2, c2-b2, e2-e3, e2-d2]
+  - b - b -
+  - - - b -
+  - - - - -
+  - - b - -
+  - - w - -
+[c2-d2, c2-b2, d4-e4, d4-d3, d4-c4, d4-e3, d4-c3, b5-c5, b5-b4, b5-a5, d5-e5, d5-c5]
+  b b b b b
+  b b b - -
+  b b - - -
+  w w w w b
+  w w w - w
+[b3-c3, b4-c3, c4-d4, c4-c3, c5-d4, d5-d4, e5-e4, e5-d4]
+  b b b b b
+  b b b b b
+  b b - w w
+  w w w w w
+  w w w w wWhitefalse
+  b b b b b
+  b b b b b
+  b b - w w
+  w w w w w
+  w w w w wWhitefalse
+test board layout:
+  - b - b -
+  - - - b -
+  - - - - -
+  - - b - b
+  - - w b -
+c1-e1-e3-c5-a5
+e1-e3-c5-a5
+  b b - b b
+  b - - b b
+  - - w w w
+  w - - w w
+  w w b w w
+Time: 0.470
+There were 1 failures:
+
+1) testUndo(qirkat.BoardTest)
+    failed to return to start expected: qirkat.Board<  b b b b b
+  b b b b b
+  b b - w w
+  w w w w w
+  w w w w w> but was: qirkat.Board<  b b b b b
+  b b b b b
+  b b - w w
+  w w w w w
+  w w w w w>
+    at qirkat.BoardTest.testUndo:59 (BoardTest.java)
+
+Ran 21 tests. 1 failed.
+make[5]: *** [unit] Error 1
+make -C ../testing check
+CLASSPATH="..:.:/home/ff/cs61b/lib/*:;..;.:/home/ff/cs61b/lib/*" python3 test-qirkat.py *.inp
+test01.inp: OK
+test02.inp: OK
+test03.inp: OK
+test04.inp: OK
+
+Summary:
+     4 tests
+     4 passed
+     0 errors
+     0 problematic tests
+
+make[4]: *** [check] Error 1
+make[3]: *** [check] Error 2
+make -f /home/ff/cs61b/testing-files/proj2/testing.mk --no-print-directory -C proj2 extra-credit;
+
+V. Check for extra credit.
+
+if [ -f /tmp/grdtst11925/compile24683 ]; then true; else echo Skipped due to compilation errors.; false; fi; \
+	if [ $? -eq 0 ]; then \
+	    if DISPLAY= java qirkat.Main --display >/dev/null 2>&1; [ $? -eq 2 ]; then \
+	        echo "Extra credit not attempted."; \
+	        echo "   V. Did not attempt extra credit." >> /tmp/grdtst11925/log24683; \
+	    else \
+	        echo "Will check for extra credit."; \
+	        echo "   V. Extra credit attempted." >> /tmp/grdtst11925/log24683; \
+	    fi; \
+	fi
+Extra credit not attempted.
+
+*************************
+
+SUMMARY
+
+ PRE. all required files present.
+   I. Compilation: successful
+  II. Style check: style errors found.
+ III. Our tests: passed 9 of 20 tests.
+  IV. Make check: all tests passed.
+   V. Did not attempt extra credit.
+
+make: *** [standard] Error 1
+make: Target `default' not remade because of errors.
+
+<<PROBLEM: Test(s) terminated with non-zero exit code 512
