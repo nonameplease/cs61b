@@ -63,6 +63,13 @@ class BoardWidget extends Pad implements Observer {
     public synchronized void paintComponent(Graphics2D g) {
         g.setColor(BLANK_COLOR);
         g.fillRect(0, 0, _dim, _dim);
+        String board = _model.toString().replaceAll("\\s", "");
+        g.setColor(LINE_COLOR);
+        g.setStroke(LINE_STROKE);
+        for (int k = 0; k <= _dim; k += SQDIM) {
+            g.drawLine(0, k, 0, _dim);
+            g.drawLine(k, 0, _dim, 0);
+        }
         // FIXME
     }
 

@@ -68,6 +68,7 @@ class Game {
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
+                    System.out.println(_board.toString());
                 }
             }
 
@@ -142,9 +143,7 @@ class Game {
         _state = SETUP;
         if (operands[0].equals("White")) {
             _whiteIsManual = false;
-            _blackIsManual = false;
         } else {
-            _whiteIsManual = true;
             _blackIsManual = false;
         }
     }
@@ -187,11 +186,9 @@ class Game {
     void doManual(String[] operands) {
         _state = SETUP;
         if (operands[0].equals("Black")) {
-            _whiteIsManual = true;
             _blackIsManual = true;
         } else {
             _whiteIsManual = true;
-            _blackIsManual = false;
         }
     }
 

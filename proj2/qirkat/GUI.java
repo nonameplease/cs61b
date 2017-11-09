@@ -106,11 +106,13 @@ class GUI extends TopLevel implements Observer, Reporter {
     @Override
     public void errMsg(String format, Object... args) {
         // FIXME
+        _out.format(format, args);
     }
 
     @Override
     public void outcomeMsg(String format, Object... args) {
         // FIXME
+        _out.format(format, args);
     }
 
     @Override
@@ -121,14 +123,19 @@ class GUI extends TopLevel implements Observer, Reporter {
     public void update(Observable obs, Object arg) {
         if (obs == _model) {
             // FIXME (if needed)
+            _widget.update(_model, arg);
         } else if (obs == _widget) {
             // FIXME (if needed)
+            _widget.update(_widget, arg);
         }
     }
 
     /** Respond to a click on SQ. */
     private void movePiece(String sq) {
         // FIXME
+        String moveString = new String();
+        moveString += sq;
+        _selectedMove = Move.parseMove(moveString);
     }
 
     /** Make MOV the user-selected move (no move if null). */
