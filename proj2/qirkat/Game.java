@@ -1,9 +1,6 @@
 package qirkat;
 
 /* Author: P. N. Hilfinger */
-
-//import com.sun.source.tree.WhileLoopTree;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -49,7 +46,6 @@ class Game {
                 doCommand();
             }
 
-            // FIXME
             if (_whiteIsManual) {
                 white = new Manual(this, WHITE);
             } else {
@@ -64,9 +60,6 @@ class Game {
 
             while (_state != SETUP && !_board.gameOver()) {
                 Move move;
-                //move = null; // FIXME
-
-
                 if (_board.whoseMove() == WHITE) {
                     move = white.myMove();
                 } else {
@@ -75,7 +68,6 @@ class Game {
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
-                    //System.out.println(_board.toString());
                 }
             }
 
@@ -149,15 +141,12 @@ class Game {
     void doAuto(String[] operands) {
         _state = SETUP;
         if (operands[0].equals("White")) {
-            //both white and black are AI
             _whiteIsManual = false;
             _blackIsManual = false;
         } else {
-            //black AI white player
             _whiteIsManual = true;
             _blackIsManual = false;
         }
-        // FIXME
     }
 
     /** Perform a 'help' command. */
@@ -188,9 +177,6 @@ class Game {
     void doLoad(String[] operands) {
         try {
             FileReader reader = new FileReader(operands[0]);
-            // FIXME
-            //load file Reads the given file and in effect
-            // substitutes its contents for the load command itself.
             _inputs.addSource(new ReaderSource(reader, false));
         } catch (IOException e) {
             throw error("Cannot open file %s", operands[0]);
@@ -200,14 +186,10 @@ class Game {
     /** Perform the command 'manual OPERANDS[0]'. */
     void doManual(String[] operands) {
         _state = SETUP;
-        //opposite of doAuto.
-        // FIXME
         if (operands[0].equals("Black")) {
-            //both white and black are manual player
             _whiteIsManual = true;
             _blackIsManual = true;
         } else {
-            //black AI white player
             _whiteIsManual = true;
             _blackIsManual = false;
         }
@@ -226,35 +208,30 @@ class Game {
 
     /** Perform the move OPERANDS[0]. */
     void doMove(String[] operands) {
-        // FIXME
         _board.makeMove(Move.parseMove(operands[0]));
     }
 
     /** Perform the command 'clear'. */
     void doClear(String[] unused) {
-        // FIXME
         _board.clear();
-        //reset the board?
         _whiteIsManual = true;
         _blackIsManual = false;
         _state = SETUP;
-
-        //resign?
     }
 
     /** Perform the command 'set OPERANDS[0] OPERANDS[1]'. */
     void doSet(String[] operands) {
-        // FIXME
+        int rowSize = 5;
         _state = SETUP;
         _board.clear();
         String board = operands[1].replaceAll("\\s", "");
         int length = board.length();
-        if (length == 25) {
-            String row1 = board.substring(0, 5);
-            String row2 = board.substring(5, 10);
-            String row3 = board.substring(10, 15);
-            String row4 = board.substring(15, 20);
-            String row5 = board.substring(20, 25);
+        if (length == rowSize * 5) {
+            String row1 = board.substring(0, rowSize);
+            String row2 = board.substring(rowSize, rowSize * 2);
+            String row3 = board.substring(rowSize * 2, rowSize * 3);
+            String row4 = board.substring(rowSize * 3, rowSize * 4);
+            String row5 = board.substring(rowSize * 4, rowSize * 5);
             String boardLinearized = row5 + row4 + row3 + row2 + row1;
             board = boardLinearized;
         }
@@ -267,7 +244,6 @@ class Game {
 
     /** Perform the command 'dump'. */
     void doDump(String[] unused) {
-        // FIXME
         System.out.println("===");
         System.out.println(board().toString());
         System.out.println("===");
@@ -292,7 +268,7 @@ class Game {
     /** Report the outcome of the current game. */
     void reportWinner() {
         String msg;
-        msg = "Game over."; // FIXME
+        msg = "Game over.";
         if (_board.gameOver()) {
             if (_board.whoseMove() == BLACK) {
                 msg = "White wins.";

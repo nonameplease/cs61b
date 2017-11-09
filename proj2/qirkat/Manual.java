@@ -17,12 +17,9 @@ class Manual extends Player {
 
     @Override
     Move myMove() {
-        //return null; // FIXME
         Command playerCommand = game().getMoveCmnd(_prompt);
         if (playerCommand != null) {
             Move playerMove = Move.parseMove(playerCommand.operands()[0]);
-            //System.out.println(board().getMoves());
-
             if (board().legalMove(playerMove)) {
                 return playerMove;
             } else {

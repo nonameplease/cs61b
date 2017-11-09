@@ -108,18 +108,13 @@ class Move {
             return move0;
         }
         if (move0.isVestigial()) {
-            //return null; // FIXME
-            //return move(move(move0.col0(), move0.row0(),
-            //        move1.col1(), move1.row1(), move1.jumpTail()), move1);
             return move(move0.col0(), move0.row0(),
                     move1.col0(), move1.row0(), move1.jumpTail());
         }
         if (move0.jumpTail() == null) {
-            //return null; // FIXME
             return move(move0.col0(), move0.row0(),
                     move0.col1(), move0.row1(), move1);
         } else {
-            //return null; // FIXME
             return move(move0.col0(), move0.row0(),
                     move0.col1(), move0.row1(),
                     move(move0.jumpTail(), move1));
@@ -168,14 +163,12 @@ class Move {
     /** Return true iff this is a horizontal, non-capturing move to
      *  the left. */
     boolean isLeftMove() {
-        //return false; // FIXME
         return _col0 > _col1 && !_isJump;
     }
 
     /** Return true iff this is a horizontal, non-capturing move
      *  to the right. */
     boolean isRightMove() {
-        //return false; // FIXME
         return _col0 < _col1 && !_isJump;
     }
 
@@ -202,7 +195,6 @@ class Move {
     /** For a jump, returns the row of the jumped-over square for the
      *  first leg of the jump.  For a non-capturing move, same as row1(). */
     char jumpedRow() {
-        //return '1';  // FIXME
         if (!_isJump) {
             return _row1;
         } else {
@@ -213,7 +205,6 @@ class Move {
     /** For a jump, returns the column of the jumped-over square for the
      *  first leg of the jump.  For a non-capturing move, same as col1(). */
     char jumpedCol() {
-        //return 'a'; // FIXME
         if (!_isJump) {
             return _col1;
         } else {
@@ -292,13 +283,9 @@ class Move {
 
     /** Write my string representation into OUT. */
     private void toString(Formatter out) {
-        //out.format("???"); // FIXME
-        /*out.format("%s%s-%s%s", _col0, _row0, _col1, _row1);
-        if (this.jumpTail() != null) {
-            _staged._nextJump.toString();
-        }*/
         Move temp = move(this, null);
-        String result = temp.col0() + "" + temp.row0() + "-" + temp.col1() + "" + temp.row1();
+        String result = temp.col0() + "" + temp.row0()
+                + "-" + temp.col1() + "" + temp.row1();
         while (temp.jumpTail() != null) {
             result += "-" + temp.jumpTail().col1() + temp.jumpTail().row1();
             temp = temp.jumpTail();
@@ -353,9 +340,6 @@ class Move {
     /** The identity function on Moves. */
     static final Function<Move, Move> IDENTITY = k -> k;
 
-
-    /////////////////////////////////////////////////
-
     /**
      * Useless.
      * @param move A move.
@@ -375,6 +359,4 @@ class Move {
         }
         return temp._toIndex;
     }
-    /////////////////////////////////////////////////
-
 }

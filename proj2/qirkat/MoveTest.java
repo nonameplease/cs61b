@@ -42,7 +42,6 @@ public class MoveTest {
         assertEquals("a3-a5-c3-e1", parseMove("a3-a5-c3-e1").toString());
     }
 
-    /////////////////////////////////////////
     @Test
     public void testIndex() {
         System.out.println(Move.index('a', '1'));
@@ -53,12 +52,11 @@ public class MoveTest {
     public void testMove() {
         Move step1 = move('c', '5', 'a', '5');
         Move step2 = move('e', '5', 'c', '5');
-        Move stepnull = move('a','5');
+        Move stepnull = move('a', '5');
         assertEquals("e5-c5-a5", move(step2, step1).toString());
         assertEquals("e5-c5-a5", move(step2, move(step1, null)).toString());
         Move test3 = move(step2, step1);
         assertEquals("e5-c5-a5", test3.toString());
         System.out.println(test3.jumpTail());
     }
-    /////////////////////////////////////////
 }

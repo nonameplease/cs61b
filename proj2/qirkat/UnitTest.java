@@ -3,7 +3,7 @@ package qirkat;
 import ucb.junit.textui;
 
 /** The suite of all JUnit tests for the qirkat package.
- *  @author
+ *  @author Scott Shao
  */
 public class UnitTest {
 

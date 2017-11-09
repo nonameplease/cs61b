@@ -7,7 +7,7 @@ import qirkat.Command.Type;
 import static qirkat.Command.Type.*;
 
 /** Test command parsing.
- *  @author
+ *  @author Scott
  */
 public class CommandTest {
 
