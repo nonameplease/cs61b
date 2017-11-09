@@ -10,7 +10,7 @@ import static qirkat.PieceColor.*;
 class AI extends Player {
 
     /** Maximum minimax search depth before going to static evaluation. */
-    private static final int MAX_DEPTH = 8;
+    private static final int MAX_DEPTH = 5;
     /** A position magnitude indicating a win (for white if positive, black
      *  if negative). */
     private static final int WINNING_VALUE = Integer.MAX_VALUE - 1;
@@ -78,14 +78,15 @@ class AI extends Player {
         Move best;
         best = null;
         //System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board + "\n" + "moves: " + board.getMoves());
+        ArrayList<Move> possibleMoves = board.getMoves();
 
-        if (depth == 0 || board.getMoves() == null) {
+        if (depth == 0 || possibleMoves.isEmpty()) {
             return staticScore(board);
         }
 
         if (sense == 1) {
             int v = -INFTY;
-            for (Move move : board.getMoves()) {
+            for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
                 v = Math.max(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
@@ -101,7 +102,7 @@ class AI extends Player {
             return v;
         } else {
             int v = INFTY;
-            for (Move move : board.getMoves()) {
+            for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
                 v = Math.min(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));

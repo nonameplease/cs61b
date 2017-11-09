@@ -306,8 +306,8 @@ class Board extends Observable {
         if (get(k) != whoseMove()) {
            return;
         }
-        Board tempBoard = new Board();
-        tempBoard.setPieces(toString(), whoseMove());
+        Board tempBoard = new Board(this);
+        //tempBoard.setPieces(toString(), whoseMove());
         //System.out.println("in getJump" + "\n" + tempBoard);
         if (get(k) == whoseMove()) {
             getJumpsHelper(moves, k, tempBoard, null);
@@ -734,8 +734,8 @@ class Board extends Observable {
             possibleStraightJump(k, possible);
             possibleDiagonalJump(k, possible);
             for (int i = 0; i < possible.size(); i += 1) {
-                Board temp = new Board();
-                temp.setPieces(tempBoard.toString(), tempBoard.whoseMove());
+                Board temp = new Board(tempBoard);
+                //temp.setPieces(tempBoard.toString(), tempBoard.whoseMove());
                 if (temp.get(k) != EMPTY) {
                     int destk = possible.get(i);
                     if (temp.get(destk) == EMPTY) {
