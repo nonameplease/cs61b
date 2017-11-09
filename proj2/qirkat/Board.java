@@ -217,7 +217,7 @@ class Board extends Observable {
                 int destk = possible.get(i);
                 if (userRow(k) >= userRow(destk)) {
                     if (get(possible.get(i)) == EMPTY
-                            && _previous[k] != destk) {
+                            && _previous[k] != destk && k >= _rowlength) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
                     }
                 }
@@ -225,7 +225,7 @@ class Board extends Observable {
                 int destk = possible.get(i);
                 if (userRow(k) <= userRow(destk)) {
                     if (get(possible.get(i)) == EMPTY
-                            && _previous[k] != destk) {
+                            && _previous[k] != destk && k < _rowlength * 4) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
                     }
                 }
