@@ -54,6 +54,8 @@ public class BoardTest {
         for (int i = 0; i < GAME1.length; i += 1) {
             b0.undo();
         }
+        System.out.println(b0.toString() + b0.whoseMove() + b0.gameOver());
+        System.out.println(b1.toString() + b1.whoseMove() + b1.gameOver());
         assertEquals("failed to return to start", b1, b0);
         makeMoves(b0, GAME1);
         assertEquals("second pass failed to reach same position", b2, b0);

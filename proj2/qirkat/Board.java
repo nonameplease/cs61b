@@ -60,7 +60,7 @@ class Board extends Observable {
     void clear() {
         _whoseMove = WHITE;
         _gameOver = false;
-        _allMoves.clear();
+        _allMoves = new MoveList();
         for (int i = 0; i < 25; i += 1) {
             _previous[i] = -1;
         }
@@ -84,9 +84,9 @@ class Board extends Observable {
     private void internalCopy(Board b) {
         // FIXME
         //System.out.println(b.toString().replaceAll("\\s", ""));
-        _board = new char[25];
-        _previous = new int[25];
-        _allMoves = new MoveList();
+        this._board = new char[25];
+        this._previous = new int[25];
+        this._allMoves = new MoveList();
         this._whoseMove = b.whoseMove();
         this.setPieces(b.toString(), whoseMove());
         this._gameOver = b.gameOver();
