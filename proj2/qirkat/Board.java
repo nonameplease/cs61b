@@ -283,7 +283,7 @@ class Board extends Observable {
                 if (userRow(k) >= userRow(destk)) {
                     if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
-                        _previous[destk] = k;
+                        //_previous[destk] = k;
                     }
                 }
             } else if (get(k) == WHITE) {
@@ -291,7 +291,7 @@ class Board extends Observable {
                 if (userRow(k) <= userRow(destk)) {
                     if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
-                        _previous[destk] = k;
+                        //_previous[destk] = k;
                     }
                 }
             }
@@ -458,7 +458,7 @@ class Board extends Observable {
 
     /** Make the Move MOV on this Board, assuming it is legal. */
     void makeMove(Move mov) {
-        assert legalMove(mov);
+        //assert legalMove(mov);
 
         // FIXME
 
@@ -470,11 +470,11 @@ class Board extends Observable {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
                     set(mov2.col0(), mov2.row0(), EMPTY);
-                    //_previous[index(mov2.col0(), mov2.row0())] = -1;
+                    _previous[index(mov2.col0(), mov2.row0())] = -1;
                 } else {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.col0(), mov2.row0(), EMPTY);
-                    //_previous[index(mov2.col1(), mov2.row1())] = index(mov2.col0(), mov2.row0());
+                    _previous[index(mov2.col1(), mov2.row1())] = index(mov2.col0(), mov2.row0());
                 }
                 mov2 = mov2.jumpTail();
             }

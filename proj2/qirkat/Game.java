@@ -75,6 +75,7 @@ class Game {
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
+                    System.out.println(_board.toString());
                 }
             }
 

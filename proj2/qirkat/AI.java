@@ -136,6 +136,15 @@ class AI extends Player {
                 if (move != null) {
                     if (board.get(move.fromIndex()) == myColor()) {
                         if (move.toString().length() > returnValue) {
+                            if (game().board().whoseMove() == BLACK) {
+                                if (move.toString().charAt(move.toString().length() - 1) == '1') {
+                                    return 100;
+                                } else {
+                                    if (move.toString().charAt(move.toString().length() - 1) == '5') {
+                                        return 100;
+                                    }
+                                }
+                            }
                             returnValue = move.toString().length();
                         }
                     }
