@@ -211,7 +211,17 @@ public class BoardTest {
          */
         String game3Board =
                 "- b - b - \n - - - b - \n - - - - - \n - - b - - \n - - w - -";
-        testBoard.setPieces(game3Board, PieceColor.WHITE);
+        testBoard.setPieces(game3Board, PieceColor.BLACK);
+        System.out.println(testBoard);
+        System.out.println(testBoard.getMoves());
+
+        /**
+         * Buggy test
+         */
+
+        String game4Board =
+                "bbbbb bbb-- bb--- wwwwb www-w";
+        testBoard.setPieces(game4Board, PieceColor.BLACK);
         System.out.println(testBoard);
         System.out.println(testBoard.getMoves());
     }

@@ -39,6 +39,7 @@ class Board extends Observable {
         int boardSize = SIDE * SIDE;
         _board = new char[boardSize];
         _allMoves = new MoveList();
+        _previous = new int[boardSize];
         //////////
         clear();
     }
@@ -60,6 +61,9 @@ class Board extends Observable {
         _whoseMove = WHITE;
         _gameOver = false;
         _allMoves.clear();
+        for (int i = 0; i < 25; i += 1) {
+            _previous[i] = -1;
+        }
 
         // FIXME
         //////////
@@ -80,15 +84,17 @@ class Board extends Observable {
     private void internalCopy(Board b) {
         // FIXME
         //System.out.println(b.toString().replaceAll("\\s", ""));
-        _whoseMove = b.whoseMove();
-        _board = b._board;
-        _gameOver = b.gameOver();
-        _allMoves = b._allMoves;
+        _board = new char[25];
+        _previous = new int[25];
+        _allMoves = new MoveList();
+        this._whoseMove = b.whoseMove();
+        this.setPieces(b.toString(), whoseMove());
+        this._gameOver = b.gameOver();
+        this._allMoves = b._allMoves;
+        for (int i = 0; i < 25; i += 1) {
+            _previous[i] = b._previous[i];
+        }
 
-        defaultPattern = b.defaultPattern;
-        defaultBoard = b.defaultBoard;
-        linearizedBoard = b.linearizedBoard;
-        linearizedPattern = b.linearizedPattern;
     }
 
     /** Set my contents as defined by STR.  STR consists of 25 characters,
@@ -198,6 +204,9 @@ class Board extends Observable {
         //return true; // FIXME
         //return (getMoves().contains(mov));
         ArrayList<Move> legalMoves = getMoves();
+        if (mov == null) {
+            return false;
+        }
         return legalMoves.contains(mov);
 /*
             }
@@ -235,6 +244,9 @@ class Board extends Observable {
     ArrayList<Move> getMoves() {
         ArrayList<Move> result = new ArrayList<>();
         getMoves(result);
+        if (result.isEmpty()) {
+            _gameOver = true;
+        }
         return result;
     }
 
@@ -259,6 +271,9 @@ class Board extends Observable {
     private void getMoves(ArrayList<Move> moves, int k) {
         // FIXME
 
+        if (get(k) != _whoseMove) {
+            return;
+        }
         ArrayList<Integer> possible = new ArrayList<Integer>();
         possibleStraightMove(k, possible);
         possibleDiagonalMove(k, possible);
@@ -266,15 +281,17 @@ class Board extends Observable {
             if (get(k) == BLACK) {
                 int destk = possible.get(i);
                 if (userRow(k) >= userRow(destk)) {
-                    if (get(possible.get(i)) == EMPTY) {
+                    if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
+                        _previous[destk] = k;
                     }
                 }
             } else if (get(k) == WHITE) {
                 int destk = possible.get(i);
                 if (userRow(k) <= userRow(destk)) {
-                    if (get(possible.get(i)) == EMPTY) {
+                    if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
                         moves.add(move(col(k), row(k), col(destk), row(destk)));
+                        _previous[destk] = k;
                     }
                 }
             }
@@ -286,13 +303,15 @@ class Board extends Observable {
     public void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
 
-        //if (get(k) != whoseMove()) {
-        //   return;
-        //}
+        if (get(k) != whoseMove()) {
+           return;
+        }
         Board tempBoard = new Board();
         tempBoard.setPieces(toString(), whoseMove());
         //System.out.println("in getJump" + "\n" + tempBoard);
-        getJumpsHelper(moves, k, tempBoard, null);
+        if (get(k) == whoseMove()) {
+            getJumpsHelper(moves, k, tempBoard, null);
+        }
 
 
         /*ArrayList<Move> temp = new ArrayList<Move>();
@@ -384,6 +403,9 @@ class Board extends Observable {
      *  linearized index K. */
     boolean jumpPossible(int k) {
         //return false; // FIXME
+        /*if (get(k) != _whoseMove) {
+            return false;
+        }
         ArrayList<Integer> possible = new ArrayList<Integer>();
         possibleDiagonalJump(k, possible);
         possibleStraightJump(k, possible);
@@ -400,7 +422,10 @@ class Board extends Observable {
                 }
             }
         }
-        return false;
+        return false;*/
+        ArrayList<Move> moves = new ArrayList<Move>();
+        getJumps(moves, k);
+        return !moves.isEmpty();
     }
 
     /** Return true iff a jump is possible from the current board. */
@@ -436,17 +461,20 @@ class Board extends Observable {
         assert legalMove(mov);
 
         // FIXME
+
         if (legalMove(mov)) {
             Move mov2 = mov;
-            _allMoves.add(mov);
+            _allMoves.add(mov2);
             while (mov2 != null) {
                 if (mov2.isJump()) {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
                     set(mov2.col0(), mov2.row0(), EMPTY);
+                    //_previous[index(mov2.col0(), mov2.row0())] = -1;
                 } else {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.col0(), mov2.row0(), EMPTY);
+                    //_previous[index(mov2.col1(), mov2.row1())] = index(mov2.col0(), mov2.row0());
                 }
                 mov2 = mov2.jumpTail();
             }
@@ -556,6 +584,8 @@ class Board extends Observable {
      * Current board.
      */
     private char[] _board;
+
+    private int[] _previous;
 
     /**
      * A MoveList contains all move so far.
@@ -714,6 +744,9 @@ class Board extends Observable {
                         int jumpedk = userLinearize(jumpedcol, jumpedrow);
                         if (temp.get(k).opposite().equals(temp.get(jumpedk))) {
                             hasNextJump = true;
+                            ///////////////////////////
+                            _previous[k] = -1;
+                            //////////////////////////
                             temp.set(jumpedk, EMPTY);
                             temp.set(destk, temp.get(k));
                             temp.set(k, EMPTY);

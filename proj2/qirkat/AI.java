@@ -28,21 +28,39 @@ class AI extends Player {
         Move move = findMove();
         Main.endTiming();
 
-        // FIXME
-        System.out.println(myColor() + " " + "moves" + " " + move.toString());
-        return move;
+        if (move == null) {
+            return null;
+        } else {
+
+
+            // FIXME
+            System.out.println(myColor() + " " + "moves" + " " + move.toString());
+            //System.out.println(game().board().toString());
+            //System.out.println(move.jumpTail());
+            return move;
+        }
     }
 
     /** Return a move for me from the current position, assuming there
      *  is a move. */
     private Move findMove() {
         Board b = new Board(board());
+        //System.out.println(board().toString());
         if (myColor() == WHITE) {
             findMove(b, MAX_DEPTH, true, 1, -INFTY, INFTY);
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
-        return _lastFoundMove;
+        //System.out.println(b.getMoves() + "\n" + "lastFoundMove: " + _lastFoundMove);
+        //return _lastFoundMove;
+        if (_lastFoundMove == null) {
+            if (b.getMoves().isEmpty()) {
+                return null;
+            }
+            return b.getMoves().get(0);
+        } else {
+            return _lastFoundMove;
+        }
     }
 
     /** The move found by the last call to one of the ...FindMove methods
@@ -59,8 +77,9 @@ class AI extends Player {
                          int alpha, int beta) {
         Move best;
         best = null;
+        //System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board + "\n" + "moves: " + board.getMoves());
 
-        if (depth == 0 || board.getMoves().size() == 0) {
+        if (depth == 0 || board.getMoves() == null) {
             return staticScore(board);
         }
 
@@ -110,13 +129,15 @@ class AI extends Player {
     private int staticScore(Board board) {
         //return 0; // FIXME
         if (board.getMoves().size() == 0) {
-            return 100;
+            return WINNING_VALUE;
         } else {
             int returnValue = 0;
             for (Move move : board.getMoves()) {
-                if (board.get(move.fromIndex()) == myColor()) {
-                    if (move.toString().length() > returnValue) {
-                        returnValue = move.toString().length();
+                if (move != null) {
+                    if (board.get(move.fromIndex()) == myColor()) {
+                        if (move.toString().length() > returnValue) {
+                            returnValue = move.toString().length();
+                        }
                     }
                 }
             }

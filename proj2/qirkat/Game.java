@@ -293,9 +293,9 @@ class Game {
         msg = "Game over."; // FIXME
         if (_board.gameOver()) {
             if (_board.whoseMove() == BLACK) {
-                msg = "Black wins.";
-            } else if (_board.whoseMove() == WHITE) {
                 msg = "White wins.";
+            } else if (_board.whoseMove() == WHITE) {
+                msg = "Black wins.";
             }
             _state = SETUP;
         }
