@@ -142,7 +142,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         // Insert (return) new red leaf node.
         if (node == null) {
             // YOUR CODE HERE
-            insert(item);
+            node = new RBTreeNode<T>(false, item);
 
         }
 
@@ -152,11 +152,11 @@ public class RedBlackTree<T extends Comparable<T>> {
             return node; // do nothing.
         } else if (comp < 0) {
             // YOUR CODE HERE
-            insert(node.left, item);
+            node.left = insert(node.left, item);
 
         } else {
             // YOUR CODE HERE
-            insert(node.right, item);
+            node.right = insert(node.right, item);
         }
 
         // handle case C and "Right-leaning" situation.
