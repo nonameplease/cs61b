@@ -10,7 +10,7 @@ import static qirkat.PieceColor.*;
 class AI extends Player {
 
     /** Maximum minimax search depth before going to static evaluation. */
-    private static final int MAX_DEPTH = 8;
+    private static final int MAX_DEPTH = 5;
     /** A position magnitude indicating a win (for white if positive, black
      *  if negative). */
     private static final int WINNING_VALUE = Integer.MAX_VALUE - 1;
@@ -28,25 +28,39 @@ class AI extends Player {
         Move move = findMove();
         Main.endTiming();
 
-        // FIXME
-        System.out.println(myColor() + " " + "moves" + " " + move);
-        //System.out.println(game().board().toString());
-        //System.out.println(move.jumpTail());
-        return move;
+        if (move == null) {
+            return null;
+        } else {
+
+
+            // FIXME
+            System.out.println(myColor() + " " + "moves" + " " + move.toString());
+            //System.out.println(game().board().toString());
+            //System.out.println(move.jumpTail());
+            return move;
+        }
     }
 
     /** Return a move for me from the current position, assuming there
      *  is a move. */
     private Move findMove() {
         Board b = new Board(board());
-        System.out.println(board().toString());
+        //System.out.println(board().toString());
         if (myColor() == WHITE) {
             findMove(b, MAX_DEPTH, true, 1, -INFTY, INFTY);
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
-        //System.out.println(board().toString());
-        return _lastFoundMove;
+        //System.out.println(b.getMoves() + "\n" + "lastFoundMove: " + _lastFoundMove);
+        //return _lastFoundMove;
+        if (_lastFoundMove == null) {
+            if (b.getMoves().isEmpty()) {
+                return null;
+            }
+            return b.getMoves().get(0);
+        } else {
+            return _lastFoundMove;
+        }
     }
 
     /** The move found by the last call to one of the ...FindMove methods
@@ -63,15 +77,16 @@ class AI extends Player {
                          int alpha, int beta) {
         Move best;
         best = null;
-        System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board + "\n" + "moves: " + board.getMoves());
+        //System.out.println("depth: " + depth + "\n" + "AI board: " + "\n" + board + "\n" + "moves: " + board.getMoves());
+        ArrayList<Move> possibleMoves = board.getMoves();
 
-        if (depth == 0 || board.getMoves() == null) {
+        if (depth == 0 || possibleMoves.isEmpty()) {
             return staticScore(board);
         }
 
         if (sense == 1) {
             int v = -INFTY;
-            for (Move move : board.getMoves()) {
+            for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
                 v = Math.max(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
@@ -87,7 +102,7 @@ class AI extends Player {
             return v;
         } else {
             int v = INFTY;
-            for (Move move : board.getMoves()) {
+            for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
                 v = Math.min(v, findMove(tempBoard, depth - 1, saveMove, sense * -1, alpha, beta));
@@ -122,6 +137,15 @@ class AI extends Player {
                 if (move != null) {
                     if (board.get(move.fromIndex()) == myColor()) {
                         if (move.toString().length() > returnValue) {
+                            if (game().board().whoseMove() == BLACK) {
+                                if (move.toString().charAt(move.toString().length() - 1) == '1') {
+                                    return 100;
+                                } else {
+                                    if (move.toString().charAt(move.toString().length() - 1) == '5') {
+                                        return 100;
+                                    }
+                                }
+                            }
                             returnValue = move.toString().length();
                         }
                     }

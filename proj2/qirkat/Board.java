@@ -60,7 +60,7 @@ class Board extends Observable {
     void clear() {
         _whoseMove = WHITE;
         _gameOver = false;
-        _allMoves.clear();
+        _allMoves = new MoveList();
         for (int i = 0; i < 25; i += 1) {
             _previous[i] = -1;
         }
@@ -84,9 +84,9 @@ class Board extends Observable {
     private void internalCopy(Board b) {
         // FIXME
         //System.out.println(b.toString().replaceAll("\\s", ""));
-        _board = new char[25];
-        _previous = new int[25];
-        _allMoves = new MoveList();
+        this._board = new char[25];
+        this._previous = new int[25];
+        this._allMoves = new MoveList();
         this._whoseMove = b.whoseMove();
         this.setPieces(b.toString(), whoseMove());
         this._gameOver = b.gameOver();
@@ -244,6 +244,9 @@ class Board extends Observable {
     ArrayList<Move> getMoves() {
         ArrayList<Move> result = new ArrayList<>();
         getMoves(result);
+        if (result.isEmpty()) {
+            _gameOver = true;
+        }
         return result;
     }
 
@@ -268,24 +271,27 @@ class Board extends Observable {
     private void getMoves(ArrayList<Move> moves, int k) {
         // FIXME
 
+        if (get(k) != _whoseMove) {
+            return;
+        }
         ArrayList<Integer> possible = new ArrayList<Integer>();
         possibleStraightMove(k, possible);
         possibleDiagonalMove(k, possible);
-        if (get(k) == whoseMove()) {
-            for (int i = 0; i < possible.size(); i += 1) {
-                if (get(k) == BLACK) {
-                    int destk = possible.get(i);
-                    if (userRow(k) >= userRow(destk)) {
-                        if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
-                            moves.add(move(col(k), row(k), col(destk), row(destk)));
-                        }
+        for (int i = 0; i < possible.size(); i += 1) {
+            if (get(k) == BLACK) {
+                int destk = possible.get(i);
+                if (userRow(k) >= userRow(destk)) {
+                    if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
+                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                        //_previous[destk] = k;
                     }
-                } else if (get(k) == WHITE) {
-                    int destk = possible.get(i);
-                    if (userRow(k) <= userRow(destk)) {
-                        if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
-                            moves.add(move(col(k), row(k), col(destk), row(destk)));
-                        }
+                }
+            } else if (get(k) == WHITE) {
+                int destk = possible.get(i);
+                if (userRow(k) <= userRow(destk)) {
+                    if (get(possible.get(i)) == EMPTY && _previous[k] != destk) {
+                        moves.add(move(col(k), row(k), col(destk), row(destk)));
+                        //_previous[destk] = k;
                     }
                 }
             }
@@ -297,11 +303,11 @@ class Board extends Observable {
     public void getJumps(ArrayList<Move> moves, int k) {
         // FIXME
 
-        //if (get(k) != whoseMove()) {
-        //   return;
-        //}
-        Board tempBoard = new Board();
-        tempBoard.setPieces(toString(), whoseMove());
+        if (get(k) != whoseMove()) {
+           return;
+        }
+        Board tempBoard = new Board(this);
+        //tempBoard.setPieces(toString(), whoseMove());
         //System.out.println("in getJump" + "\n" + tempBoard);
         if (get(k) == whoseMove()) {
             getJumpsHelper(moves, k, tempBoard, null);
@@ -397,6 +403,9 @@ class Board extends Observable {
      *  linearized index K. */
     boolean jumpPossible(int k) {
         //return false; // FIXME
+        /*if (get(k) != _whoseMove) {
+            return false;
+        }
         ArrayList<Integer> possible = new ArrayList<Integer>();
         possibleDiagonalJump(k, possible);
         possibleStraightJump(k, possible);
@@ -413,7 +422,10 @@ class Board extends Observable {
                 }
             }
         }
-        return false;
+        return false;*/
+        ArrayList<Move> moves = new ArrayList<Move>();
+        getJumps(moves, k);
+        return !moves.isEmpty();
     }
 
     /** Return true iff a jump is possible from the current board. */
@@ -446,9 +458,10 @@ class Board extends Observable {
 
     /** Make the Move MOV on this Board, assuming it is legal. */
     void makeMove(Move mov) {
-        assert legalMove(mov);
+        //assert legalMove(mov);
 
         // FIXME
+
         if (legalMove(mov)) {
             Move mov2 = mov;
             _allMoves.add(mov2);
@@ -457,7 +470,7 @@ class Board extends Observable {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.jumpedCol(), mov2.jumpedRow(), EMPTY);
                     set(mov2.col0(), mov2.row0(), EMPTY);
-                    _previous[index(mov2.col1(), mov2.row1())] = -1;
+                    _previous[index(mov2.col0(), mov2.row0())] = -1;
                 } else {
                     set(mov2.col1(), mov2.row1(), get(mov2.col0(), mov2.row0()));
                     set(mov2.col0(), mov2.row0(), EMPTY);
@@ -721,8 +734,8 @@ class Board extends Observable {
             possibleStraightJump(k, possible);
             possibleDiagonalJump(k, possible);
             for (int i = 0; i < possible.size(); i += 1) {
-                Board temp = new Board();
-                temp.setPieces(tempBoard.toString(), tempBoard.whoseMove());
+                Board temp = new Board(tempBoard);
+                //temp.setPieces(tempBoard.toString(), tempBoard.whoseMove());
                 if (temp.get(k) != EMPTY) {
                     int destk = possible.get(i);
                     if (temp.get(destk) == EMPTY) {
@@ -731,6 +744,9 @@ class Board extends Observable {
                         int jumpedk = userLinearize(jumpedcol, jumpedrow);
                         if (temp.get(k).opposite().equals(temp.get(jumpedk))) {
                             hasNextJump = true;
+                            ///////////////////////////
+                            _previous[k] = -1;
+                            //////////////////////////
                             temp.set(jumpedk, EMPTY);
                             temp.set(destk, temp.get(k));
                             temp.set(k, EMPTY);
