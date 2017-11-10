@@ -136,6 +136,7 @@ class GUI extends TopLevel implements Observer, Reporter {
         String moveString = new String();
         moveString += sq;
         _selectedMove = Move.parseMove(moveString);
+        _out.printf(_selectedMove.toString());
     }
 
     /** Make MOV the user-selected move (no move if null). */
