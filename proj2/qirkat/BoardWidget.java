@@ -1,10 +1,9 @@
 package qirkat;
 
+import javafx.scene.shape.Circle;
 import ucb.gui2.Pad;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.util.Observer;
 import java.util.Observable;
 
@@ -64,12 +63,24 @@ class BoardWidget extends Pad implements Observer {
         g.setColor(BLANK_COLOR);
         g.fillRect(0, 0, _dim, _dim);
         String board = _model.toString().replaceAll("\\s", "");
-        g.setColor(LINE_COLOR);
-        g.setStroke(LINE_STROKE);
-        for (int k = 0; k <= _dim; k += SQDIM) {
-            g.drawLine(0, k, 0, _dim);
-            g.drawLine(k, 0, _dim, 0);
+        g.setStroke(OUTLINE_STROKE);
+        g.setPaint(LINE_COLOR);
+        for (int k = 0; k < 25; k += 1) {
+            int col = k % 5;
+            int row = k / 5;
+            if (_model.get(k) == PieceColor.WHITE) {
+                g.setColor(WHITE_COLOR);
+            } else if (_model.get(k) == PieceColor.BLACK) {
+                g.setColor(BLACK_COLOR);
+            } else {
+                g.setColor(BLANK_COLOR);
+            }
+            g.fillOval(col * SQDIM, row * SQDIM, PIECE_RADIUS * 2, PIECE_RADIUS * 2);
         }
+        //Circle c = new Circle(0, 0, PIECE_RADIUS);
+        //g.drawOval(0, 0, PIECE_RADIUS * 2, PIECE_RADIUS * 2);
+        //g.setColor(WHITE_COLOR);
+        //g.fillOval(200, 200, PIECE_RADIUS * 2, PIECE_RADIUS * 2);
         // FIXME
     }
 

@@ -34,7 +34,7 @@ class AI extends Player {
 
 
             System.out.println(myColor() + " " + "moves" + " "
-                    + move.toString());
+                    + move.toString() + ".");
             return move;
         }
     }
