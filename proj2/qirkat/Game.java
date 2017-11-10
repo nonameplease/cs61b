@@ -58,9 +58,6 @@ class Game {
                 black = new AI(this, BLACK);
             }
 
-            if (board().getMoves().isEmpty()) {
-                return;
-            }
             while (_state != SETUP && !_board.gameOver()) {
                 Move move;
                 if (_board.whoseMove() == WHITE) {

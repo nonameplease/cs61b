@@ -28,7 +28,7 @@ class AI extends Player {
         Move move = findMove();
         Main.endTiming();
 
-        if (!board().gameOver() && move != null) {
+        if (!board().getMoves().isEmpty() && move != null) {
             System.out.println(myColor() + " " + "moves" + " "
                     + move.toString() + ".");
             return move;
@@ -45,6 +45,7 @@ class AI extends Player {
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
+        if (b.getMoves().isEmpty()) 
         return _lastFoundMove;
     }
 
