@@ -69,15 +69,8 @@ class AI extends Player {
         int bestScore;
         ArrayList<Move> possibleMoves = board.getMoves();
 
-        if (board().gameOver()) {
-            if (board().whoseMove() == WHITE) {
-                return WINNING_VALUE * -1;
-            } else {
-                return WINNING_VALUE;
-            }
-        }
 
-        if (depth == 0) {
+        if (depth == 0 || possibleMoves.isEmpty()) {
             return staticScore(board);
         }
 
@@ -99,10 +92,6 @@ class AI extends Player {
                     break;
                 }
             }
-            /*if (saveMove) {
-                _lastFoundMove = best;
-            }
-            return v;*/
         } else {
             bestScore = INFTY;
             for (Move move : possibleMoves) {
@@ -121,10 +110,6 @@ class AI extends Player {
                     break;
                 }
             }
-            /*if (saveMove) {
-                _lastFoundMove = best;
-            }
-            return v;*/
         }
         if (saveMove) {
             _lastFoundMove = best;

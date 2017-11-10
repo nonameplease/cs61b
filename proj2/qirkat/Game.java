@@ -32,6 +32,8 @@ class Game {
         _board = board;
         _constBoard = _board.constantView();
         _reporter = reporter;
+        _whiteIsManual = true;
+        _blackIsManual = false;
     }
 
     /** Run a session of Qirkat gaming. */
@@ -68,7 +70,6 @@ class Game {
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
-                    System.out.print(_board.toString());
                 }
             }
 
