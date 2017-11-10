@@ -68,6 +68,7 @@ class Game {
 
                 if (_state == PLAYING) {
                     _board.makeMove(move);
+                    System.out.print(_board.toString());
                 }
             }
 

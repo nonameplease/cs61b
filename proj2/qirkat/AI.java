@@ -28,12 +28,13 @@ class AI extends Player {
         Move move = findMove();
         Main.endTiming();
 
-        if (!board().getMoves().isEmpty() && move != null) {
+        if (move != null) {
             System.out.println(myColor() + " " + "moves" + " "
                     + move.toString() + ".");
             return move;
+        } else {
+            return null;
         }
-        return move;
     }
 
     /** Return a move for me from the current position, assuming there
@@ -45,7 +46,9 @@ class AI extends Player {
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
-        if (b.getMoves().isEmpty()) 
+        if (b.getMoves().isEmpty()) {
+            return null;
+        }
         return _lastFoundMove;
     }
 
