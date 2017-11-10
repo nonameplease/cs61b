@@ -657,16 +657,15 @@ class Board extends Observable {
     public boolean equals(Object obj) {
         if (obj instanceof Board) {
             final Board other = (Board) obj;
-            if (this.whoseMove() == other.whoseMove()) {
-                return true;
-            }
-            if (this.gameOver() == other.gameOver()) {
-                return true;
-            }
-            if (this._previous == other._previous) {
-                return true;
-            }
-            if (!this._board.toString().equals(other._board.toString())) {
+            if (whoseMove() == other.whoseMove() && gameOver() == other.gameOver()) {
+                for (int k = 0; k < _board.length; k += 1) {
+                    if (get(k) != other.get(k)) {
+                        return false;
+                    }
+                    if (_previous[k] != other._previous[k]) {
+                        return false;
+                    }
+                }
                 return true;
             }
         }
