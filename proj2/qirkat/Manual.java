@@ -1,5 +1,7 @@
 package qirkat;
 
+import java.util.ArrayList;
+
 import static qirkat.PieceColor.*;
 import static qirkat.Command.Type.*;
 
@@ -17,17 +19,22 @@ class Manual extends Player {
 
     @Override
     Move myMove() {
-        Command playerCommand = game().getMoveCmnd(_prompt);
-        if (playerCommand != null) {
-            Move playerMove = Move.parseMove(playerCommand.operands()[0]);
-            if (board().legalMove(playerMove)) {
-                return playerMove;
+        ArrayList<Move> allMoves = board().getMoves();
+        if (allMoves.isEmpty()) {
+            return null;
+        } else {
+            Command playerCommand = game().getMoveCmnd(_prompt);
+            if (playerCommand != null) {
+                Move playerMove = Move.parseMove(playerCommand.operands()[0]);
+                if (allMoves.contains(playerMove)) {
+                    return playerMove;
+                } else {
+                    System.out.println("that move is illegal.");
+                    return null;
+                }
             } else {
-                System.out.println("that move is illegal.");
                 return null;
             }
-        } else {
-            return null;
         }
     }
 

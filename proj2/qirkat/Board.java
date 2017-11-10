@@ -173,6 +173,7 @@ class Board extends Observable {
         ArrayList<Move> legalMoves = getMoves();
         if (legalMoves.isEmpty()) {
             _gameOver = true;
+            return false;
         }
         if (mov == null) {
             return false;
