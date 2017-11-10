@@ -28,15 +28,12 @@ class AI extends Player {
         Move move = findMove();
         Main.endTiming();
 
-        if (move == null) {
-            return null;
-        } else {
-
-
+        if (!board().gameOver() && move != null) {
             System.out.println(myColor() + " " + "moves" + " "
                     + move.toString() + ".");
             return move;
         }
+        return move;
     }
 
     /** Return a move for me from the current position, assuming there
@@ -66,7 +63,6 @@ class AI extends Player {
         Move best;
         best = null;
         int bestScore;
-        int v;
         ArrayList<Move> possibleMoves = board.getMoves();
 
         if (board().gameOver()) {
@@ -84,17 +80,18 @@ class AI extends Player {
         if (sense == 1) {
             bestScore = -INFTY;
             for (Move move : possibleMoves) {
+                int v;
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
-                v = Math.max(bestScore, findMove(tempBoard, depth - 1,
+                v = findMove(tempBoard, depth - 1,
                         saveMove, sense * -1,
-                        alpha, beta));
-                if (bestScore > v) {
-                    _lastFoundMove = move;
-                }
-                alpha = Math.max(alpha, v);
-                if (beta <= alpha) {
+                        alpha, beta);
+                if (v > bestScore) {
                     best = move;
+                }
+                bestScore = Math.max(v, bestScore);
+                alpha = Math.max(alpha, bestScore);
+                if (beta <= alpha) {
                     break;
                 }
             }
@@ -105,18 +102,18 @@ class AI extends Player {
         } else {
             bestScore = INFTY;
             for (Move move : possibleMoves) {
+                int v;
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
-                v = Math.min(bestScore, findMove
-                        (tempBoard, depth - 1,
-                                saveMove, sense * -1,
-                                alpha, beta));
-                if (bestScore < v) {
-                    _lastFoundMove = move;
-                }
-                beta = Math.min(beta, v);
-                if (beta <= alpha) {
+                v = findMove(tempBoard, depth - 1,
+                        saveMove, sense * -1,
+                        alpha, beta);
+                if (v < bestScore) {
                     best = move;
+                }
+                bestScore = Math.min(v, bestScore);
+                beta = Math.min(beta, bestScore);
+                if (beta <= alpha) {
                     break;
                 }
             }
