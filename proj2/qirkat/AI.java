@@ -48,15 +48,7 @@ class AI extends Player {
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
-        ArrayList<Move> finalMove = b.getMoves();
-        if (_lastFoundMove == null) {
-            if (finalMove.isEmpty()) {
-                return null;
-            }
-            return finalMove.get(0);
-        } else {
-            return _lastFoundMove;
-        }
+        return _lastFoundMove;
     }
 
     /** The move found by the last call to one of the ...FindMove methods
@@ -73,50 +65,70 @@ class AI extends Player {
                          int alpha, int beta) {
         Move best;
         best = null;
+        int bestScore;
+        int v;
         ArrayList<Move> possibleMoves = board.getMoves();
 
-        if (depth == 0 || possibleMoves.isEmpty()) {
+        if (board().gameOver()) {
+            if (board().whoseMove() == WHITE) {
+                return WINNING_VALUE * -1;
+            } else {
+                return WINNING_VALUE;
+            }
+        }
+
+        if (depth == 0) {
             return staticScore(board);
         }
 
         if (sense == 1) {
-            int v = -INFTY;
+            bestScore = -INFTY;
             for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
-                v = Math.max(v, findMove(tempBoard, depth - 1,
+                v = Math.max(bestScore, findMove(tempBoard, depth - 1,
                         saveMove, sense * -1,
                         alpha, beta));
+                if (bestScore > v) {
+                    _lastFoundMove = move;
+                }
                 alpha = Math.max(alpha, v);
                 if (beta <= alpha) {
                     best = move;
                     break;
                 }
             }
-            if (saveMove) {
+            /*if (saveMove) {
                 _lastFoundMove = best;
             }
-            return v;
+            return v;*/
         } else {
-            int v = INFTY;
+            bestScore = INFTY;
             for (Move move : possibleMoves) {
                 Board tempBoard = new Board(board);
                 tempBoard.makeMove(move);
-                v = Math.min(v, findMove
+                v = Math.min(bestScore, findMove
                         (tempBoard, depth - 1,
                                 saveMove, sense * -1,
                                 alpha, beta));
+                if (bestScore < v) {
+                    _lastFoundMove = move;
+                }
                 beta = Math.min(beta, v);
                 if (beta <= alpha) {
                     best = move;
                     break;
                 }
             }
-            if (saveMove) {
+            /*if (saveMove) {
                 _lastFoundMove = best;
             }
-            return v;
+            return v;*/
         }
+        if (saveMove) {
+            _lastFoundMove = best;
+        }
+        return bestScore;
     }
 
     /** Return a heuristic value for BOARD. */
