@@ -307,8 +307,12 @@ class Board extends Observable {
     /** Return true iff a jump is possible for a piece at position with
      *  linearized index K. */
     boolean jumpPossible(int k) {
+        if (get(k) != whoseMove()) {
+            return false;
+        }
         ArrayList<Move> moves = new ArrayList<Move>();
-        getJumps(moves, k);
+        //getJumps(moves, k);
+        getOneJumps(moves, k);
         return !moves.isEmpty();
     }
 
