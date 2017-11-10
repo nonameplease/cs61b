@@ -69,8 +69,15 @@ class AI extends Player {
         int bestScore;
         ArrayList<Move> possibleMoves = board.getMoves();
 
+        if (possibleMoves.isEmpty()) {
+            if (myColor() == WHITE) {
+                return WINNING_VALUE;
+            } else {
+                return WINNING_VALUE * -1;
+            }
+        }
 
-        if (depth == 0 || possibleMoves.isEmpty()) {
+        if (depth == 0) {
             return staticScore(board);
         }
 
@@ -120,27 +127,14 @@ class AI extends Player {
     /** Return a heuristic value for BOARD. */
     private int staticScore(Board board) {
         ArrayList<Move> allMoves = board.getMoves();
-        if (allMoves.size() == 0) {
-            return WINNING_VALUE;
+        if (allMoves.isEmpty()) {
+            return 0;
         } else {
             int returnValue = 0;
             for (Move move : allMoves) {
                 if (move != null) {
                     if (board.get(move.fromIndex()) == myColor()) {
                         if (move.toString().length() > returnValue) {
-                            if (game().board().whoseMove() == BLACK) {
-                                if (move.toString().charAt
-                                        (move.toString().length() - 1)
-                                        == '1') {
-                                    return 100;
-                                } else {
-                                    if (move.toString().charAt
-                                            (move.toString().length() - 1)
-                                            == '5') {
-                                        return 100;
-                                    }
-                                }
-                            }
                             returnValue = move.toString().length();
                         }
                     }
