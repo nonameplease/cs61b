@@ -369,6 +369,11 @@ class Board extends Observable {
             _whoseMove = _whoseMove.opposite();
         }
 
+        //if (getMoves().isEmpty()) {
+        //    _gameOver = true;
+        //}
+
+
         setChanged();
         notifyObservers();
     }
