@@ -70,10 +70,10 @@ class AI extends Player {
         ArrayList<Move> possibleMoves = board.getMoves();
 
         if (possibleMoves.isEmpty()) {
-            if (myColor() == WHITE) {
-                return WINNING_VALUE;
-            } else {
+            if (sense == 1) {
                 return WINNING_VALUE * -1;
+            } else {
+                return WINNING_VALUE;
             }
         }
 
