@@ -51,11 +51,9 @@ class AI extends Player {
         ArrayList<Move> finalMove = b.getMoves();
         if (_lastFoundMove == null) {
             if (finalMove.isEmpty()) {
-            //if (b.getMoves().isEmpty()) {
                 return null;
             }
             return finalMove.get(0);
-            //return b.getMoves().get(0);
         } else {
             return _lastFoundMove;
         }
@@ -124,12 +122,10 @@ class AI extends Player {
     /** Return a heuristic value for BOARD. */
     private int staticScore(Board board) {
         ArrayList<Move> allMoves = board.getMoves();
-        //if (board.getMoves().size() == 0) {
         if (allMoves.size() == 0) {
             return WINNING_VALUE;
         } else {
             int returnValue = 0;
-            //for (Move move : board.getMoves()) {
             for (Move move : allMoves) {
                 if (move != null) {
                     if (board.get(move.fromIndex()) == myColor()) {

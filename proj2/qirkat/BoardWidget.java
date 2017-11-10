@@ -1,15 +1,14 @@
 package qirkat;
 
-import javafx.scene.shape.Circle;
 import ucb.gui2.Pad;
+import java.awt.Color;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 
-import java.awt.*;
 import java.util.Observer;
 import java.util.Observable;
 
 import java.awt.event.MouseEvent;
-
-import static qirkat.PieceColor.*;
 
 /** Widget for displaying a Qirkat board.
  *  @author Scott Shao
@@ -65,7 +64,7 @@ class BoardWidget extends Pad implements Observer {
         String board = _model.toString().replaceAll("\\s", "");
         g.setStroke(OUTLINE_STROKE);
         g.setPaint(LINE_COLOR);
-        for (int k = 0; k < 25; k += 1) {
+        for (int k = 0; k < SIDE * SIDE; k += 1) {
             int col = k % 5;
             int row = k / 5;
             if (_model.get(k) == PieceColor.WHITE) {
@@ -75,13 +74,9 @@ class BoardWidget extends Pad implements Observer {
             } else {
                 g.setColor(BLANK_COLOR);
             }
-            g.fillOval(col * SQDIM, row * SQDIM, PIECE_RADIUS * 2, PIECE_RADIUS * 2);
+            g.fillOval(col * SQDIM, row * SQDIM,
+                    PIECE_RADIUS * 2, PIECE_RADIUS * 2);
         }
-        //Circle c = new Circle(0, 0, PIECE_RADIUS);
-        //g.drawOval(0, 0, PIECE_RADIUS * 2, PIECE_RADIUS * 2);
-        //g.setColor(WHITE_COLOR);
-        //g.fillOval(200, 200, PIECE_RADIUS * 2, PIECE_RADIUS * 2);
-        // FIXME
     }
 
     /** Notify observers of mouse's current position from click event WHERE. */
@@ -103,9 +98,6 @@ class BoardWidget extends Pad implements Observer {
     public synchronized void update(Observable model, Object arg) {
         repaint();
     }
-
-    // FILL IN
-
 
     /** Dimension of current drawing surface in pixels. */
     private int _dim;

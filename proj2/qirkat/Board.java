@@ -311,7 +311,6 @@ class Board extends Observable {
             return false;
         }
         ArrayList<Move> moves = new ArrayList<Move>();
-        //getJumps(moves, k);
         getOneJumps(moves, k);
         return !moves.isEmpty();
     }
@@ -347,7 +346,6 @@ class Board extends Observable {
     /** Make the Move MOV on this Board, assuming it is legal. */
     void makeMove(Move mov) {
         if (legalMove(mov)) {
-        //if (mov != null) {
             Move mov2 = mov;
             _allMoves.add(mov2);
             while (mov2 != null) {
@@ -368,11 +366,6 @@ class Board extends Observable {
             }
             _whoseMove = _whoseMove.opposite();
         }
-
-        //if (getMoves().isEmpty()) {
-        //    _gameOver = true;
-        //}
-
 
         setChanged();
         notifyObservers();
@@ -662,7 +655,8 @@ class Board extends Observable {
     public boolean equals(Object obj) {
         if (obj instanceof Board) {
             final Board other = (Board) obj;
-            if (whoseMove() == other.whoseMove() && gameOver() == other.gameOver()) {
+            if (whoseMove() == other.whoseMove()
+                    && gameOver() == other.gameOver()) {
                 for (int k = 0; k < _board.length; k += 1) {
                     if (get(k) != other.get(k)) {
                         return false;
