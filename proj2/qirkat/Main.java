@@ -38,8 +38,8 @@ public class Main {
             try {
                 // Remove this comment.  Also remove the next two lines if
                 // you do the extra credit.
-                //System.err.printf("Sorry, --display not implemented.%n");
-                //System.exit(2);
+                System.err.printf("Sorry, --display not implemented.%n");
+                System.exit(2);
 
                 PipedWriter writer = new PipedWriter();
                 GUI display = new GUI("Qirkat", board, writer);

@@ -10,7 +10,7 @@ import static qirkat.PieceColor.*;
 class AI extends Player {
 
     /** Maximum minimax search depth before going to static evaluation. */
-    private static final int MAX_DEPTH = 5;
+    private static final int MAX_DEPTH = 4;
     /** A position magnitude indicating a win (for white if positive, black
      *  if negative). */
     private static final int WINNING_VALUE = Integer.MAX_VALUE - 1;
@@ -48,11 +48,14 @@ class AI extends Player {
         } else {
             findMove(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
         }
+        ArrayList<Move> finalMove = b.getMoves();
         if (_lastFoundMove == null) {
-            if (b.getMoves().isEmpty()) {
+            if (finalMove.isEmpty()) {
+            //if (b.getMoves().isEmpty()) {
                 return null;
             }
-            return b.getMoves().get(0);
+            return finalMove.get(0);
+            //return b.getMoves().get(0);
         } else {
             return _lastFoundMove;
         }
@@ -120,11 +123,14 @@ class AI extends Player {
 
     /** Return a heuristic value for BOARD. */
     private int staticScore(Board board) {
-        if (board.getMoves().size() == 0) {
+        ArrayList<Move> allMoves = board.getMoves();
+        //if (board.getMoves().size() == 0) {
+        if (allMoves.size() == 0) {
             return WINNING_VALUE;
         } else {
             int returnValue = 0;
-            for (Move move : board.getMoves()) {
+            //for (Move move : board.getMoves()) {
+            for (Move move : allMoves) {
                 if (move != null) {
                     if (board.get(move.fromIndex()) == myColor()) {
                         if (move.toString().length() > returnValue) {

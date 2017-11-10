@@ -171,6 +171,9 @@ class Board extends Observable {
          * Need to be fixed since it is used to check for legal moves.
          */
         ArrayList<Move> legalMoves = getMoves();
+        if (legalMoves.isEmpty()) {
+            _gameOver = true;
+        }
         if (mov == null) {
             return false;
         }
@@ -340,6 +343,7 @@ class Board extends Observable {
     /** Make the Move MOV on this Board, assuming it is legal. */
     void makeMove(Move mov) {
         if (legalMove(mov)) {
+        //if (mov != null) {
             Move mov2 = mov;
             _allMoves.add(mov2);
             while (mov2 != null) {
