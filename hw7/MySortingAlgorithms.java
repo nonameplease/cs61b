@@ -131,12 +131,12 @@ public class MySortingAlgorithms {
         }
     }
 
-    /* For radix sorts, treat the integers as strings of k-bit numbers.  For
-     * example, if you take k to be 2, then the least significant digit of
+    /* For radix sorts, treat the integers as strings of x-bit numbers.  For
+     * example, if you take x to be 2, then the least significant digit of
      * 25 (= 11001 in binary) would be 1 (01), the next least would be 2 (10)
      * and the third least would be 1.  The rest would be 0.  You can even take
-     * k to be 1 and sort one bit at a time.  It might be interesting to see
-     * how the times compare for various values of k. */
+     * x to be 1 and sort one bit at a time.  It might be interesting to see
+     * how the times compare for various values of x. */
 
     /**
      * LSD Sort implementation.
