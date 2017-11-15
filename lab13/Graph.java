@@ -26,7 +26,7 @@ public class Graph {
             LinkedList<Edge> v1Neighbors = adjLists[v1];
             for (Edge e : v1Neighbors) {
                 if (e.to() == v2) {
-                    e.to = edgeWeight;
+                    e.edgeWeight = edgeWeight;
                 }
             }
         }
