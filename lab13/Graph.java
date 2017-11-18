@@ -68,9 +68,11 @@ public class Graph {
     // to all other vertices.
     public int[] dijkstras(int startVertex) {
         // TODO: Your code here!
-        PriorityQueue<Vertex> fringe = new PriorityQueue<Vertex>();
+        int[] vertices = new int[vertexCount];
+        PriorityQueue<Integer> fringe = new PriorityQueue<Integer>();
         for (int i = 0; i < vertexCount; i += 1) {
-
+            vertices[i] = Integer.MAX_VALUE;
+            fringe.add(vertices[i]);
         }
         return null;
     }

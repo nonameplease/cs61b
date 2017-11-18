@@ -37,12 +37,26 @@ public class MazeCycles extends MazeExplorer {
         for (int w : maze.adj(v)) {
             if (!marked[w]) {
                 marked[w] = true;
-                edgeTo[w] = v;
-                announce();
                 distTo[w] = distTo[v] + 1;
                 findCycle(maze, w, v);
             } else if (w != p) {
                 cycle = true;
+                edgeTo[w] = v;
+                announce();
+                drawCycle(maze, v, w);
+            }
+        }
+    }
+
+    private void drawCycle(Maze maze, int v, int w) {
+        if (distTo[v] <= distTo[w]) {
+            return;
+        }
+        for (int neighbor : maze.adj(v)) {
+            if (distTo[v] - 1 == distTo[neighbor]) {
+                edgeTo[neighbor] = v;
+                announce();
+                drawCycle(maze, neighbor, w);
             }
         }
     }
