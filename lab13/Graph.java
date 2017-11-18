@@ -74,7 +74,17 @@ public class Graph {
             vertices[i] = Integer.MAX_VALUE;
             fringe.add(vertices[i]);
         }
-        return null;
+        while (!fringe.isEmpty()) {
+            int vertex = fringe.remove();
+            for (Integer neighbor : neighbors(vertex)) {
+                Edge e = getEdge(vertex, neighbor);
+                if (vertex + e.edgeWeight < neighbor) {
+                    neighbor = vertex + e.edgeWeight;
+                    addEdge(vertex, neighbor, e.edgeWeight);
+                }
+            }
+        }
+        return vertices;
     }
 
     // Returns the Edge object corresponding to the listed vertices, v1 and v2.
@@ -138,5 +148,8 @@ public class Graph {
         g2.addEdge(1, 2, 1);
         g2.addEdge(2, 3, 1);
         g2.addEdge(4, 3, 1);
+
+        int[] result = g1.dijkstras(0);
+        System.out.println(result);
     }
 }
