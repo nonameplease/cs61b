@@ -1,3 +1,5 @@
+import sun.security.provider.certpath.Vertex;
+
 import java.util.*;
 
 public class Graph {
@@ -66,12 +68,26 @@ public class Graph {
     // to all other vertices.
     public int[] dijkstras(int startVertex) {
         // TODO: Your code here!
+        PriorityQueue<Vertex> fringe = new PriorityQueue<Vertex>();
+        for (int i = 0; i < vertexCount; i += 1) {
+
+        }
         return null;
     }
 
     // Returns the Edge object corresponding to the listed vertices, v1 and v2.
     // You may find this helpful to implement!
     private Edge getEdge(int v1, int v2) {
+        for (Edge e : adjLists[v1]) {
+            if (e.to() == v2) {
+                return e;
+            }
+        }
+        for (Edge e : adjLists[v2]) {
+            if (e.to() == v1) {
+                return e;
+            }
+        }
         return null;
     }
 
