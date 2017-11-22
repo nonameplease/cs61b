@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class containing all the sorting algorithms from 61B to date.
@@ -16,6 +18,7 @@ import java.util.Arrays;
  * All implementations except Distribution Sort adopted from Algorithms,
  * a textbook by Kevin Wayne and Bob Sedgewick. Their code does not
  * obey our style conventions.
+ * @author Scott Shao
  */
 public class MySortingAlgorithms {
 
@@ -89,25 +92,44 @@ public class MySortingAlgorithms {
       * not the entire algorithm, which is easier to do recursively.
       */
     public static class MergeSort implements SortingAlgorithm {
-        private int returnList[];
-        private int tempList[];
+
+        /**
+         * An array holds return List.
+         */
+        private int[] returnList;
+
+        /**
+         * An array temporary hold numbers.
+         */
+        private int[] tempList;
 
         @Override
         public void sort(int[] array, int k) {
             returnList = array;
             tempList = new int [k];
-            mergesort(0, k - 1);
+            mergesortHelper(0, k - 1);
         }
 
-        private void mergesort(int low, int high) {
+        /**
+         * Helper function for MergeSort for recursion.
+         * @param low Low bound.
+         * @param high High Bound.
+         */
+        private void mergesortHelper(int low, int high) {
             if (low < high) {
-                mergesort(low, low + (high - low) / 2);
-                mergesort(low + (high - low) / 2 + 1, high);
-                merge(low, low + (high - low) / 2, high);
+                mergesortHelper(low, low + (high - low) / 2);
+                mergesortHelper(low + (high - low) / 2 + 1, high);
+                mergeHelper(low, low + (high - low) / 2, high);
             }
         }
 
-        private void merge(int low, int mid, int high) {
+        /**
+         * Helper function for MergeSort to merge.
+         * @param low Low bound.
+         * @param mid Mid bound.
+         * @param high high bound.
+         */
+        private void mergeHelper(int low, int mid, int high) {
             for (int i = low; i <= high; i += 1) {
                 tempList[i] = returnList[i];
             }
@@ -151,7 +173,7 @@ public class MySortingAlgorithms {
                     max = array[i];
                 }
             }
-            int count[] = new int[max + 1];
+            int[] count = new int[max + 1];
             for (int i = 0; i < k; i += 1) {
                 count[array[i]] += 1;
             }
@@ -177,16 +199,22 @@ public class MySortingAlgorithms {
         @Override
         public void sort(int[] array, int k) {
             int total = k - 1;
-            for (int i = total / 2; i >= 0; i -=1) {
+            for (int i = total / 2; i >= 0; i -= 1) {
                 heapify(array, i, total);
             }
-            for (int i = total; i >0; i -= 1) {
+            for (int i = total; i > 0; i -= 1) {
                 swap(array, 0, i);
                 total -= 1;
                 heapify(array, 0, total);
             }
         }
 
+        /**
+         * Helper function for HeapSort.
+         * @param array Input array.
+         * @param index Index.
+         * @param total Total number.
+         */
         private void heapify(int[] array, int index, int total) {
             int left = index * 2;
             int right = left + 1;
@@ -215,7 +243,38 @@ public class MySortingAlgorithms {
     public static class QuickSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            quickSortHelper(0, k - 1, array);
+        }
+
+        /**
+         * Helper function for QuickSort.
+         * @param low Low bound.
+         * @param high High bound.
+         * @param array Input Array.
+         */
+        private void quickSortHelper(int low, int high, int[] array) {
+            int l = low;
+            int h = high;
+            int pivot = array[low + (high - low) / 2];
+            while (l <= h) {
+                while (array[l] < pivot) {
+                    l += 1;
+                }
+                while (array[h] > pivot) {
+                    h -= 1;
+                }
+                if (l <= h) {
+                    swap(array, l, h);
+                    l += 1;
+                    h -= 1;
+                }
+            }
+            if (low < h) {
+                quickSortHelper(low, h, array);
+            }
+            if (high > l) {
+                quickSortHelper(l, high, array);
+            }
         }
 
         @Override
@@ -237,7 +296,32 @@ public class MySortingAlgorithms {
     public static class LSDSort implements SortingAlgorithm {
         @Override
         public void sort(int[] a, int k) {
-            // FIXME
+            List<Integer>[] buckets = new ArrayList[10];
+            for (int i = 0; i < buckets.length; i += 1) {
+                buckets[i] = new ArrayList<Integer>();
+            }
+            boolean state = false;
+            int temp = -1;
+            int divisor = 1;
+            while (!state) {
+                state = true;
+                for (int i = 0; i < k; i += 1) {
+                    temp = a[i] / divisor;
+                    buckets[temp % 10].add(a[i]);
+                    if (state && temp > 0) {
+                        state = false;
+                    }
+                }
+                int low = 0;
+                for (int high = 0; high < 10; high += 1) {
+                    for (int j : buckets[high]) {
+                        a[low] = j;
+                        low += 1;
+                    }
+                    buckets[high].clear();
+                }
+                divisor *= 10;
+            }
         }
 
         @Override
@@ -252,9 +336,44 @@ public class MySortingAlgorithms {
     public static class MSDSort implements SortingAlgorithm {
         @Override
         public void sort(int[] a, int k) {
-            // FIXME
+            int max = 0;
+            for (int i = 1; i < k; i += 1) {
+                if (a[i] > max) {
+                    max = a[i];
+                }
+            }
+            for (int i = 1; max / i > 0; i *= 10) {
+                helper(a, k, i);
+            }
         }
 
+        /**
+         * Helper function for MSDSort.
+         * @param array Input array.
+         * @param k Number of elements.
+         * @param e Expectation.
+         */
+        private void helper(int[] array, int k, int e) {
+            int[] returnValue = new int[k];
+            int[] count = new int[10];
+            for (int i = 0; i < count.length; i += 1) {
+                count[i] = 0;
+            }
+
+            for (int i = 0; i < k; i += 1) {
+                count[(array[i] / e) % 10] += 1;
+            }
+            for (int i = 1; i < 10; i += 1) {
+                count[i] += count[i - 1];
+            }
+            for (int i = k - 1; i >= 0; i -= 1) {
+                returnValue[count[(array[i] / e) % 10] - 1] = array[i];
+                count[(array[i] / e) % 10] -= 1;
+            }
+            for (int i = 0; i < k; i += 1) {
+                array[i] = returnValue[i];
+            }
+        }
         @Override
         public String toString() {
             return "MSD Sort";
