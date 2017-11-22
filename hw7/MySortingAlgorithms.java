@@ -38,7 +38,15 @@ public class MySortingAlgorithms {
     public static class InsertionSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            for (int i = 1; i < k; i += 1) {
+                int temp = array[i];
+                int j = i - 1;
+                while (j >= 0 && array[j] > temp) {
+                    array[j + 1] = array[j];
+                    j = j - 1;
+                }
+                array[j + 1] = temp;
+            }
         }
 
         @Override
@@ -56,7 +64,17 @@ public class MySortingAlgorithms {
     public static class SelectionSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            for (int i = 0; i < k - 1; i += 1) {
+                int small = i;
+                for (int j = i + 1; j < k; j += 1) {
+                    if (array[j] < array[small]) {
+                        small = j;
+                    }
+                }
+                if (small != i) {
+                    swap(array, i, small);
+                }
+            }
         }
 
         @Override
@@ -71,12 +89,47 @@ public class MySortingAlgorithms {
       * not the entire algorithm, which is easier to do recursively.
       */
     public static class MergeSort implements SortingAlgorithm {
+        private int returnList[];
+        private int tempList[];
+
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            returnList = array;
+            tempList = new int [k];
+            mergesort(0, k - 1);
         }
 
-        // may want to add additional methods
+        private void mergesort(int low, int high) {
+            if (low < high) {
+                mergesort(low, low + (high - low) / 2);
+                mergesort(low + (high - low) / 2 + 1, high);
+                merge(low, low + (high - low) / 2, high);
+            }
+        }
+
+        private void merge(int low, int mid, int high) {
+            for (int i = low; i <= high; i += 1) {
+                tempList[i] = returnList[i];
+            }
+            int lowCount = low;
+            int highCount = mid + 1;
+            int temp = low;
+            while (lowCount <= mid && highCount <= high) {
+                if (tempList[lowCount] <= tempList[highCount]) {
+                    returnList[temp] = tempList[lowCount];
+                    lowCount += 1;
+                } else {
+                    returnList[temp] = tempList[highCount];
+                    highCount += 1;
+                }
+                temp += 1;
+            }
+            while (lowCount <= mid) {
+                returnList[temp] = tempList[lowCount];
+                lowCount += 1;
+                temp += 1;
+            }
+        }
 
         @Override
         public String toString() {
@@ -92,10 +145,25 @@ public class MySortingAlgorithms {
     public static class DistributionSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME: to be implemented
+            int max = 0;
+            for (int i = 0; i < k; i += 1) {
+                if (array[i] > max) {
+                    max = array[i];
+                }
+            }
+            int count[] = new int[max + 1];
+            for (int i = 0; i < k; i += 1) {
+                count[array[i]] += 1;
+            }
+            int index = 0;
+            for (int i = 0; i < count.length; i += 1) {
+                int temp = count[i];
+                for (int j = 0; j < temp; j += 1) {
+                    array[index] = i;
+                    index += 1;
+                }
+            }
         }
-
-        // may want to add additional methods
 
         @Override
         public String toString() {
@@ -108,7 +176,32 @@ public class MySortingAlgorithms {
     public static class HeapSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            int total = k - 1;
+            for (int i = total / 2; i >= 0; i -=1) {
+                heapify(array, i, total);
+            }
+            for (int i = total; i >0; i -= 1) {
+                swap(array, 0, i);
+                total -= 1;
+                heapify(array, 0, total);
+            }
+        }
+
+        private void heapify(int[] array, int index, int total) {
+            int left = index * 2;
+            int right = left + 1;
+            int temp = index;
+
+            if (left <= total && array[left] > array[temp]) {
+                temp = left;
+            }
+            if (right <= total && array[right] > array[temp]) {
+                temp = right;
+            }
+            if (index != temp) {
+                swap(array, index, temp);
+                heapify(array, temp, total);
+            }
         }
 
         @Override
