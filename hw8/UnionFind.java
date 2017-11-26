@@ -12,13 +12,17 @@ public class UnionFind {
     /** A union-find structure consisting of the sets { 1 }, { 2 }, ... { N }.
      */
     public UnionFind(int N) {
-        // FIXME
+        set = new int[N + 1];
+        set[0] = Integer.MAX_VALUE;
+        for (int i = 1; i < set.length; i += 1) {
+            set[i] = i;
+        }
     }
 
     /** Return the representative of the partition currently containing V.
      *  Assumes V is contained in one of the partitions.  */
     public int find(int v) {
-        return 0;  // FIXME
+        return set[v];
     }
 
     /** Return true iff U and V are in the same partition. */
@@ -28,8 +32,13 @@ public class UnionFind {
 
     /** Union U and V into a single partition, returning its representative. */
     public int union(int u, int v) {
-        return 0;  // FIXME
+        if (set[u] < set[v]) {
+            set[v] = set[u];
+        } else {
+            set[u] = set[v];
+        }
+        return set[u];
     }
 
-    // FIXME
+    private int[] set;
 }
