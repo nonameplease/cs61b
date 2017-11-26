@@ -32,13 +32,23 @@ public class UnionFind {
 
     /** Union U and V into a single partition, returning its representative. */
     public int union(int u, int v) {
-        if (set[u] < set[v]) {
-            set[v] = set[u];
+        int uval = set[u];
+        int vval = set[v];
+        if (uval < vval) {
+            for (int i = 1; i < set.length; i += 1) {
+                if (set[i] == vval) {
+                    set[i] = uval;
+                }
+            }
         } else {
-            set[u] = set[v];
+            for (int i = 1; i < set.length; i += 1) {
+                if (set[i] == uval) {
+                    set[i] = vval;
+                }
+            }
         }
         return set[u];
     }
 
-    private int[] set;
+    public int[] set;
 }
