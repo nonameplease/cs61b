@@ -9,6 +9,7 @@ public class Commit implements Serializable {
     private double timeStamp;
     private String message;
     private HashMap<String, String> fileMapper;
+    private static final String Commit_Dir = ".gitlet/commits/";
 
     public Commit(Commit parent, double timeStamp, String message, HashMap<String, String> fileMapper) {
         this.parent = parent;
