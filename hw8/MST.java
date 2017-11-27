@@ -17,6 +17,7 @@ public class MST {
      *  are a subset of those in E (they do not include copies of the
      *  original edges, just the original edges themselves.) */
     public static int[][] mst(int V, int[][] E) {
+
         return null;  // FIXME
     }
 
@@ -28,5 +29,57 @@ public class MST {
                 return e0[2] - e1[2];
             }
         };
+
+
+    /** Your Heapsort implementation.
+     */
+    public static class HeapSort{
+        public void sort(int[] array, int k) {
+            int total = k - 1;
+            for (int i = total / 2; i >= 0; i -= 1) {
+                heapify(array, i, total);
+            }
+            for (int i = total; i > 0; i -= 1) {
+                swap(array, 0, i);
+                total -= 1;
+                heapify(array, 0, total);
+            }
+        }
+
+        /**
+         * Helper function for HeapSort.
+         * @param array Input array.
+         * @param index Index.
+         * @param total Total number.
+         */
+        private void heapify(int[] array, int index, int total) {
+            int left = index * 2;
+            int right = left + 1;
+            int temp = index;
+
+            if (left <= total && array[left] > array[temp]) {
+                temp = left;
+            }
+            if (right <= total && array[right] > array[temp]) {
+                temp = right;
+            }
+            if (index != temp) {
+                swap(array, index, temp);
+                heapify(array, temp, total);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Heap Sort";
+        }
+    }
+
+    /** Exchange A[I] and A[J]. */
+    private static void swap(int[] a, int i, int j) {
+        int swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
 
 }
