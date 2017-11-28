@@ -125,8 +125,6 @@ public class Main {
         }
         System.out.println(commitTree);
         saveTree(commitTree);
-        }
-
     }
 
 }

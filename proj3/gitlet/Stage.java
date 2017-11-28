@@ -74,7 +74,7 @@ public class Stage implements Serializable {
         File f = new File(fileName);
         if (headCommit.contains(fileName)) {
             File backup = headCommit.getFile(fileName);
-            if (backup.lastModified() == f.lastModified()) {
+            if (backup.lastModified() > f.lastModified()) {
                 return true;
             }
         }

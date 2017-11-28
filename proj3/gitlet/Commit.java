@@ -2,6 +2,7 @@ package gitlet;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -150,6 +151,18 @@ public class Commit implements Serializable {
         }
     }
 
+    public void restoreFiles(String fileName) {
+        File copyFrom = getFile(fileName);
+        File compyTo = new File(fileName);
+        Utils.writeContents(compyTo, Utils.readContents(copyFrom));
+    }
+
+    public void restoreAllFiles() {
+        Collection<String> fileNames = fileMapper.keySet();
+        for (String fileName : fileNames) {
+            restoreFiles(fileName);
+        }
+    }
 
 
     @Override
