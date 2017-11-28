@@ -12,6 +12,8 @@ public class Stage implements Serializable {
     /**
      * Key: File name.
      * Value: Directory.
+     * null value means the file has not been added to commits
+     * or the file has been modified since last commit.
      */
     private HashMap<String, String> stagedFiles;
 
@@ -77,5 +79,20 @@ public class Stage implements Serializable {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== Staged Files ===" + "\n");
+        for (String file : FilesNewOnStage) {
+            sb.append(file + "\n");
+        }
+        sb.append("\n");
+        sb.append("=== Removed Files ===" + "\n");
+        for (String file : FilesMarkedForRemove) {
+            sb.append(file + "\n");
+        }
+        return sb.toString();
     }
 }

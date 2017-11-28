@@ -50,7 +50,7 @@ public class Main {
         }
     }
 
-    
+
 
 
 
@@ -71,6 +71,60 @@ public class Main {
         String token2 = "";
         if (args.length > 2) {
             token2 = args[2];
+        }
+
+        CommitTree commitTree = tryLoad();
+        String command = args[0];
+        switch (command) {
+            case "init":
+                commitTree = init();
+                break;
+            case "add":
+                commitTree.add(token);
+                break;
+            case "commit":
+                commitTree.commit(token);
+                break;
+            case "rm":
+                commitTree.remove(token);
+                break;
+            case "log":
+                commitTree.printLog();
+                break;
+            case "global-log":
+                commitTree.printGlobalLog();
+                break;
+            case "find":
+                commitTree.find(token);
+                break;
+            case "status":
+                System.out.println(commitTree);
+                break;
+            case "checkout":
+                if (args.length == 2) {
+                    commitTree.checkout(token);
+                } else {
+                    commitTree.checkout(token, token2);
+                }
+                break;
+            case "branch":
+                commitTree.addNewBranch(token);
+                break;
+            case "rm-branch":
+                commitTree.removeBranch(token);
+                break;
+            case "reset":
+                commitTree.reset(token);
+                break;
+            case "merge":
+                commitTree.merge(token);
+                break;
+            default:
+                System.err.println("No command with that name exists.");
+                break;
+        }
+        System.out.println(commitTree);
+        saveTree(commitTree);
         }
 
     }
