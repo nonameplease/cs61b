@@ -73,6 +73,11 @@ public class Main {
             token2 = args[2];
         }
 
+        String token3 = "";
+        if (args.length > 3) {
+            token3 = args[3];
+        }
+
         CommitTree commitTree = tryLoad();
         String command = args[0];
         switch (command) {
@@ -101,10 +106,12 @@ public class Main {
                 System.out.println(commitTree);
                 break;
             case "checkout":
-                if (args.length == 2) {
-                    commitTree.checkout(token);
+                if (args.length == 3) {
+                    commitTree.checkout(token2);
+                } else if (args.length == 4){
+                    commitTree.checkout(token, token3);
                 } else {
-                    commitTree.checkout(token, token2);
+                    commitTree.checkout(token);
                 }
                 break;
             case "branch":

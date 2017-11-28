@@ -39,15 +39,18 @@ public class Commit implements Serializable {
         if (currentStage != null) {
             fileMapper = currentStage.getStagedFiles();
             parent = currentStage.getHeadCommit();
+        } else {
+            fileMapper = new HashMap<>();
+            parent = this;
         }
-        saveFiles();
     }
 
     public Commit(Stage currentStage, String message) {
         this(currentStage);
         this.message = message;
-        this.hashValue = Utils.sha1(fileMapper, parent, message, timeStamp);
+        this.hashValue = Utils.sha1(fileMapper.keySet().toString(), parent.toString(), message, timeStamp.toString());
         thisCommit_Dir = Commit_Dir + timeStamp.hashCode() + File.separator;
+        saveFiles();
     }
 
     /*public String findSplitPoint(Commit given) {
@@ -144,9 +147,10 @@ public class Commit implements Serializable {
             } else {
                 fileToSave = fileMapper.get(fileName) + fileName;
             }
-            File f = new File(fileToSave);
             String path = thisCommit_Dir + fileName;
-            Utils.writeContents(f, Utils.readContents(new File(path)));
+            File f = new File(path);
+            byte[] content = Utils.readContents(new File(fileToSave));
+            Utils.writeContents(f, content);
             fileMapper.put(fileName, thisCommit_Dir);
         }
     }

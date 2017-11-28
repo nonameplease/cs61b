@@ -1,11 +1,9 @@
 package gitlet;
 
-import sun.awt.Symbol;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class CommitTree implements Serializable {
     private HashMap<String, Branch> branchMap;
@@ -54,6 +52,10 @@ public class CommitTree implements Serializable {
     }
 
     public void commit(String msg) {
+        if (getCurrentBranch().getCurrentStage().getStagedFiles().keySet() == null) {
+            System.err.println(" No changes added to the commit.");
+        }
+
         if (msg.length() > 0) {
             currentBranch.commitMsg(msg);
         } else {
@@ -76,11 +78,13 @@ public class CommitTree implements Serializable {
 
     public void printLog() {
         Commit currentCommit = currentBranch.getHead();
-        while (currentCommit != null) {
+        while (currentCommit != currentCommit.getParent()) {
             System.out.println(currentCommit.toString());
             System.out.println();
             currentCommit = currentCommit.getParent();
         }
+
+        System.out.println(currentCommit.toString());
     }
 
     public void printGlobalLog() {
@@ -102,7 +106,7 @@ public class CommitTree implements Serializable {
     }
 
     public void checkout(String name) {
-        if (!currentBranch.getHead().getParent().contains(name)) {
+        if (!currentBranch.getHead().contains(name)) {
             System.err.println("File does not exist in that commit.");
             return;
         }
