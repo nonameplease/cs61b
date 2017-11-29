@@ -1,10 +1,9 @@
 package gitlet;
 
 
+import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class CommitTree implements Serializable {
     private HashMap<String, Branch> branchMap;
@@ -127,10 +126,35 @@ public class CommitTree implements Serializable {
     }
 
     public void checkoutBranch(String name) {
+        List<String> currentDirFiles = new ArrayList<>();
+        currentDirFiles = Utils.plainFilenamesIn(System.getProperty("user.dir"));
 
+        if (!branchMap.containsKey(name)) {
+            System.err.println("No such branch exists.");
+            return;
+        }
+
+        for (String fileName : currentDirFiles) {
+            if (currentBranch.getCurrentStage().getStagedFiles().get(fileName) == null && branchMap.get(name).getCurrentStage().getStagedFiles().containsKey(fileName)) {
+                System.err.println("There is an untracked file in the way; delete it or add it first. ");
+                return;
+            }
+        }
+
+        if (currentBranch.getBranchName() == name) {
+            System.err.println("No need to checkout the current branch.");
+            return;
+        }
+
+        Branch givenBranch = branchMap.get(name);
+        Commit givenHeadCommit = givenBranch.getHead();
+        givenHeadCommit.restoreAllFiles();
+        currentBranch = givenBranch;
+        currentBranch.getHead().restoreAllFiles();
     }
 
     public void checkoutCommit(String hashValue, String name) {
+        hashValue = getLongCommitHashValue(hashValue);
         if (!allCommits.containsKey(hashValue)) {
             System.err.println("No commit with that id exists.");
             return;
@@ -166,6 +190,7 @@ public class CommitTree implements Serializable {
     }
 
     public void reset(String hashValue) {
+        hashValue = getLongCommitHashValue(hashValue);
         if (!allCommits.containsKey(hashValue)) {
             System.err.println("No commit with that id exists.");
             return;
@@ -189,6 +214,20 @@ public class CommitTree implements Serializable {
 
         Branch given = branchMap.get(branchName);
         currentBranch.merge(given);
+    }
+
+    public String getLongCommitHashValue(String shortHashValue) {
+        if (shortHashValue.length() < 40) {
+            int length = shortHashValue.length();
+            for (String hash : allCommits.keySet()) {
+                String shorthash = hash.substring(0, length);
+                if (shorthash.equals(shortHashValue)) {
+                    return hash;
+                }
+            }
+            return null;
+        }
+        return shortHashValue;
     }
 
     @Override
