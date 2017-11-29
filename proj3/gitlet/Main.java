@@ -82,49 +82,99 @@ public class Main {
         String command = args[0];
         switch (command) {
             case "init":
-                commitTree = init();
+                if (args.length == 1) {
+                    commitTree = init();
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "add":
-                commitTree.add(token);
+                if (args.length == 2) {
+                    commitTree.add(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "commit":
-                commitTree.commit(token);
+                if (args.length == 2) {
+                    commitTree.commit(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "rm":
-                commitTree.remove(token);
+                if (args.length == 2) {
+                    commitTree.remove(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "log":
-                commitTree.printLog();
+                if (args.length == 1) {
+                    commitTree.printLog();
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "global-log":
-                commitTree.printGlobalLog();
+                if (args.length == 1) {
+                    commitTree.printGlobalLog();
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "find":
-                commitTree.find(token);
+                if (args.length == 2) {
+                    commitTree.find(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "status":
-                System.out.println(commitTree);
+                if (args.length == 1) {
+                    System.out.println(commitTree);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "checkout":
                 if (args.length == 3) {
                     commitTree.checkout(token2);
                 } else if (args.length == 4){
                     commitTree.checkout(token, token3);
-                } else {
+                } else if (args.length == 2) {
                     commitTree.checkout(token);
+                } else {
+                    System.err.println("Incorrect operands.");
                 }
                 break;
             case "branch":
-                commitTree.addNewBranch(token);
+                if (args.length == 2) {
+                    commitTree.addNewBranch(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "rm-branch":
-                commitTree.removeBranch(token);
+                if (args.length == 2) {
+                    commitTree.removeBranch(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "reset":
-                commitTree.reset(token);
+                if (args.length == 2) {
+                    commitTree.reset(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             case "merge":
-                commitTree.merge(token);
+                if (args.length == 2) {
+                    commitTree.merge(token);
+                } else {
+                    System.err.println("Incorrect operands.");
+                }
                 break;
             default:
                 System.err.println("No command with that name exists.");
