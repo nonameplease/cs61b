@@ -3,6 +3,7 @@ package gitlet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class CommitTree implements Serializable {
@@ -37,6 +38,7 @@ public class CommitTree implements Serializable {
         String message = "initial commit";
         String branchName = "master";
         Commit initCommit = new Commit(null, message);
+        initCommit.setTimeStamp(new Date(0));
         Branch initBranch = new Branch(branchName, initCommit);
         ArrayList<String> hashValueBank = new ArrayList<>();
         hashValueBank.add(initCommit.getHashValue());

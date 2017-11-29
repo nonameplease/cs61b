@@ -2,8 +2,10 @@ package gitlet;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 
 public class Commit implements Serializable {
@@ -168,13 +170,19 @@ public class Commit implements Serializable {
         }
     }
 
+    public void setTimeStamp(Date newTime) {
+        timeStamp = newTime;
+    }
+
 
     @Override
     public String toString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z");
+        String formattedDate = dateFormat.format(this.timeStamp);
         StringBuilder sb = new StringBuilder();
         sb.append("===\n");
         sb.append("commit " + this.hashValue + "\n");
-        sb.append("Date: " + this.timeStamp.toString() + "\n");
+        sb.append("Date: " + formattedDate + "\n");
         sb.append(this.message);
         return sb.toString();
     }
