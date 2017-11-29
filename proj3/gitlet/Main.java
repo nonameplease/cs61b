@@ -78,6 +78,10 @@ public class Main {
             token3 = args[3];
         }
 
+        /**
+         * If .gitlet not initialized, might output NullPointerException,
+         * So catch the exception and output .gitlet not initialized.
+         */
         CommitTree commitTree = tryLoad();
         String command = args[0];
         switch (command) {
@@ -180,7 +184,7 @@ public class Main {
                 System.err.println("No command with that name exists.");
                 break;
         }
-        System.out.println(commitTree);
+        //System.out.println(commitTree);
         saveTree(commitTree);
     }
 

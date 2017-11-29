@@ -237,8 +237,10 @@ public class CommitTree implements Serializable {
         sb.append("=== Branches ===" + "\n");
         sb.append("*" + currentBranch.getBranchName() + "\n");
         for (String branchName : branchMap.keySet()) {
-            sb.append(branchName);
-            sb.append("\n");
+            if (branchName != currentBranch.getBranchName()) {
+                sb.append(branchName);
+                sb.append("\n");
+            }
         }
         sb.append("\n");
         sb.append(currentBranch.getCurrentStage().toString());
