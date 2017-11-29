@@ -128,6 +128,7 @@ public class CommitTree implements Serializable {
     public void checkoutBranch(String name) {
         List<String> currentDirFiles = new ArrayList<>();
         currentDirFiles = Utils.plainFilenamesIn(System.getProperty("user.dir"));
+        //System.out.println(currentDirFiles);
 
         if (!branchMap.containsKey(name)) {
             System.err.println("No such branch exists.");
