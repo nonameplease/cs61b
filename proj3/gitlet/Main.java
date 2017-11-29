@@ -139,11 +139,11 @@ public class Main {
                 break;
             case "checkout":
                 if (args.length == 3) {
-                    commitTree.checkout(token2);
+                    commitTree.checkoutFile(token2);
                 } else if (args.length == 4){
-                    commitTree.checkout(token, token3);
+                    commitTree.checkoutCommit(token, token3);
                 } else if (args.length == 2) {
-                    commitTree.checkout(token);
+                    commitTree.checkoutBranch(token);
                 } else {
                     System.err.println("Incorrect operands.");
                 }
@@ -180,7 +180,7 @@ public class Main {
                 System.err.println("No command with that name exists.");
                 break;
         }
-        //System.out.println(commitTree);
+        System.out.println(commitTree);
         saveTree(commitTree);
     }
 

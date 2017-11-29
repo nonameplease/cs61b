@@ -107,7 +107,7 @@ public class CommitTree implements Serializable {
         }
     }
 
-    public void checkout(String name) {
+    public void checkoutFile(String name) {
         if (!currentBranch.getHead().contains(name)) {
             System.err.println("File does not exist in that commit.");
             return;
@@ -126,7 +126,11 @@ public class CommitTree implements Serializable {
         }
     }
 
-    public void checkout(String hashValue, String name) {
+    public void checkoutBranch(String name) {
+
+    }
+
+    public void checkoutCommit(String hashValue, String name) {
         if (!allCommits.containsKey(hashValue)) {
             System.err.println("No commit with that id exists.");
             return;
