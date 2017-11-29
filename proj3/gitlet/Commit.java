@@ -2,6 +2,8 @@ package gitlet;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -149,7 +151,8 @@ public class Commit implements Serializable {
             } else {
                 fileToSave = fileMapper.get(fileName) + fileName;
             }
-            String path = thisCommit_Dir + fileName;
+            Path file = Paths.get(fileName);
+            String path = thisCommit_Dir + file.getFileName();
             File f = new File(path);
             byte[] content = Utils.readContents(new File(fileToSave));
             Utils.writeContents(f, content);
