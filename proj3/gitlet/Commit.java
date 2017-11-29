@@ -162,8 +162,8 @@ public class Commit implements Serializable {
 
     public void restoreFiles(String fileName) {
         File copyFrom = getFile(fileName);
-        File compyTo = new File(fileName);
-        Utils.writeContents(compyTo, Utils.readContents(copyFrom));
+        File copyTo = new File(fileName);
+        Utils.writeContents(copyTo, Utils.readContents(copyFrom));
     }
 
     public void restoreAllFiles() {
