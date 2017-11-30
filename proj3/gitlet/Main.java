@@ -11,11 +11,13 @@ public class Main {
 
     private static CommitTree init() {
         File f = new File(GITLET_DIR);
+        File stagef = new File(Stage.Stage_Dir);
         if (f.exists()) {
             System.err.println("A Gitlet version-control system already exists in the current directory.");
             return null;
         }
         f.mkdirs();
+        stagef.mkdirs();
         return CommitTree.commitTreeINIT();
     }
 

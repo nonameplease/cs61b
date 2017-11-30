@@ -9,6 +9,7 @@ public class Stage implements Serializable {
     private Commit headCommit;
     private ArrayList<String> FilesNewOnStage;
     private ArrayList<String> FilesMarkedForRemove;
+    public static final String Stage_Dir = ".gitlet" + File.separator + "stage" + File.separator;
     /**
      * Key: File name.
      * Value: Directory.
@@ -57,6 +58,8 @@ public class Stage implements Serializable {
             System.err.println("No changes added to the commit.");
         }
 
+        File stagef = new File(Stage_Dir + Utils.getPlainFileName(fileName));
+        Utils.writeContents(stagef, Utils.readContents(f));
         stagedFiles.put(fileName, null);
         FilesNewOnStage.add(fileName);
     }
@@ -73,8 +76,8 @@ public class Stage implements Serializable {
     private boolean unchangedFromLastCommit(String fileName) {
         File f = new File(fileName);
         if (headCommit.contains(fileName)) {
-            File backup = headCommit.getFile(fileName);
-            if (backup.lastModified() > f.lastModified()) {
+            File lastCommitFile = headCommit.getFile(fileName);
+            if (Utils.readContentsAsString(lastCommitFile).equals(Utils.readContentsAsString(f))) {
                 return true;
             }
         }

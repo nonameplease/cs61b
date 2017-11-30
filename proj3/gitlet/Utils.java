@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -242,6 +243,11 @@ class Utils {
     abstract static class Function<T1, T2> {
         /** Returns the value of this function on X. */
         abstract T2 apply(T1 x);
+    }
+
+    static String getPlainFileName(String fileName) {
+        Path path = Paths.get(fileName);
+        return path.getFileName().toString();
     }
 
 }
