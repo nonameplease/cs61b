@@ -90,7 +90,9 @@ public class Stage implements Serializable {
             }
         }*/
         File dir = new File(Stage_Dir);
-        dir.delete();
+        for (File file : dir.listFiles()) {
+            file.delete();
+        }
     }
 
     private boolean unchangedFromLastCommit(String fileName) {
