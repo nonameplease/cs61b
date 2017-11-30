@@ -55,7 +55,11 @@ public class Commit implements Serializable {
         if (currentStage != null) {
             /**
              * Can't clear stage area after each commit now.
-             * java.util.ConcurrentModificationException
+             * java.util.ConcurrentModificationException.
+             * Update: I think it is working now.
+             * Using file.delete(). The reason why it didn't work
+             * before is because dir can't be deleted if it is not
+             * empty.
              */
             currentStage.clearStageArea();
         }
@@ -148,6 +152,41 @@ public class Commit implements Serializable {
         if (fileMapper == null) {
             return;
         }
+        for (String fileName : fileMapper.keySet()) {
+            String fileToSave;
+            if (fileMapper.get(fileName) == null) {
+                fileToSave = fileName;
+            } else {
+                fileToSave = fileMapper.get(fileName) + fileName;
+            }
+            Path file = Paths.get(fileName);
+            String path = thisCommit_Dir + file.getFileName();
+            File f = new File(path);
+            byte[] content = Utils.readContents(new File(fileToSave));
+            Utils.writeContents(f, content);
+            fileMapper.put(file.getFileName().toString(), thisCommit_Dir);
+        }
+    }
+
+    /**
+     * Still need to work on it.
+     * Current difficulties: Unable to track blobs that are present in both commits
+     * but has not been modified since last commit.
+     * What should happen: Instead of copy the file to current commit dir,
+     * the dir of the file should be added to the current commit fileMapper so that
+     * when this file is being checkout with this commit it will not cause
+     * no file error.
+     */
+    private void saveFilesWithParentCommit() {
+        File dir = new File(thisCommit_Dir);
+        dir.mkdirs();
+        if (fileMapper == null) {
+            return;
+        }
+        /**
+         * Parent file mapper.
+         */
+        HashMap<String, String> parentFileMapper = parent.getFileMapper();
         for (String fileName : fileMapper.keySet()) {
             String fileToSave;
             if (fileMapper.get(fileName) == null) {
