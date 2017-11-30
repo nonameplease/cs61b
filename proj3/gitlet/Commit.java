@@ -5,10 +5,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.HashMap;
+import java.util.*;
 
 public class Commit implements Serializable {
     private String hashValue;
@@ -55,6 +52,13 @@ public class Commit implements Serializable {
         this.hashValue = Utils.sha1(fileMapper.keySet().toString(), parent.toString(), message, timeStamp.toString());
         thisCommit_Dir = Commit_Dir + timeStamp.hashCode() + File.separator;
         saveFiles();
+        if (currentStage != null) {
+            /**
+             * Can't clear stage area after each commit now.
+             * java.util.ConcurrentModificationException
+             */
+            //currentStage.clearStageArea();
+        }
     }
 
     /*public String findSplitPoint(Commit given) {
@@ -156,7 +160,7 @@ public class Commit implements Serializable {
             File f = new File(path);
             byte[] content = Utils.readContents(new File(fileToSave));
             Utils.writeContents(f, content);
-            fileMapper.put(fileName, thisCommit_Dir);
+            fileMapper.put(file.getFileName().toString(), thisCommit_Dir);
         }
     }
 

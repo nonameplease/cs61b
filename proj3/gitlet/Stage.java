@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class Stage implements Serializable {
     private Commit headCommit;
     private ArrayList<String> FilesNewOnStage;
     private ArrayList<String> FilesMarkedForRemove;
     public static final String Stage_Dir = ".gitlet" + File.separator + "stage" + File.separator;
+    //public static final String Stage_Dir = ".gitlet" + File.separator;
     /**
      * Key: File name.
      * Value: Directory.
@@ -60,16 +63,31 @@ public class Stage implements Serializable {
 
         File stagef = new File(Stage_Dir + Utils.getPlainFileName(fileName));
         Utils.writeContents(stagef, Utils.readContents(f));
-        stagedFiles.put(fileName, null);
-        FilesNewOnStage.add(fileName);
+        stagedFiles.put(stagef.getPath(), null);
+        FilesNewOnStage.add(stagef.getPath());
     }
 
     public void rm(String fileName) {
         if (stagedFiles.containsKey(fileName)) {
             stagedFiles.remove(fileName);
             FilesMarkedForRemove.add(fileName);
+            try {
+                Utils.restrictedDelete(fileName);
+            } catch (IllegalArgumentException e) {
+                File f = new File(fileName);
+                f.delete();
+            }
         } else {
             System.err.println("No reason to remove the file.");
+        }
+    }
+
+    public void clearStageArea() {
+        if (stagedFiles != null) {
+            Set<String> fileNames = stagedFiles.keySet();
+            for (String fileName : fileNames) {
+                rm(fileName);
+            }
         }
     }
 
