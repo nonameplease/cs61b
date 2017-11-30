@@ -57,7 +57,7 @@ public class Commit implements Serializable {
              * Can't clear stage area after each commit now.
              * java.util.ConcurrentModificationException
              */
-            //currentStage.clearStageArea();
+            currentStage.clearStageArea();
         }
     }
 

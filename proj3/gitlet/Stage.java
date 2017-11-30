@@ -83,12 +83,14 @@ public class Stage implements Serializable {
     }
 
     public void clearStageArea() {
-        if (stagedFiles != null) {
+        /*if (stagedFiles != null) {
             Set<String> fileNames = stagedFiles.keySet();
             for (String fileName : fileNames) {
                 rm(fileName);
             }
-        }
+        }*/
+        File dir = new File(Stage_Dir);
+        dir.delete();
     }
 
     private boolean unchangedFromLastCommit(String fileName) {
