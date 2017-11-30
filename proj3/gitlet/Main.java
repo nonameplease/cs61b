@@ -3,7 +3,7 @@ package gitlet;
 import java.io.*;
 
 /** Driver class for Gitlet, the tiny stupid version-control system.
- *  @author
+ *  @author Scott Shao
  */
 public class Main {
 
