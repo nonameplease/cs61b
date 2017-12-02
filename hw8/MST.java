@@ -1,8 +1,8 @@
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /** Minimal spanning tree utility.
- *  @author
+ *  @author Scott Shao
  */
 public class MST {
 
@@ -17,8 +17,37 @@ public class MST {
      *  are a subset of those in E (they do not include copies of the
      *  original edges, just the original edges themselves.) */
     public static int[][] mst(int V, int[][] E) {
+        return mstCanPass(V, E);
+    }
 
-        return null;  // FIXME
+    /**
+     * A older implementation that can pass.
+     * @param V Number of vertices.
+     * @param E A double array.
+     * @return A double array.
+     */
+    public static int[][] mstCanPass(int V, int[][] E) {
+        PriorityQueue<int[]> mst =
+                new PriorityQueue<int[]>(EDGE_WEIGHT_COMPARATOR);
+        PriorityQueue<int[]> fringe =
+                new PriorityQueue<int[]>(EDGE_WEIGHT_COMPARATOR);
+        for (int i = 0; i < E.length; i += 1) {
+            fringe.offer(E[i]);
+        }
+        UnionFind uf = new UnionFind(V);
+        while (!fringe.isEmpty()) {
+            int[] cur = fringe.poll();
+            if (!uf.samePartition(cur[0], cur[1])) {
+                uf.union(cur[0], cur[1]);
+                mst.offer(cur);
+            }
+        }
+        int[][] result = new int[mst.size()] [3];
+        for (int i = 0; i < result.length && !mst.isEmpty(); i += 1) {
+            int[] cur = mst.poll();
+            result[i] = cur;
+        }
+        return result;
     }
 
     /** An ordering of edges by weight. */
@@ -30,56 +59,62 @@ public class MST {
             }
         };
 
-
-    /** Your Heapsort implementation.
+    /**
+     * buggy.
+     * @param V number of vertices.
+     * @param E edges.
      */
-    public static class HeapSort{
-        public void sort(int[] array, int k) {
-            int total = k - 1;
-            for (int i = total / 2; i >= 0; i -= 1) {
-                heapify(array, i, total);
-            }
-            for (int i = total; i > 0; i -= 1) {
-                swap(array, 0, i);
-                total -= 1;
-                heapify(array, 0, total);
-            }
-        }
-
-        /**
-         * Helper function for HeapSort.
-         * @param array Input array.
-         * @param index Index.
-         * @param total Total number.
-         */
-        private void heapify(int[] array, int index, int total) {
-            int left = index * 2;
-            int right = left + 1;
-            int temp = index;
-
-            if (left <= total && array[left] > array[temp]) {
-                temp = left;
-            }
-            if (right <= total && array[right] > array[temp]) {
-                temp = right;
-            }
-            if (index != temp) {
-                swap(array, index, temp);
-                heapify(array, temp, total);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "Heap Sort";
+    private void heapMst(int V, int[][] E) {
+        int[][] weights = E;
+        heapSort(weights);
+        int edges = 1;
+        int index = 0;
+        UnionFind uf = new UnionFind(V);
+        while (edges != V) {
+            uf.union(weights[index][0], weights[index][1]);
         }
     }
 
-    /** Exchange A[I] and A[J]. */
-    private static void swap(int[] a, int i, int j) {
-        int swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
+    /**
+     * Heapsort tailored for double array.
+     * @param arr A double array in this class.
+     */
+    private void heapSort(int[][] arr) {
+        int n = arr.length;
+
+        for (int i = n / 2; i >= 0; i -= 1) {
+            heapify(arr, n, i);
+        }
+
+        for (int i = n - 1; i >= 0; i -= 1) {
+            int[] temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            heapify(arr, i, 0);
+        }
     }
 
+    /**
+     * Heapify the array.
+     * @param arr A array.
+     * @param n Number of index.
+     * @param index Largest.
+     */
+    private void heapify(int[][] arr, int n, int index) {
+        int largest = index;
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
+        if (left < n && arr[left][2] > arr[largest][2]) {
+            largest = left;
+        }
+        if (right < n && arr[right][2] > arr[largest][2]) {
+            largest = right;
+        }
+        if (largest != index) {
+            int[] swap = arr[index];
+            arr[index] = arr[largest];
+            arr[largest] = swap;
+            heapify(arr, n, largest);
+        }
+    }
 }
