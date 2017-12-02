@@ -1,4 +1,4 @@
-# A simple test of adding, committing, modifying, and checking out.
+# Commit staged file after add and modify file in working dir.
 > init
 <<<
 + wug.txt wug.txt
