@@ -67,7 +67,25 @@ public class Stage implements Serializable {
     }
 
     public void rm(String fileName) {
+        boolean staged = false;
+        boolean tracked = false;
         if (stagedFiles.containsKey(fileName)) {
+            staged = true;
+            stagedFiles.remove(fileName);
+            File f = new File(Stage_Dir + fileName);
+            f.delete();
+        }
+        if (headCommit.getFileMapper().containsKey(fileName)) {
+            tracked = true;
+            FilesMarkedForRemove.add(fileName);
+            File f = new File(fileName);
+            f.delete();
+        }
+        if (!staged && !tracked) {
+            System.err.println("No reason to remove the file.");
+        }
+
+        /*if (stagedFiles.containsKey(fileName)) {
             stagedFiles.remove(fileName);
             FilesMarkedForRemove.add(fileName);
             try {
@@ -78,7 +96,7 @@ public class Stage implements Serializable {
             }
         } else {
             System.err.println("No reason to remove the file.");
-        }
+        }*/
     }
 
     public void clearStageArea() {
