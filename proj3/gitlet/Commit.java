@@ -51,16 +51,9 @@ public class Commit implements Serializable {
         this.message = message;
         this.hashValue = Utils.sha1(fileMapper.keySet().toString(), parent.toString(), message, timeStamp.toString());
         thisCommit_Dir = Commit_Dir + timeStamp.hashCode() + File.separator;
-        saveFiles();
+        //saveFiles();
+        saveFilesWithParentCommit();
         if (currentStage != null) {
-            /**
-             * Can't clear stage area after each commit now.
-             * java.util.ConcurrentModificationException.
-             * Update: I think it is working now.
-             * Using file.delete(). The reason why it didn't work
-             * before is because dir can't be deleted if it is not
-             * empty.
-             */
             currentStage.clearStageArea();
         }
     }
@@ -155,16 +148,15 @@ public class Commit implements Serializable {
         for (String fileName : fileMapper.keySet()) {
             String fileToSave;
             if (fileMapper.get(fileName) == null) {
-                fileToSave = fileName;
+                fileToSave = Stage.Stage_Dir + fileName;
             } else {
                 fileToSave = fileMapper.get(fileName) + fileName;
             }
-            Path file = Paths.get(fileName);
-            String path = thisCommit_Dir + file.getFileName();
+            String path = thisCommit_Dir + fileName;
             File f = new File(path);
             byte[] content = Utils.readContents(new File(fileToSave));
             Utils.writeContents(f, content);
-            fileMapper.put(file.getFileName().toString(), thisCommit_Dir);
+            fileMapper.put(fileName, thisCommit_Dir);
         }
     }
 
@@ -187,10 +179,17 @@ public class Commit implements Serializable {
          * Parent file mapper.
          */
         HashMap<String, String> parentFileMapper = parent.getFileMapper();
+        for (String fileName : parentFileMapper.keySet()) {
+            if (!fileMapper.containsKey(fileName)) {
+                fileMapper.put(fileName, parentFileMapper.get(fileName));
+            }
+        }
+
+
         for (String fileName : fileMapper.keySet()) {
             String fileToSave;
             if (fileMapper.get(fileName) == null) {
-                fileToSave = fileName;
+                fileToSave = Stage.Stage_Dir + fileName;
             } else {
                 fileToSave = fileMapper.get(fileName) + fileName;
             }

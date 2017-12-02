@@ -12,7 +12,6 @@ public class Stage implements Serializable {
     private ArrayList<String> FilesNewOnStage;
     private ArrayList<String> FilesMarkedForRemove;
     public static final String Stage_Dir = ".gitlet" + File.separator + "stage" + File.separator;
-    //public static final String Stage_Dir = ".gitlet" + File.separator;
     /**
      * Key: File name.
      * Value: Directory.
@@ -63,8 +62,8 @@ public class Stage implements Serializable {
 
         File stagef = new File(Stage_Dir + Utils.getPlainFileName(fileName));
         Utils.writeContents(stagef, Utils.readContents(f));
-        stagedFiles.put(stagef.getPath(), null);
-        FilesNewOnStage.add(stagef.getPath());
+        stagedFiles.put(stagef.getName(), null);
+        FilesNewOnStage.add(stagef.getName());
     }
 
     public void rm(String fileName) {
