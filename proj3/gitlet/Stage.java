@@ -1,5 +1,7 @@
 package gitlet;
 
+import com.google.common.io.Files;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,6 +74,7 @@ public class Stage implements Serializable {
         if (stagedFiles.containsKey(fileName)) {
             staged = true;
             stagedFiles.remove(fileName);
+            FilesNewOnStage.remove(fileName);
             File f = new File(Stage_Dir + fileName);
             f.delete();
         }

@@ -15,6 +15,7 @@ public class Commit implements Serializable {
     private HashMap<String, String> fileMapper;
     private static final String Commit_Dir = ".gitlet" + File.separator + "commits" + File.separator;
     private String thisCommit_Dir;
+    private Stage currentStage;
 
     public Commit(Commit parent, Date timeStamp, String message, HashMap<String, String> fileMapper) {
         this.parent = parent;
@@ -37,6 +38,7 @@ public class Commit implements Serializable {
 
     public Commit (Stage currentStage) {
         this.timeStamp = new Date();
+        this.currentStage = currentStage;
         if (currentStage != null) {
             fileMapper = currentStage.getStagedFiles();
             parent = currentStage.getHeadCommit();
