@@ -100,6 +100,10 @@ public class Commit implements Serializable {
         return thisCommit_Dir;
     }
 
+    public Stage getCurrentStage() {
+        return currentStage;
+    }
+
     /**
      * Potentially break point.
      * @param o An object, ideally a Commit.
