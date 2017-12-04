@@ -136,6 +136,11 @@ public class Stage implements Serializable {
         for (String file : FilesMarkedForRemove) {
             sb.append(file + "\n");
         }
+        sb.append("\n");
+        sb.append("=== Modifications Not Staged For Commit ===" + "\n");
+        sb.append("\n");
+        sb.append("=== Untracked Files ===" + "\n");
+        sb.append("\n");
         return sb.toString();
     }
 }

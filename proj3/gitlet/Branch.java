@@ -120,18 +120,21 @@ public class Branch implements Serializable {
                             conflict = true;
                         }
                     }
-                } else if (head.contains(fileName) && !givenHead.contains(fileName)) {
+                } else if (head.contains(fileName)
+                        && !givenHead.contains(fileName)) {
                     if (!head.modified(head, fileName)) {
                         givenHead.getCurrentStage().rm(fileName);
                     }
                 }
                 if (givenHead.contains(fileName)) {
-                    if (givenHead.modified(split, fileName) && !head.contains(fileName)) {
+                    if (givenHead.modified(split, fileName)
+                            && !head.contains(fileName)) {
                         conflict = true;
                     }
                 }
                 if (head.contains(fileName)) {
-                    if (head.modified(split, fileName) && givenHead.contains(fileName)) {
+                    if (head.modified(split, fileName)
+                            && givenHead.contains(fileName)) {
                         conflict = true;
                     }
                 }
@@ -149,10 +152,7 @@ public class Branch implements Serializable {
                 }
             }
 
-            /**
-             * Dealing with conflicts.
-             */
-            if (conflict == true) {
+            if (conflict) {
                 byte[] currentContent;
                 byte[] givenContent;
                 if (head.contains(fileName)) {
@@ -161,7 +161,8 @@ public class Branch implements Serializable {
                     currentContent = new byte[0];
                 }
                 if (givenHead.contains(fileName)) {
-                    givenContent = Utils.readContents(givenHead.getFile(fileName));
+                    givenContent =
+                            Utils.readContents(givenHead.getFile(fileName));
                 } else {
                     givenContent = new byte[0];
                 }
@@ -176,15 +177,6 @@ public class Branch implements Serializable {
                 head.getCurrentStage().add(fileName);
             }
         }
-
-        /*for (String fileName : givenHead.getFileMapper().keySet()) {
-            if (!head.contains(fileName) || (!head.modified(split, fileName))) {
-                head.copyFile(givenHead, fileName, fileName);
-            } else {
-                String copyName = fileName + ".conflict";
-                head.copyFile(givenHead, fileName, copyName);
-            }
-        }*/
     }
 
 }
