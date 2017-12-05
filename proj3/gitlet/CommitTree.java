@@ -92,7 +92,7 @@ public class CommitTree implements Serializable {
      */
     public void commit(String msg) {
         if (getCurrentBranch().getCurrentStage().
-                getStagedFiles().keySet().size() == 0) {
+                getStagedFiles().keySet().size() == 0 && getCurrentBranch().getCurrentStage().getFilesMarkedForRemove().size() == 0) {
             System.err.println(" No changes added to the commit.");
         }
 
