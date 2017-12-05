@@ -303,6 +303,13 @@ public class CommitTree implements Serializable {
             return;
         }
 
+        for (String fileName : currentBranch.getCurrentStage().getStagedFiles().keySet()) {
+            if (currentBranch.getCurrentStage().getStagedFiles().get(fileName) == null) {
+                System.err.println("You have uncommitted changes.");
+                return;
+            }
+        }
+
         Branch given = branchMap.get(branchName);
         currentBranch.merge(given);
     }
