@@ -222,12 +222,14 @@ public class Branch implements Serializable {
         if (getHead().getFileMapper().containsKey(fileName)) {
             fileBoolean.setPresentInCurrentCommit(true);
         }
-        if (fileBoolean.getPresentInSplit() && fileBoolean.getPresentInGivenCommit()) {
+        if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInGivenCommit()) {
             if (givenHead.modified(split, fileName)) {
                 fileBoolean.setModifiedInGivenCommit(true);
             }
         }
-        if (fileBoolean.getPresentInSplit() && fileBoolean.getPresentInCurrentCommit()) {
+        if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInCurrentCommit()) {
             if (head.modified(split, fileName)) {
                 fileBoolean.setModifiedInCurrnetCommit(true);
             }
