@@ -1,5 +1,6 @@
 package gitlet;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -209,9 +210,16 @@ public class CommitTree implements Serializable {
 
         Branch givenBranch = branchMap.get(name);
         Commit givenHeadCommit = givenBranch.getHead();
+        for (String fileName : currentBranch.getHead().getFileMapper().keySet()) {
+            if (!givenHeadCommit.getFileMapper().containsKey(fileName)) {
+                File f = new File(fileName);
+                f.delete();
+            }
+        }
         givenHeadCommit.restoreAllFiles();
+        givenBranch.getCurrentStage().clearStageArea();
         currentBranch = givenBranch;
-        currentBranch.getHead().restoreAllFiles();
+        //currentBranch.getHead().restoreAllFiles();
     }
 
     /**
