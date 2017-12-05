@@ -17,15 +17,15 @@ public class Stage implements Serializable {
     /**
      * Files new on stage.
      */
-    private ArrayList<String> FilesNewOnStage;
+    private ArrayList<String> filesNewOnStage;
     /**
      * Files marked for removal.
      */
-    private ArrayList<String> FilesMarkedForRemove;
+    private ArrayList<String> filesMarkedForRemove;
     /**
      * Stage dir.
      */
-    public static final String Stage_Dir = ".gitlet"
+    public static final String STAGEDIR = ".gitlet"
             + File.separator + "stage" + File.separator;
     /**
      * Key: File name.
@@ -41,8 +41,8 @@ public class Stage implements Serializable {
      */
     public Stage(Commit givenHeadCommit) {
         this.headCommit = givenHeadCommit;
-        FilesNewOnStage = new ArrayList<String>();
-        FilesMarkedForRemove = new ArrayList<String>();
+        filesNewOnStage = new ArrayList<String>();
+        filesMarkedForRemove = new ArrayList<String>();
         stagedFiles = new HashMap<>();
     }
 
@@ -50,8 +50,8 @@ public class Stage implements Serializable {
      * Stage.
      */
     public Stage() {
-        FilesNewOnStage = new ArrayList<String>();
-        FilesMarkedForRemove = new ArrayList<String>();
+        filesNewOnStage = new ArrayList<String>();
+        filesMarkedForRemove = new ArrayList<String>();
         stagedFiles = new HashMap<>();
     }
 
@@ -68,7 +68,7 @@ public class Stage implements Serializable {
      * @return ArrayList files new on stage.
      */
     public ArrayList<String> getFilesNewOnStage() {
-        return FilesNewOnStage;
+        return filesNewOnStage;
     }
 
     /**
@@ -76,7 +76,7 @@ public class Stage implements Serializable {
      * @return Arraylist files marked for removal.
      */
     public ArrayList<String> getFilesMarkedForRemove() {
-        return FilesMarkedForRemove;
+        return filesMarkedForRemove;
     }
 
     /**
@@ -100,27 +100,28 @@ public class Stage implements Serializable {
 
         if (unchangedFromLastCommit(fileName)) {
             boolean contains = false;
-            File stageArea = new File(Stage_Dir);
+            File stageArea = new File(STAGEDIR);
             for (File stagedFile : stageArea.listFiles()) {
                 if (fileName.equals(stagedFile.getName())) {
                     contains = true;
                 }
             }
             if (contains) {
-                File stagedFile = new File(Stage_Dir + fileName);
+                File stagedFile = new File(STAGEDIR + fileName);
                 stagedFile.delete();
-                stagedFiles.remove(fileName);
+                getStagedFiles().remove(fileName);
             }
         } else {
-            File stagef = new File(Stage_Dir + Utils.getPlainFileName(fileName));
+            File stagef = new File(STAGEDIR
+                    + Utils.getPlainFileName(fileName));
             Utils.writeContents(stagef, Utils.readContents(f));
-            stagedFiles.put(stagef.getName(), null);
-            FilesNewOnStage.add(stagef.getName());
+            getStagedFiles().put(stagef.getName(), null);
+            getFilesNewOnStage().add(stagef.getName());
         }
 
-        if (headCommit.getCurrentStage() != null) {
-            if (FilesMarkedForRemove.contains(fileName)) {
-                FilesMarkedForRemove.remove(fileName);
+        if (getHeadCommit().getCurrentStage() != null) {
+            if (getFilesMarkedForRemove().contains(fileName)) {
+                getFilesMarkedForRemove().remove(fileName);
             }
         }
 
@@ -133,16 +134,16 @@ public class Stage implements Serializable {
     public void rm(String fileName) {
         boolean staged = false;
         boolean tracked = false;
-        if (stagedFiles.containsKey(fileName)) {
+        if (getStagedFiles().containsKey(fileName)) {
             staged = true;
-            stagedFiles.remove(fileName);
-            FilesNewOnStage.remove(fileName);
-            File f = new File(Stage_Dir + fileName);
+            getStagedFiles().remove(fileName);
+            getFilesNewOnStage().remove(fileName);
+            File f = new File(STAGEDIR + fileName);
             f.delete();
         }
-        if (headCommit.getFileMapper().containsKey(fileName)) {
+        if (getHeadCommit().getFileMapper().containsKey(fileName)) {
             tracked = true;
-            FilesMarkedForRemove.add(fileName);
+            getFilesMarkedForRemove().add(fileName);
             File f = new File(fileName);
             f.delete();
         }
@@ -155,13 +156,7 @@ public class Stage implements Serializable {
      * Clear stage folder.
      */
     public void clearStageArea() {
-        /*if (stagedFiles != null) {
-            Set<String> fileNames = stagedFiles.keySet();
-            for (String fileName : fileNames) {
-                rm(fileName);
-            }
-        }*/
-        File dir = new File(Stage_Dir);
+        File dir = new File(STAGEDIR);
         for (File file : dir.listFiles()) {
             file.delete();
         }
@@ -174,8 +169,9 @@ public class Stage implements Serializable {
      */
     private boolean unchangedFromLastCommit(String fileName) {
         File f = new File(fileName);
-        if (headCommit.getFileMapper().containsKey(fileName) && headCommit.getFileMapper().get(fileName) != null) {
-            File lastCommitFile = headCommit.getFile(fileName);
+        if (getHeadCommit().getFileMapper().containsKey(fileName)
+                && getHeadCommit().getFileMapper().get(fileName) != null) {
+            File lastCommitFile = getHeadCommit().getFile(fileName);
             if (Utils.readContentsAsString(lastCommitFile).
                     equals(Utils.readContentsAsString(f))) {
                 return true;
@@ -188,12 +184,12 @@ public class Stage implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("=== Staged Files ===" + "\n");
-        for (String file : FilesNewOnStage) {
+        for (String file : getFilesNewOnStage()) {
             sb.append(file + "\n");
         }
         sb.append("\n");
         sb.append("=== Removed Files ===" + "\n");
-        for (String file : FilesMarkedForRemove) {
+        for (String file : getFilesMarkedForRemove()) {
             sb.append(file + "\n");
         }
         sb.append("\n");

@@ -39,12 +39,12 @@ public class Commit implements Serializable {
     /**
      * Commit folder dir.
      */
-    private static final String Commit_Dir = ".gitlet"
+    private static final String COMMITDIR = ".gitlet"
             + File.separator + "commits" + File.separator;
     /**
      * Commit dir.
      */
-    private String thisCommit_Dir;
+    private String thisCommitDir;
     /**
      * Current stage.
      */
@@ -77,7 +77,7 @@ public class Commit implements Serializable {
         this.message = givenMessage;
         this.hashValue = Utils.sha1(fileMapper.keySet().toString(),
                 parent.toString(), givenMessage, timeStamp.toString());
-        thisCommit_Dir = Commit_Dir + timeStamp.hashCode() + File.separator;
+        thisCommitDir = COMMITDIR + timeStamp.hashCode() + File.separator;
         saveFilesWithParentCommit();
         if (givenCurrentStage != null) {
             givenCurrentStage.clearStageArea();
@@ -145,7 +145,7 @@ public class Commit implements Serializable {
      * @return Commit dir.
      */
     public String getThisCommitDir() {
-        return thisCommit_Dir;
+        return thisCommitDir;
     }
 
     /**
@@ -168,6 +168,11 @@ public class Commit implements Serializable {
             return this.hashValue == given.hashValue;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     /**
@@ -218,14 +223,15 @@ public class Commit implements Serializable {
     public boolean modified(Commit given, String fileName) {
         File givenFile = given.getFile(fileName);
         File thisFile = getFile(fileName);
-        return !(Utils.readContentsAsString(givenFile).equals(Utils.readContentsAsString(thisFile)));
+        return !(Utils.readContentsAsString(givenFile).
+                equals(Utils.readContentsAsString(thisFile)));
     }
 
     /**
      * Base for saveFilesWithParentCommit.
      */
     private void saveFiles() {
-        File dir = new File(thisCommit_Dir);
+        File dir = new File(thisCommitDir);
         dir.mkdirs();
         if (fileMapper == null) {
             return;
@@ -233,15 +239,15 @@ public class Commit implements Serializable {
         for (String fileName : fileMapper.keySet()) {
             String fileToSave;
             if (fileMapper.get(fileName) == null) {
-                fileToSave = Stage.Stage_Dir + fileName;
+                fileToSave = Stage.STAGEDIR + fileName;
             } else {
                 fileToSave = fileMapper.get(fileName) + fileName;
             }
-            String path = thisCommit_Dir + fileName;
+            String path = thisCommitDir + fileName;
             File f = new File(path);
             byte[] content = Utils.readContents(new File(fileToSave));
             Utils.writeContents(f, content);
-            fileMapper.put(fileName, thisCommit_Dir);
+            fileMapper.put(fileName, thisCommitDir);
         }
     }
 
@@ -256,14 +262,16 @@ public class Commit implements Serializable {
      * not cause no file error.
      */
     private void saveFilesWithParentCommit() {
-        File dir = new File(thisCommit_Dir);
+        File dir = new File(thisCommitDir);
         dir.mkdirs();
         if (fileMapper == null) {
             return;
         }
         HashMap<String, String> parentFileMapper = parent.getFileMapper();
         for (String fileName : parentFileMapper.keySet()) {
-            if (!fileMapper.containsKey(fileName) && !currentStage.getFilesMarkedForRemove().contains(fileName)) {
+            if (!fileMapper.containsKey(fileName)
+                    && !currentStage.getFilesMarkedForRemove().
+                    contains(fileName)) {
                 fileMapper.put(fileName, parentFileMapper.get(fileName));
             }
         }
@@ -272,16 +280,16 @@ public class Commit implements Serializable {
         for (String fileName : fileMapper.keySet()) {
             String fileToSave;
             if (fileMapper.get(fileName) == null) {
-                fileToSave = Stage.Stage_Dir + fileName;
+                fileToSave = Stage.STAGEDIR + fileName;
             } else {
                 fileToSave = fileMapper.get(fileName) + fileName;
             }
             Path file = Paths.get(fileName);
-            String path = thisCommit_Dir + file.getFileName();
+            String path = thisCommitDir + file.getFileName();
             File f = new File(path);
             byte[] content = Utils.readContents(new File(fileToSave));
             Utils.writeContents(f, content);
-            fileMapper.put(file.getFileName().toString(), thisCommit_Dir);
+            fileMapper.put(file.getFileName().toString(), thisCommitDir);
         }
     }
 

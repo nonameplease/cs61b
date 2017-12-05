@@ -351,9 +351,14 @@ public class Branch implements Serializable {
                     givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
                     conflicted = true;
                     hasConflict = true;
-                } else if (!fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && head.modified(givenHead, fileName)) {
-                    givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
-                    currentContent = Utils.readContentsAsString(head.getFile(fileName));
+                } else if (!fileBoolean.presentInSplit
+                        && fileBoolean.presentInGivenCommit
+                        && fileBoolean.presentInCurrentCommit
+                        && head.modified(givenHead, fileName)) {
+                    givenContent = Utils.readContentsAsString
+                            (givenHead.getFile(fileName));
+                    currentContent = Utils.readContentsAsString
+                            (head.getFile(fileName));
                     conflicted = true;
                     hasConflict = true;
                 } else {
@@ -377,7 +382,8 @@ public class Branch implements Serializable {
                 }
             }
         }
-        commitMsg("Merged " + given.getBranchName() + " into " + getBranchName() + ".");
+        commitMsg("Merged " + given.getBranchName()
+                + " into " + getBranchName() + ".");
         if (hasConflict) {
             System.out.println("Encountered a merge conflict.");
         }

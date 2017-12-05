@@ -32,12 +32,7 @@ public class CommitTree implements Serializable {
     /**
      * Length of SHA1.
      */
-    private static final int IDlength = 40;
-
-    /**
-     * Check if initialized.
-     */
-    public boolean initialized = false;
+    private static final int IDLENGTH = 40;
 
     /**
      * Initialize commit tree.
@@ -46,7 +41,6 @@ public class CommitTree implements Serializable {
         branchMap = new HashMap<>();
         allCommits = new HashMap<>();
         commitMsgToHashValue = new HashMap<>();
-        initialized = false;
     }
 
     /**
@@ -82,7 +76,6 @@ public class CommitTree implements Serializable {
         commitTree.branchMap.put(branchName, initBranch);
         commitTree.allCommits.put(initCommit.getHashValue(), initCommit);
         commitTree.commitMsgToHashValue.put(message, hashValueBank);
-        commitTree.initialized = true;
         return commitTree;
     }
 
@@ -100,7 +93,9 @@ public class CommitTree implements Serializable {
      */
     public void commit(String msg) {
         if (getCurrentBranch().getCurrentStage().
-                getStagedFiles().keySet().size() == 0 && getCurrentBranch().getCurrentStage().getFilesMarkedForRemove().size() == 0) {
+                getStagedFiles().keySet().size() == 0
+                && getCurrentBranch().getCurrentStage().
+                getFilesMarkedForRemove().size() == 0) {
             System.err.println(" No changes added to the commit.");
         }
 
@@ -191,8 +186,6 @@ public class CommitTree implements Serializable {
         List<String> workingDirFiles;
         workingDirFiles = Utils.plainFilenamesIn(
                 System.getProperty("user.dir"));
-        //System.out.println(currentDirFiles);
-        //System.out.println(currentBranch.getHead().getFileMapper().keySet());
 
         if (!branchMap.containsKey(name)) {
             System.err.println("No such branch exists.");
@@ -209,8 +202,10 @@ public class CommitTree implements Serializable {
 
         for (String fileName : workingDirFiles) {
             if (givenHeadCommit.getFileMapper().containsKey(fileName)) {
-                if (!currentBranch.getHead().getFileMapper().containsKey(fileName) ||
-                        currentBranch.getHead().getFile(fileName).equals(new File(fileName))) {
+                if (!currentBranch.getHead().getFileMapper().
+                        containsKey(fileName)
+                        || currentBranch.getHead().getFile(fileName).
+                                equals(new File(fileName))) {
                     System.err.println("There is an untracked file "
                             + "in the way; delete it or add it first. ");
                     return;
@@ -218,7 +213,8 @@ public class CommitTree implements Serializable {
             }
         }
 
-        for (String fileName : currentBranch.getHead().getFileMapper().keySet()) {
+        for (String fileName : currentBranch.getHead().
+                getFileMapper().keySet()) {
             if (!givenHeadCommit.getFileMapper().containsKey(fileName)) {
                 File f = new File(fileName);
                 f.delete();
@@ -227,7 +223,6 @@ public class CommitTree implements Serializable {
         givenHeadCommit.restoreAllFiles();
         givenBranch.getCurrentStage().clearStageArea();
         currentBranch = givenBranch;
-        //currentBranch.getHead().restoreAllFiles();
     }
 
     /**
@@ -294,13 +289,16 @@ public class CommitTree implements Serializable {
                 System.getProperty("user.dir"));
         Commit commit = allCommits.get(hashValue);
         for (String fileName : workingDirFiles) {
-            if (!currentBranch.getHead().getFileMapper().containsKey(fileName) && commit.getFileMapper().containsKey(fileName)) {
-                System.err.println("There is an untracked file in the way; delete it or add it first.");
+            if (!currentBranch.getHead().getFileMapper().containsKey(fileName)
+                    && commit.getFileMapper().containsKey(fileName)) {
+                System.err.println("There is an untracked "
+                        + "file in the way; delete it or add it first.");
                 return;
             }
         }
         commit.restoreAllFiles();
-        for (String fileName : currentBranch.getHead().getFileMapper().keySet()) {
+        for (String fileName : currentBranch.getHead().
+                getFileMapper().keySet()) {
             if (!commit.getFileMapper().containsKey(fileName)) {
                 File f = new File(fileName);
                 f.delete();
@@ -327,8 +325,10 @@ public class CommitTree implements Serializable {
             return;
         }
 
-        for (String fileName : currentBranch.getCurrentStage().getStagedFiles().keySet()) {
-            if (currentBranch.getCurrentStage().getStagedFiles().get(fileName) == null) {
+        for (String fileName : currentBranch.getCurrentStage().
+                getStagedFiles().keySet()) {
+            if (currentBranch.getCurrentStage().getStagedFiles().
+                    get(fileName) == null) {
                 System.err.println("You have uncommitted changes.");
                 return;
             }
@@ -345,7 +345,7 @@ public class CommitTree implements Serializable {
      * @return Normal ID.
      */
     public String getLongCommitHashValue(String shortHashValue) {
-        if (shortHashValue.length() < IDlength) {
+        if (shortHashValue.length() < IDLENGTH) {
             int length = shortHashValue.length();
             for (String hash : allCommits.keySet()) {
                 String shorthash = hash.substring(0, length);
