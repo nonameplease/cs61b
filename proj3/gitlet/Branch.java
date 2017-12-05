@@ -158,7 +158,7 @@ public class Branch implements Serializable {
             return;
         }
         if (split.equals(getBranchName())) {
-            head = given.getHead();
+            head = givenHead;
             System.out.println("Current branch fast-forwarded.");
             return;
         }

@@ -199,7 +199,7 @@ public class CommitTree implements Serializable {
 
         Branch givenBranch = branchMap.get(name);
         Commit givenHeadCommit = givenBranch.getHead();
-        
+
         for (String fileName : workingDirFiles) {
             if (givenHeadCommit.getFileMapper().containsKey(fileName)) {
                 if (!currentBranch.getHead().getFileMapper().containsKey(fileName) ||
