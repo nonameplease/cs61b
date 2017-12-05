@@ -181,8 +181,8 @@ public class CommitTree implements Serializable {
      * @param name Branch name.
      */
     public void checkoutBranch(String name) {
-        List<String> currentDirFiles;
-        currentDirFiles = Utils.plainFilenamesIn(
+        List<String> workingDirFiles;
+        workingDirFiles = Utils.plainFilenamesIn(
                 System.getProperty("user.dir"));
         //System.out.println(currentDirFiles);
         //System.out.println(currentBranch.getHead().getFileMapper().keySet());
@@ -197,19 +197,20 @@ public class CommitTree implements Serializable {
             return;
         }
 
-        for (String fileName : currentDirFiles) {
-            if (currentBranch.getCurrentStage().
-                    getStagedFiles().get(fileName) == null
-                    && branchMap.get(name).getCurrentStage().
-                    getStagedFiles().containsKey(fileName)) {
-                System.err.println("There is an untracked file "
-                        + "in the way; delete it or add it first. ");
-                return;
+        Branch givenBranch = branchMap.get(name);
+        Commit givenHeadCommit = givenBranch.getHead();
+        
+        for (String fileName : workingDirFiles) {
+            if (givenHeadCommit.getFileMapper().containsKey(fileName)) {
+                if (!currentBranch.getHead().getFileMapper().containsKey(fileName) ||
+                        currentBranch.getHead().getFile(fileName).equals(new File(fileName))) {
+                    System.err.println("There is an untracked file "
+                            + "in the way; delete it or add it first. ");
+                    return;
+                }
             }
         }
 
-        Branch givenBranch = branchMap.get(name);
-        Commit givenHeadCommit = givenBranch.getHead();
         for (String fileName : currentBranch.getHead().getFileMapper().keySet()) {
             if (!givenHeadCommit.getFileMapper().containsKey(fileName)) {
                 File f = new File(fileName);
