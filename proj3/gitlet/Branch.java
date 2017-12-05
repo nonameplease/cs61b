@@ -156,7 +156,16 @@ public class Branch implements Serializable {
         List<String> workingDirFiles;
         workingDirFiles = Utils.plainFilenamesIn(
                 System.getProperty("user.dir"));
-        //System.out.println(split.getFileMapper().keySet().toString());
+
+        for (String fileName : workingDirFiles) {
+            if (!head.getFileMapper().containsKey(fileName)) {
+                if (givenHead.getFileMapper().containsKey(fileName) && !Utils.readContentsAsString(new File(fileName)).equals(Utils.readContentsAsString(givenHead.getFile(fileName)))) {
+                    System.err.println("There is an untracked file in the way; delete it or add it first.");
+                    return;
+                }
+            }
+        }
+
         if (split.equals(givenHead)) {
             System.out.println(
                     "Given branch is an ancestor of the current branch.");
