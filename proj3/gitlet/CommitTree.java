@@ -307,7 +307,9 @@ public class CommitTree implements Serializable {
             }
         }
         currentBranch.setHead(commit);
-        currentBranch.setCurrentStage(null);
+        currentBranch.getCurrentStage().clearStageArea();
+        currentBranch.getCurrentStage().getStagedFiles().clear();
+        currentBranch.getCurrentStage().getFilesNewOnStage().clear();
     }
 
     /**
@@ -368,7 +370,7 @@ public class CommitTree implements Serializable {
             }
         }
         sb.append("\n");
-        sb.append(currentBranch.getCurrentStage().toString());
+        sb.append(getCurrentBranch().getCurrentStage().toString());
         return sb.toString();
     }
 

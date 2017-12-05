@@ -159,7 +159,7 @@ public class Main {
             break;
         case "status":
             if (args.length == 1) {
-                System.out.println(commitTree);
+                System.out.println(commitTree.toString());
             } else {
                 System.err.println("Incorrect operands.");
             }
