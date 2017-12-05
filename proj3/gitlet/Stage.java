@@ -109,6 +109,7 @@ public class Stage implements Serializable {
             if (contains) {
                 File stagedFile = new File(Stage_Dir + fileName);
                 stagedFile.delete();
+                stagedFiles.remove(fileName);
             }
         } else {
             File stagef = new File(Stage_Dir + Utils.getPlainFileName(fileName));
