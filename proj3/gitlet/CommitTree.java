@@ -35,12 +35,18 @@ public class CommitTree implements Serializable {
     private static final int IDlength = 40;
 
     /**
+     * Check if initialized.
+     */
+    public boolean initialized = false;
+
+    /**
      * Initialize commit tree.
      */
     private CommitTree() {
         branchMap = new HashMap<>();
         allCommits = new HashMap<>();
         commitMsgToHashValue = new HashMap<>();
+        initialized = false;
     }
 
     /**
@@ -76,6 +82,7 @@ public class CommitTree implements Serializable {
         commitTree.branchMap.put(branchName, initBranch);
         commitTree.allCommits.put(initCommit.getHashValue(), initCommit);
         commitTree.commitMsgToHashValue.put(message, hashValueBank);
+        commitTree.initialized = true;
         return commitTree;
     }
 
@@ -293,6 +300,12 @@ public class CommitTree implements Serializable {
             }
         }
         commit.restoreAllFiles();
+        for (String fileName : currentBranch.getHead().getFileMapper().keySet()) {
+            if (!commit.getFileMapper().containsKey(fileName)) {
+                File f = new File(fileName);
+                f.delete();
+            }
+        }
         currentBranch.setHead(commit);
         currentBranch.setCurrentStage(null);
     }

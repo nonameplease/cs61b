@@ -85,7 +85,6 @@ public class Main {
             System.err.println("Please enter a command.");
             return;
         }
-
         String token = "";
         if (args.length > 1) {
             token = args[1];
@@ -102,6 +101,10 @@ public class Main {
         }
         CommitTree commitTree = tryLoad();
         String command = args[0];
+        if (!command.equals("init") && commitTree == null) {
+            System.err.println("Not in an initialized Gitlet directory.");
+            return;
+        }
         switch (command) {
         case "init":
             if (args.length == 1) {
