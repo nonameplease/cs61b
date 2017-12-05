@@ -174,7 +174,7 @@ public class Stage implements Serializable {
      */
     private boolean unchangedFromLastCommit(String fileName) {
         File f = new File(fileName);
-        if (headCommit.contains(fileName)) {
+        if (headCommit.getFileMapper().containsKey(fileName) && headCommit.getFileMapper().get(fileName) != null) {
             File lastCommitFile = headCommit.getFile(fileName);
             if (Utils.readContentsAsString(lastCommitFile).
                     equals(Utils.readContentsAsString(f))) {

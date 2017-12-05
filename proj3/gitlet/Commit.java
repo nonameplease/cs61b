@@ -202,10 +202,10 @@ public class Commit implements Serializable {
     public void copyFile(Commit given, String fileNameCopyFrom,
                          String fileNameCopyTo) {
         File copyFrom = given.getFile(fileNameCopyFrom);
-        String path = thisCommit_Dir + fileNameCopyTo;
+        String path = fileNameCopyTo;
         File copyTo = new File(path);
         Utils.writeContents(copyTo, Utils.readContents(copyFrom));
-        this.fileMapper.put(fileNameCopyTo, thisCommit_Dir);
+        this.fileMapper.put(fileNameCopyTo, null);
     }
 
     /**
@@ -217,8 +217,8 @@ public class Commit implements Serializable {
      */
     public boolean modified(Commit given, String fileName) {
         File givenFile = given.getFile(fileName);
-        File thisFile = this.getFile(fileName);
-        return !(Utils.readContents(givenFile) == Utils.readContents(thisFile));
+        File thisFile = getFile(fileName);
+        return !(Utils.readContentsAsString(givenFile).equals(Utils.readContentsAsString(thisFile)));
     }
 
     /**
