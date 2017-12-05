@@ -119,8 +119,8 @@ public class Stage implements Serializable {
         }
 
         if (headCommit.getCurrentStage() != null) {
-            if (headCommit.getCurrentStage().getFilesMarkedForRemove().contains(fileName)) {
-                headCommit.getCurrentStage().getFilesMarkedForRemove().remove(fileName);
+            if (FilesMarkedForRemove.contains(fileName)) {
+                FilesMarkedForRemove.remove(fileName);
             }
         }
 
