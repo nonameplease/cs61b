@@ -361,6 +361,7 @@ public class Branch implements Serializable {
                     sb.append(System.lineSeparator());
                     sb.append(givenContent);
                     sb.append(">>>>>>>");
+                    sb.append(System.lineSeparator());
                     File f = new File(fileName);
                     Utils.writeContents(f, sb.toString());
                     currentStage.add(fileName);
