@@ -163,8 +163,16 @@ public class Main {
             break;
         case "checkout":
             if (args.length == 3) {
+                if (!token.equals("--")) {
+                    System.err.println("Incorrect operands.");
+                    break;
+                }
                 commitTree.checkoutFile(token2);
             } else if (args.length == 4) {
+                if (!token2.equals("--")) {
+                    System.err.println("Incorrect operands.");
+                    break;
+                }
                 commitTree.checkoutCommit(token, token3);
             } else if (args.length == 2) {
                 commitTree.checkoutBranch(token);

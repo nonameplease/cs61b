@@ -92,7 +92,7 @@ public class CommitTree implements Serializable {
      */
     public void commit(String msg) {
         if (getCurrentBranch().getCurrentStage().
-                getStagedFiles().keySet() == null) {
+                getStagedFiles().keySet().size() == 0) {
             System.err.println(" No changes added to the commit.");
         }
 
@@ -169,13 +169,6 @@ public class CommitTree implements Serializable {
             return;
         }
 
-        if (branchMap.containsKey(name)) {
-            currentBranch = branchMap.get(name);
-            Commit commit = currentBranch.getHead();
-            commit.restoreAllFiles();
-            return;
-        }
-
         if (currentBranch.getHead().contains(name)) {
             currentBranch.getHead().restoreFiles(name);
             return;
@@ -187,14 +180,19 @@ public class CommitTree implements Serializable {
      * @param name Branch name.
      */
     public void checkoutBranch(String name) {
-        List<String> currentDirFiles = new ArrayList<>();
+        List<String> currentDirFiles;
         currentDirFiles = Utils.plainFilenamesIn(
                 System.getProperty("user.dir"));
-        System.out.println(currentDirFiles);
-        System.out.println(currentBranch.getHead().getFileMapper().keySet());
+        //System.out.println(currentDirFiles);
+        //System.out.println(currentBranch.getHead().getFileMapper().keySet());
 
         if (!branchMap.containsKey(name)) {
             System.err.println("No such branch exists.");
+            return;
+        }
+
+        if (currentBranch.getBranchName().equals(name)) {
+            System.err.println("No need to checkout the current branch.");
             return;
         }
 
@@ -207,11 +205,6 @@ public class CommitTree implements Serializable {
                         + "in the way; delete it or add it first. ");
                 return;
             }
-        }
-
-        if (currentBranch.getBranchName() == name) {
-            System.err.println("No need to checkout the current branch.");
-            return;
         }
 
         Branch givenBranch = branchMap.get(name);
