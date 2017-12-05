@@ -1,19 +1,32 @@
 package gitlet;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 /** Driver class for Gitlet, the tiny stupid version-control system.
  *  @author Scott Shao
  */
 public class Main {
 
+    /**
+     * Gitlet dir.
+     */
     private static final String GITLET_DIR = ".gitlet" + File.separator;
 
+    /**
+     * Init commit tree.
+     * @return Commit tree.
+     */
     private static CommitTree init() {
         File f = new File(GITLET_DIR);
         File stagef = new File(Stage.Stage_Dir);
         if (f.exists()) {
-            System.err.println("A Gitlet version-control system already exists in the current directory.");
+            System.err.println("A Gitlet version-control "
+                    + "system already exists in the current directory.");
             return null;
         }
         f.mkdirs();
@@ -21,6 +34,10 @@ public class Main {
         return CommitTree.commitTreeINIT();
     }
 
+    /**
+     * Load serialized tree.
+     * @return Commit tree.
+     */
     private static CommitTree tryLoad() {
         CommitTree commitTree = null;
         File commitTreeFile = new File(GITLET_DIR + "gitletVCS.ser");
@@ -37,6 +54,10 @@ public class Main {
         return commitTree;
     }
 
+    /**
+     * Save serialized tree.
+     * @param commitTree Commit tree.
+     */
     public static void saveTree(CommitTree commitTree) {
         if (commitTree == null) {
             return;
@@ -79,114 +100,110 @@ public class Main {
         if (args.length > 3) {
             token3 = args[3];
         }
-
-        /**
-         * If .gitlet not initialized, might output NullPointerException,
-         * So catch the exception and output .gitlet not initialized.
-         */
         CommitTree commitTree = tryLoad();
         String command = args[0];
         switch (command) {
-            case "init":
-                if (args.length == 1) {
-                    commitTree = init();
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "add":
-                if (args.length == 2) {
-                    commitTree.add(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "commit":
-                if (args.length == 2) {
-                    commitTree.commit(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "rm":
-                if (args.length == 2) {
-                    commitTree.remove(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "log":
-                if (args.length == 1) {
-                    commitTree.printLog();
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "global-log":
-                if (args.length == 1) {
-                    commitTree.printGlobalLog();
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "find":
-                if (args.length == 2) {
-                    commitTree.find(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "status":
-                if (args.length == 1) {
-                    System.out.println(commitTree);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "checkout":
-                if (args.length == 3) {
-                    commitTree.checkoutFile(token2);
-                } else if (args.length == 4){
-                    commitTree.checkoutCommit(token, token3);
-                } else if (args.length == 2) {
-                    commitTree.checkoutBranch(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "branch":
-                if (args.length == 2) {
-                    commitTree.addNewBranch(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "rm-branch":
-                if (args.length == 2) {
-                    commitTree.removeBranch(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "reset":
-                if (args.length == 2) {
-                    commitTree.reset(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            case "merge":
-                if (args.length == 2) {
-                    commitTree.merge(token);
-                } else {
-                    System.err.println("Incorrect operands.");
-                }
-                break;
-            default:
-                System.err.println("No command with that name exists.");
-                break;
+        case "init":
+            if (args.length == 1) {
+                commitTree = init();
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "add":
+            if (args.length == 2) {
+                commitTree.add(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "commit":
+            if (args.length == 2) {
+                commitTree.commit(token);
+            } else if (args.length == 1) {
+                System.err.println("Please enter a commit message.");
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "rm":
+            if (args.length == 2) {
+                commitTree.remove(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "log":
+            if (args.length == 1) {
+                commitTree.printLog();
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "global-log":
+            if (args.length == 1) {
+                commitTree.printGlobalLog();
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "find":
+            if (args.length == 2) {
+                commitTree.find(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "status":
+            if (args.length == 1) {
+                System.out.println(commitTree);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "checkout":
+            if (args.length == 3) {
+                commitTree.checkoutFile(token2);
+            } else if (args.length == 4) {
+                commitTree.checkoutCommit(token, token3);
+            } else if (args.length == 2) {
+                commitTree.checkoutBranch(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "branch":
+            if (args.length == 2) {
+                commitTree.addNewBranch(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "rm-branch":
+            if (args.length == 2) {
+                commitTree.removeBranch(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "reset":
+            if (args.length == 2) {
+                commitTree.reset(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        case "merge":
+            if (args.length == 2) {
+                commitTree.merge(token);
+            } else {
+                System.err.println("Incorrect operands.");
+            }
+            break;
+        default:
+            System.err.println("No command with that name exists.");
+            break;
         }
-        //System.out.println(commitTree);
         saveTree(commitTree);
     }
 

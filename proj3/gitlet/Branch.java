@@ -5,54 +5,113 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class branch.
+ * @author Scott Shao
+ */
 public class Branch implements Serializable {
+    /**
+     * Branch name.
+     */
     private final String branchName;
+    /**
+     * Head commit.
+     */
     private Commit head;
+    /**
+     * Current stage.
+     */
     private Stage currentStage;
 
-    public Branch(String branchName, Commit head) {
-        this.branchName = branchName;
-        this.head = head;
-        this.currentStage = new Stage(head);
+    /**
+     * Initialize branch.
+     * @param givenBranchName Given branch name.
+     * @param givenHead Given commit.
+     */
+    public Branch(String givenBranchName, Commit givenHead) {
+        this.branchName = givenBranchName;
+        this.head = givenHead;
+        this.currentStage = new Stage(givenHead);
     }
 
+    /**
+     * Get current branch name.
+     * @return Current branch name.
+     */
     public String getBranchName() {
         return branchName;
     }
 
+    /**
+     * Get current head commit.
+     * @return The current head commit.
+     */
     public Commit getHead() {
         return head;
     }
 
+    /**
+     * Get current stage.
+     * @return The current stage.
+     */
     public Stage getCurrentStage() {
         return currentStage;
     }
 
-    public void setHead(Commit head) {
-        this.head = head;
+    /**
+     * Set head commit.
+     * @param givenHead The head commit.
+     */
+    public void setHead(Commit givenHead) {
+        this.head = givenHead;
     }
 
-    public void setCurrentStage(Stage stage) {
-        this.currentStage = stage;
+    /**
+     * Set the current stage to stage.
+     * @param givenStage The stage.
+     */
+    public void setCurrentStage(Stage givenStage) {
+        this.currentStage = givenStage;
     }
 
+    /**
+     * Commit without message.
+     */
     public void commitNoMsg() {
         System.err.println("Please enter a commit message.");
     }
 
+    /**
+     * Commit with message.
+     * @param msg The message.
+     */
     public void commitMsg(String msg) {
         this.head = new Commit(currentStage, msg);
         currentStage = new Stage(head);
     }
 
+    /**
+     * Stage file.
+     * @param fileName File name.
+     */
     public void stageFile(String fileName) {
         currentStage.add(fileName);
     }
 
+    /**
+     * Remove file.
+     * @param fileName File name.
+     */
     public void removeFile(String fileName) {
         currentStage.rm(fileName);
     }
 
+    /**
+     * Find split point.
+     * @param b1 Branch 1.
+     * @param b2 Branch 2.
+     * @return Commit at split point.
+     */
     private static Commit splitPoint(Branch b1, Branch b2) {
         int b1Length = b1.length();
         int b2Length = b2.length();
@@ -74,6 +133,7 @@ public class Branch implements Serializable {
 
     /**
      * Num of commits in branch b.
+     * @return A int length.
      */
     private int length() {
         int length = 0;
@@ -93,7 +153,8 @@ public class Branch implements Serializable {
         Commit givenHead = given.getHead();
         Commit split = splitPoint(this, given);
         if (split.equals(givenHead)) {
-            System.out.println("Given branch is an ancestor of the current branch.");
+            System.out.println(
+                    "Given branch is an ancestor of the current branch.");
             return;
         }
         if (split.equals(getBranchName())) {
@@ -113,10 +174,13 @@ public class Branch implements Serializable {
             boolean conflict = false;
             if (split.contains(fileName)) {
                 if (givenHead.contains(fileName) && head.contains(fileName)) {
-                    if (givenHead.modified(split, fileName) && !head.modified(split, fileName)) {
+                    if (givenHead.modified(split, fileName)
+                            && !head.modified(split, fileName)) {
                         head.copyFile(givenHead, fileName, fileName);
-                    } else if (givenHead.modified(split, fileName) && head.modified(split, fileName)) {
-                        if (!head.getFile(fileName).equals(givenHead.getFile(fileName))) {
+                    } else if (givenHead.modified(split, fileName)
+                            && head.modified(split, fileName)) {
+                        if (!head.getFile(fileName).
+                                equals(givenHead.getFile(fileName))) {
                             conflict = true;
                         }
                     }

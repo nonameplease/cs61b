@@ -1,36 +1,66 @@
 package gitlet;
 
-
-import java.io.File;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
+/**
+ * CommitTree class.
+ * @author Scott Shao
+ */
 public class CommitTree implements Serializable {
+    /**
+     * Hash map maps branch name to branch.
+     */
     private HashMap<String, Branch> branchMap;
+    /**
+     * Current branch.
+     */
     private Branch currentBranch;
     /**
      * Key: Parent HashValue.
      * Value: Commit.
      */
     private HashMap<String, Commit> allCommits;
+    /**
+     * Hash map maps commit message to SHA1 ID.
+     */
     private HashMap<String, ArrayList<String>> commitMsgToHashValue;
+    /**
+     * Length of SHA1.
+     */
+    private static final int IDlength = 40;
 
+    /**
+     * Initialize commit tree.
+     */
     private CommitTree() {
         branchMap = new HashMap<>();
         allCommits = new HashMap<>();
         commitMsgToHashValue = new HashMap<>();
     }
 
+    /**
+     * Get branch map.
+     * @return Branch map.
+     */
     public HashMap<String, Branch> getBranchMap() {
         return branchMap;
     }
 
+    /**
+     * Return current branch.
+     * @return Current branch.
+     */
     public Branch getCurrentBranch() {
         return currentBranch;
     }
 
     /**
-     * INIT
+     * INIT.
+     * @return Return initialized command tree.
      */
     public static CommitTree commitTreeINIT() {
         CommitTree commitTree = new CommitTree();
@@ -48,12 +78,21 @@ public class CommitTree implements Serializable {
         return commitTree;
     }
 
+    /**
+     * Add command.
+     * @param fileName File name.
+     */
     public void add(String fileName) {
         currentBranch.stageFile(fileName);
     }
 
+    /**
+     * Commit command.
+     * @param msg Commit message.
+     */
     public void commit(String msg) {
-        if (getCurrentBranch().getCurrentStage().getStagedFiles().keySet() == null) {
+        if (getCurrentBranch().getCurrentStage().
+                getStagedFiles().keySet() == null) {
             System.err.println(" No changes added to the commit.");
         }
 
@@ -73,10 +112,17 @@ public class CommitTree implements Serializable {
         commitMsgToHashValue.put(msg, temp);
     }
 
+    /**
+     * Remove file.
+     * @param fileName File name.
+     */
     public void remove(String fileName) {
         currentBranch.removeFile(fileName);
     }
 
+    /**
+     * Log command.
+     */
     public void printLog() {
         Commit currentCommit = currentBranch.getHead();
         while (currentCommit != currentCommit.getParent()) {
@@ -88,6 +134,9 @@ public class CommitTree implements Serializable {
         System.out.println(currentCommit.toString());
     }
 
+    /**
+     * Global log command.
+     */
     public void printGlobalLog() {
         for (String key : allCommits.keySet()) {
             Commit commit = allCommits.get(key);
@@ -96,6 +145,10 @@ public class CommitTree implements Serializable {
         }
     }
 
+    /**
+     * Find command.
+     * @param msg Commit message.
+     */
     public void find(String msg) {
         if (!commitMsgToHashValue.containsKey(msg)) {
             System.err.println("Found no commit with that message.");
@@ -106,6 +159,10 @@ public class CommitTree implements Serializable {
         }
     }
 
+    /**
+     * Checkout command with file name.
+     * @param name File name.
+     */
     public void checkoutFile(String name) {
         if (!currentBranch.getHead().contains(name)) {
             System.err.println("File does not exist in that commit.");
@@ -125,10 +182,16 @@ public class CommitTree implements Serializable {
         }
     }
 
+    /**
+     * Checkout command with branch name.
+     * @param name Branch name.
+     */
     public void checkoutBranch(String name) {
         List<String> currentDirFiles = new ArrayList<>();
-        currentDirFiles = Utils.plainFilenamesIn(System.getProperty("user.dir"));
-        //System.out.println(currentDirFiles);
+        currentDirFiles = Utils.plainFilenamesIn(
+                System.getProperty("user.dir"));
+        System.out.println(currentDirFiles);
+        System.out.println(currentBranch.getHead().getFileMapper().keySet());
 
         if (!branchMap.containsKey(name)) {
             System.err.println("No such branch exists.");
@@ -136,8 +199,12 @@ public class CommitTree implements Serializable {
         }
 
         for (String fileName : currentDirFiles) {
-            if (currentBranch.getCurrentStage().getStagedFiles().get(fileName) == null && branchMap.get(name).getCurrentStage().getStagedFiles().containsKey(fileName)) {
-                System.err.println("There is an untracked file in the way; delete it or add it first. ");
+            if (currentBranch.getCurrentStage().
+                    getStagedFiles().get(fileName) == null
+                    && branchMap.get(name).getCurrentStage().
+                    getStagedFiles().containsKey(fileName)) {
+                System.err.println("There is an untracked file "
+                        + "in the way; delete it or add it first. ");
                 return;
             }
         }
@@ -154,6 +221,11 @@ public class CommitTree implements Serializable {
         currentBranch.getHead().restoreAllFiles();
     }
 
+    /**
+     * Checkout command with commit ID and file name.
+     * @param hashValue Commit ID.
+     * @param name File name.
+     */
     public void checkoutCommit(String hashValue, String name) {
         hashValue = getLongCommitHashValue(hashValue);
         if (!allCommits.containsKey(hashValue)) {
@@ -168,6 +240,10 @@ public class CommitTree implements Serializable {
         commit.restoreFiles(name);
     }
 
+    /**
+     * Add new branch.
+     * @param branchName Branch name.
+     */
     public void addNewBranch(String branchName) {
         if (branchMap.containsKey(branchName)) {
             System.err.println("A branch with that name already exists.");
@@ -178,6 +254,10 @@ public class CommitTree implements Serializable {
         branchMap.put(branchName, newBranch);
     }
 
+    /**
+     * Remove branch.
+     * @param branchName Branch name.
+     */
     public void removeBranch(String branchName) {
         if (currentBranch.getBranchName().equals(branchName)) {
             System.err.println("Cannot remove the current branch.");
@@ -190,6 +270,10 @@ public class CommitTree implements Serializable {
         branchMap.remove(branchName);
     }
 
+    /**
+     * Reset command.
+     * @param hashValue Commit ID.
+     */
     public void reset(String hashValue) {
         hashValue = getLongCommitHashValue(hashValue);
         if (!allCommits.containsKey(hashValue)) {
@@ -202,6 +286,10 @@ public class CommitTree implements Serializable {
         currentBranch.setCurrentStage(null);
     }
 
+    /**
+     * Merge command.
+     * @param branchName Given branch.
+     */
     public void merge(String branchName) {
         if (!branchMap.containsKey(branchName)) {
             System.err.println("A branch with that name does not exist.");
@@ -217,8 +305,14 @@ public class CommitTree implements Serializable {
         currentBranch.merge(given);
     }
 
+    /**
+     * Get normal commit hash value from
+     * a shorthand version.
+     * @param shortHashValue The shorthand ID.
+     * @return Normal ID.
+     */
     public String getLongCommitHashValue(String shortHashValue) {
-        if (shortHashValue.length() < 40) {
+        if (shortHashValue.length() < IDlength) {
             int length = shortHashValue.length();
             for (String hash : allCommits.keySet()) {
                 String shorthash = hash.substring(0, length);

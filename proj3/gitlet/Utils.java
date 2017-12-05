@@ -245,6 +245,11 @@ class Utils {
         abstract T2 apply(T1 x);
     }
 
+    /**
+     * Get plain file name.
+     * @param fileName File name with dir.
+     * @return File name.
+     */
     static String getPlainFileName(String fileName) {
         Path path = Paths.get(fileName);
         return path.getFileName().toString();

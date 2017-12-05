@@ -1,0 +1,14 @@
+> init
+<<<
++ wug.txt wug.txt
+> add wug.txt
+<<<
+> commit "added wug"
+<<<
++ wug.txt notwug.txt
+> add wug.txt
+<<<
++ wug.txt wug.txt
+> add wug.txt
+<<<
+* .gitlet/stage/wug.txt
