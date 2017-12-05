@@ -311,47 +311,40 @@ public class Branch implements Serializable {
              * Merge.
              */
             if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && !fileBoolean.modifiedInCurrentCommit) {
-                /*Utils.writeContents(new File(fileName), Utils.readContents(givenHead.getFile(fileName)));
-                currentStage.getStagedFiles().put(fileName, null);
-                currentStage.getFilesNewOnStage().add(fileName);
-                Utils.writeContents(new File(Stage.Stage_Dir + fileName), Utils.readContents(givenHead.getFile(fileName)));*/
                 head.copyFile(givenHead, fileName, fileName);
                 currentStage.add(fileName);
+                //System.out.println("1");
             } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && !fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit) {
-
-            } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit) {
-                if (!head.modified(givenHead, fileName)) {
-
-                }
+                //System.out.println("2");
+            } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit && !head.modified(givenHead, fileName)) {
+                //System.out.println("3");
+                //System.out.println("here?");
             } else if (fileBoolean.presentInSplit && !fileBoolean.presentInGivenCommit && !fileBoolean.presentInCurrentCommit) {
-
+                //System.out.println("4");
             } else if (!fileBoolean.presentInSplit && !fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit) {
-
+                //System.out.println("5");
             } else if (!fileBoolean.presentInSplit && !fileBoolean.presentInCurrentCommit && fileBoolean.presentInGivenCommit) {
-                /*Utils.writeContents(new File(fileName), Utils.readContents(givenHead.getFile(fileName)));
-                currentStage.getStagedFiles().put(fileName, null);
-                currentStage.getFilesNewOnStage().add(fileName);
-                Utils.writeContents(new File(Stage.Stage_Dir + fileName), Utils.readContents(givenHead.getFile(fileName)));*/
                 head.copyFile(givenHead, fileName, fileName);
                 currentStage.add(fileName);
+                //System.out.println("6");
             } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && !fileBoolean.presentInCurrentCommit && !fileBoolean.modifiedInGivenCommit) {
-
+                //System.out.println("7");
             } else if (fileBoolean.presentInSplit && fileBoolean.presentInCurrentCommit && !fileBoolean.modifiedInCurrentCommit && !fileBoolean.presentInGivenCommit) {
                 File f = new File(fileName);
                 f.delete();
                 currentStage.getFilesMarkedForRemove().add(fileName);
+                //System.out.println("8");
             } else {
                 boolean conflicted = false;
                 String givenContent = "";
                 String currentContent = "";
-                if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit) {
-                    if (head.modified(givenHead, fileName)) {
-                        givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
-                        currentContent = Utils.readContentsAsString(head.getFile(fileName));
-                        conflicted = true;
-                        hasConflict = true;
-                        //System.out.println(fileName + " conflict 1");
-                    }
+                if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit && head.modified(givenHead, fileName)) {
+                    //System.out.println("enter conflict 1 outside modified");
+                    givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
+                    currentContent = Utils.readContentsAsString(head.getFile(fileName));
+                    conflicted = true;
+                    hasConflict = true;
+                    //System.out.println(fileName + " conflict 1");
                 } else if (fileBoolean.presentInSplit && fileBoolean.presentInCurrentCommit && !fileBoolean.presentInGivenCommit && fileBoolean.modifiedInCurrentCommit) {
                     currentContent = Utils.readContentsAsString(head.getFile(fileName));
                     conflicted = true;
@@ -361,27 +354,28 @@ public class Branch implements Serializable {
                     givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
                     conflicted = true;
                     hasConflict = true;
-                    //System.out.println(fileName + " conflict 3");
-                } else if (!fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit) {
-                    if (head.modified(givenHead, fileName)) {
-                        givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
-                        currentContent = Utils.readContentsAsString(head.getFile(fileName));
-                        conflicted = true;
-                        hasConflict = true;
-                        //System.out.println(fileName + " conflict 4");
-                    }
+                   // System.out.println(fileName + " conflict 3");
+                } else if (!fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && head.modified(givenHead, fileName)) {
+                    givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
+                    currentContent = Utils.readContentsAsString(head.getFile(fileName));
+                    conflicted = true;
+                    hasConflict = true;
+                    //System.out.println(fileName + " conflict 4");
                 } else {
                     givenContent = "";
                     currentContent = "";
                     conflicted = false;
+                    //System.out.println(fileName + "no conflicts");
                 }
                 if (conflicted) {
                     StringBuilder sb = new StringBuilder();
-                    sb.append("<<<<<<< HEAD \n");
+                    sb.append("<<<<<<< HEAD");
+                    sb.append(System.lineSeparator());
                     sb.append(currentContent);
-                    sb.append("======= \n");
+                    sb.append("=======");
+                    sb.append(System.lineSeparator());
                     sb.append(givenContent);
-                    sb.append(">>>>>>> \n");
+                    sb.append(">>>>>>>");
                     File f = new File(fileName);
                     Utils.writeContents(f, sb.toString());
                     currentStage.add(fileName);
@@ -392,78 +386,6 @@ public class Branch implements Serializable {
         if (hasConflict) {
             System.out.println("Encountered a merge conflict.");
         }
-
-        /*for (String fileName : allFiles) {
-            boolean conflict = false;
-            if (split.contains(fileName)) {
-                if (givenHead.contains(fileName) && head.contains(fileName)) {
-                    if (givenHead.modified(split, fileName)
-                            && !head.modified(split, fileName)) {
-                        head.copyFile(givenHead, fileName, fileName);
-                    } else if (givenHead.modified(split, fileName)
-                            && head.modified(split, fileName)) {
-                        if (!head.getFile(fileName).
-                                equals(givenHead.getFile(fileName))) {
-                            conflict = true;
-                        }
-                    }
-                } else if (head.contains(fileName)
-                        && !givenHead.contains(fileName)) {
-                    if (!head.modified(head, fileName)) {
-                        givenHead.getCurrentStage().rm(fileName);
-                    }
-                }
-                if (givenHead.contains(fileName)) {
-                    if (givenHead.modified(split, fileName)
-                            && !head.contains(fileName)) {
-                        conflict = true;
-                    }
-                }
-                if (head.contains(fileName)) {
-                    if (head.modified(split, fileName)
-                            && givenHead.contains(fileName)) {
-                        conflict = true;
-                    }
-                }
-            } else {
-                if (!head.contains(fileName) && givenHead.contains(fileName)) {
-                    File copyFrom = givenHead.getFile(fileName);
-                    File copyTo = new File(fileName);
-                    Utils.writeContents(copyTo, Utils.readContents(copyFrom));
-                    head.getCurrentStage().add(fileName);
-                }
-                if (head.contains(fileName) && givenHead.contains(fileName)) {
-                    if (head.getFile(fileName) != givenHead.getFile(fileName)) {
-                        conflict = true;
-                    }
-                }
-            }
-
-            if (conflict) {
-                byte[] currentContent;
-                byte[] givenContent;
-                if (head.contains(fileName)) {
-                    currentContent = Utils.readContents(head.getFile(fileName));
-                } else {
-                    currentContent = new byte[0];
-                }
-                if (givenHead.contains(fileName)) {
-                    givenContent =
-                            Utils.readContents(givenHead.getFile(fileName));
-                } else {
-                    givenContent = new byte[0];
-                }
-                StringBuilder sb = new StringBuilder();
-                sb.append("<<<<<<< HEAD \n");
-                sb.append(currentContent);
-                sb.append("======= \n");
-                sb.append(givenContent);
-                sb.append(">>>>>>> \n");
-                File f = new File(fileName);
-                Utils.writeContents(f, sb.toString());
-                head.getCurrentStage().add(fileName);
-            }
-        }*/
     }
 
 }
