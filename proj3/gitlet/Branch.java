@@ -156,16 +156,18 @@ public class Branch implements Serializable {
         List<String> workingDirFiles;
         workingDirFiles = Utils.plainFilenamesIn(
                 System.getProperty("user.dir"));
-
         for (String fileName : workingDirFiles) {
             if (!head.getFileMapper().containsKey(fileName)) {
-                if (givenHead.getFileMapper().containsKey(fileName) && !Utils.readContentsAsString(new File(fileName)).equals(Utils.readContentsAsString(givenHead.getFile(fileName)))) {
-                    System.err.println("There is an untracked file in the way; delete it or add it first.");
+                if (givenHead.getFileMapper().containsKey(fileName)
+                        && !Utils.readContentsAsString(new File(fileName))
+                        .equals(Utils.readContentsAsString
+                                (givenHead.getFile(fileName)))) {
+                    System.err.println("There is an untracked file "
+                            + "in the way; delete it or add it first.");
                     return;
                 }
             }
         }
-
         if (split.equals(givenHead)) {
             System.out.println(
                     "Given branch is an ancestor of the current branch.");
@@ -175,56 +177,6 @@ public class Branch implements Serializable {
             head = givenHead;
             System.out.println("Current branch fast-forwarded.");
             return;
-        }
-
-        class fileBoolean {
-            String fileName;
-            boolean presentInSplit;
-            boolean presentInGivenCommit;
-            boolean presentInCurrentCommit;
-            boolean presentInWorkingDir;
-            boolean modifiedInGivenCommit;
-            boolean modifiedInCurrentCommit;
-            boolean modifiedInWorkingDir;
-
-            public fileBoolean (String givenFileName) {
-                fileName = givenFileName;
-                presentInSplit = false;
-                presentInGivenCommit = false;
-                presentInCurrentCommit = false;
-                presentInWorkingDir = false;
-                modifiedInGivenCommit = false;
-                modifiedInCurrentCommit = false;
-                modifiedInWorkingDir = false;
-            }
-
-            public void setPresentInSplit(boolean input) {
-                presentInSplit = input;
-            }
-
-            public void setPresentInGivenCommit(boolean input) {
-                presentInGivenCommit = input;
-            }
-
-            public void setPresentInCurrentCommit(boolean input) {
-                presentInCurrentCommit = input;
-            }
-
-            public void setPresentInWorkingDir(boolean input) {
-                presentInWorkingDir = input;
-            }
-
-            public void setModifiedInGivenCommit(boolean input) {
-                modifiedInGivenCommit = input;
-            }
-
-            public void setModifiedInCurrnetCommit(boolean input) {
-                modifiedInCurrentCommit = input;
-            }
-
-            public void setModifiedInWorkingDir(boolean input) {
-                modifiedInWorkingDir = input;
-            }
         }
         Set<String> allFiles = new HashSet<>();
         for (String fileName : head.getFileMapper().keySet()) {
@@ -238,149 +190,9 @@ public class Branch implements Serializable {
         }
         boolean hasConflict = false;
         for (String fileName : allFiles) {
-            /**
-             * Checking states.
-             */
-            fileBoolean fileBoolean = new fileBoolean(fileName);
-            if (split.getFileMapper().containsKey(fileName)) {
-                fileBoolean.setPresentInSplit(true);
-            }
-            if (givenHead.getFileMapper().containsKey(fileName)) {
-                fileBoolean.setPresentInGivenCommit(true);
-            }
-            if (head.getFileMapper().containsKey(fileName)) {
-                fileBoolean.setPresentInCurrentCommit(true);
-            }
-            if (workingDirFiles.contains(fileName)) {
-                fileBoolean.setPresentInWorkingDir(true);
-            }
-            if (!fileBoolean.presentInSplit) {
-                if (fileBoolean.presentInGivenCommit) {
-                    //fileBoolean.setModifiedInGivenCommit(true);
-                }
-            } else {
-                if (fileBoolean.presentInGivenCommit) {
-                    if (givenHead.modified(split, fileName)) {
-                        fileBoolean.setModifiedInGivenCommit(true);
-                    }
-                }
-            }
-            if (!fileBoolean.presentInSplit) {
-                if (fileBoolean.presentInCurrentCommit) {
-                    //fileBoolean.setModifiedInCurrnetCommit(true);
-                }
-            } else {
-                if (fileBoolean.presentInCurrentCommit) {
-                    if (head.modified(split, fileName)) {
-                        fileBoolean.setModifiedInCurrnetCommit(true);
-                    }
-                }
-            }
-            if (!fileBoolean.presentInSplit) {
-                if (fileBoolean.presentInWorkingDir) {
-                    //fileBoolean.setModifiedInWorkingDir(true);
-                }
-            } else {
-                if (fileBoolean.presentInWorkingDir) {
-                    if (!split.getFile(fileName).equals(new File(fileName))) {
-                        //fileBoolean.setModifiedInWorkingDir(true);
-                    }
-                }
-            }
-
-            /**
-             * System out for testing.
-             * String fileName;
-             boolean presentInSplit;
-             boolean presentInGivenCommit;
-             boolean presentInCurrentCommit;
-             boolean presentInWorkingDir;
-             boolean modifiedInGivenCommit;
-             boolean modifiedInCurrentCommit;
-             boolean modifiedInWorkingDir;
-             */
-            /*System.out.println("fileName: " + fileName);
-            System.out.println();
-            System.out.println("presentInSplit: " + fileBoolean.presentInSplit);
-            System.out.println();
-            System.out.println("presentInGivenCommit: " + fileBoolean.presentInGivenCommit);
-            System.out.println();
-            System.out.println("presentInCurrentCommit: " + fileBoolean.presentInCurrentCommit);
-            System.out.println();
-            System.out.println("presentInWorkingDir: " + fileBoolean.presentInWorkingDir);
-            System.out.println();
-            System.out.println("modifiedInGivenCommit: " + fileBoolean.modifiedInGivenCommit);
-            System.out.println();
-            System.out.println("modifiedInCurrentCommit: " + fileBoolean.modifiedInCurrentCommit);
-            System.out.println();
-            System.out.println("modifiedInWorkingDir: " + fileBoolean.modifiedInWorkingDir);
-            System.out.println();*/
-
-            /**
-             * Merge.
-             */
-            if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && !fileBoolean.modifiedInCurrentCommit) {
-                head.copyFile(givenHead, fileName, fileName);
-                currentStage.add(fileName);
-            } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && !fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit) {
-            } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit && !head.modified(givenHead, fileName)) {
-            } else if (fileBoolean.presentInSplit && !fileBoolean.presentInGivenCommit && !fileBoolean.presentInCurrentCommit) {
-            } else if (!fileBoolean.presentInSplit && !fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit) {
-            } else if (!fileBoolean.presentInSplit && !fileBoolean.presentInCurrentCommit && fileBoolean.presentInGivenCommit) {
-                head.copyFile(givenHead, fileName, fileName);
-                currentStage.add(fileName);
-            } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && !fileBoolean.presentInCurrentCommit && !fileBoolean.modifiedInGivenCommit) {
-            } else if (fileBoolean.presentInSplit && fileBoolean.presentInCurrentCommit && !fileBoolean.modifiedInCurrentCommit && !fileBoolean.presentInGivenCommit) {
-                File f = new File(fileName);
-                f.delete();
-                currentStage.getFilesMarkedForRemove().add(fileName);
-            } else {
-                boolean conflicted = false;
-                String givenContent = "";
-                String currentContent = "";
-                if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit && fileBoolean.modifiedInCurrentCommit && head.modified(givenHead, fileName)) {
-                    givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
-                    currentContent = Utils.readContentsAsString(head.getFile(fileName));
-                    conflicted = true;
-                    hasConflict = true;
-                } else if (fileBoolean.presentInSplit && fileBoolean.presentInCurrentCommit && !fileBoolean.presentInGivenCommit && fileBoolean.modifiedInCurrentCommit) {
-                    currentContent = Utils.readContentsAsString(head.getFile(fileName));
-                    conflicted = true;
-                    hasConflict = true;
-                } else if (fileBoolean.presentInSplit && fileBoolean.presentInGivenCommit && !fileBoolean.presentInCurrentCommit && fileBoolean.modifiedInGivenCommit) {
-                    givenContent = Utils.readContentsAsString(givenHead.getFile(fileName));
-                    conflicted = true;
-                    hasConflict = true;
-                } else if (!fileBoolean.presentInSplit
-                        && fileBoolean.presentInGivenCommit
-                        && fileBoolean.presentInCurrentCommit
-                        && head.modified(givenHead, fileName)) {
-                    givenContent = Utils.readContentsAsString
-                            (givenHead.getFile(fileName));
-                    currentContent = Utils.readContentsAsString
-                            (head.getFile(fileName));
-                    conflicted = true;
-                    hasConflict = true;
-                } else {
-                    givenContent = "";
-                    currentContent = "";
-                    conflicted = false;
-                }
-                if (conflicted) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("<<<<<<< HEAD");
-                    sb.append(System.lineSeparator());
-                    sb.append(currentContent);
-                    sb.append("=======");
-                    sb.append(System.lineSeparator());
-                    sb.append(givenContent);
-                    sb.append(">>>>>>>");
-                    sb.append(System.lineSeparator());
-                    File f = new File(fileName);
-                    Utils.writeContents(f, sb.toString());
-                    currentStage.add(fileName);
-                }
-            }
+            FileBoolean fileBoolean = new FileBoolean(fileName);
+            checkState(fileBoolean, fileName, split, givenHead);
+            hasConflict = merge(fileBoolean, fileName, givenHead, hasConflict);
         }
         commitMsg("Merged " + given.getBranchName()
                 + " into " + getBranchName() + ".");
@@ -389,4 +201,146 @@ public class Branch implements Serializable {
         }
     }
 
+    /**
+     * Helper method.
+     * @param fileBoolean FileBoolean.
+     * @param fileName File name.
+     * @param split Split point.
+     * @param givenHead Given head commit.
+     */
+    private void checkState(FileBoolean fileBoolean, String fileName,
+                            Commit split, Commit givenHead) {
+        /**
+         * Checking states.
+         */
+        if (split.getFileMapper().containsKey(fileName)) {
+            fileBoolean.setPresentInSplit(true);
+        }
+        if (givenHead.getFileMapper().containsKey(fileName)) {
+            fileBoolean.setPresentInGivenCommit(true);
+        }
+        if (getHead().getFileMapper().containsKey(fileName)) {
+            fileBoolean.setPresentInCurrentCommit(true);
+        }
+        if (fileBoolean.getPresentInSplit() && fileBoolean.getPresentInGivenCommit()) {
+            if (givenHead.modified(split, fileName)) {
+                fileBoolean.setModifiedInGivenCommit(true);
+            }
+        }
+        if (fileBoolean.getPresentInSplit() && fileBoolean.getPresentInCurrentCommit()) {
+            if (head.modified(split, fileName)) {
+                fileBoolean.setModifiedInCurrnetCommit(true);
+            }
+        }
+    }
+
+    /**
+     * Helper merge method.
+     * @param fileBoolean FileBoolean check states.
+     * @param fileName File name.
+     * @param givenHead Given head commit.
+     * @param hasConflict State has conflict.
+     * @return Return boolean has conflict.
+     */
+    private boolean merge(FileBoolean fileBoolean, String fileName,
+                          Commit givenHead, boolean hasConflict) {
+        /**
+         * Merge.
+         */
+        if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInGivenCommit()
+                && fileBoolean.getPresentInCurrentCommit()
+                && fileBoolean.getModifiedInGivenCommit()
+                && !fileBoolean.getModifiedInCurrentCommit()) {
+            head.copyFile(givenHead, fileName, fileName);
+            currentStage.add(fileName);
+        } else if (!fileBoolean.getPresentInSplit()
+                && !fileBoolean.getPresentInCurrentCommit()
+                && fileBoolean.getPresentInGivenCommit()) {
+            head.copyFile(givenHead, fileName, fileName);
+            currentStage.add(fileName);
+        } else if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInCurrentCommit()
+                && !fileBoolean.getModifiedInCurrentCommit()
+                && !fileBoolean.getPresentInGivenCommit()) {
+            File f = new File(fileName);
+            f.delete();
+            currentStage.getFilesMarkedForRemove().add(fileName);
+        } else {
+            hasConflict = conflicted(fileBoolean, fileName,
+                    givenHead, hasConflict);
+        }
+        return hasConflict;
+    }
+
+    /**
+     * Helper method.
+     * @param fileBoolean FileBoolean.
+     * @param fileName File name.
+     * @param givenHead Given head commit.
+     * @param hasConflict Boolean has conflict.
+     * @return Boolean has conflict.
+     */
+    private boolean conflicted(FileBoolean fileBoolean,
+                               String fileName, Commit givenHead,
+                               boolean hasConflict) {
+        boolean conflicted = false;
+        String givenContent = "";
+        String currentContent = "";
+        if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getModifiedInGivenCommit()
+                && fileBoolean.getPresentInCurrentCommit()
+                && fileBoolean.getModifiedInGivenCommit()
+                && fileBoolean.getModifiedInCurrentCommit()
+                && head.modified(givenHead, fileName)) {
+            givenContent = Utils.readContentsAsString
+                    (givenHead.getFile(fileName));
+            currentContent = Utils.readContentsAsString
+                    (head.getFile(fileName));
+            conflicted = true;
+            hasConflict = true;
+        } else if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInCurrentCommit()
+                && !fileBoolean.getPresentInGivenCommit()
+                && fileBoolean.getModifiedInCurrentCommit()) {
+            currentContent = Utils.readContentsAsString
+                    (head.getFile(fileName));
+            conflicted = true;
+            hasConflict = true;
+        } else if (fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInGivenCommit()
+                && !fileBoolean.getPresentInCurrentCommit()
+                && fileBoolean.getModifiedInGivenCommit()) {
+            givenContent = Utils.readContentsAsString
+                    (givenHead.getFile(fileName));
+            conflicted = true;
+            hasConflict = true;
+        } else if (!fileBoolean.getPresentInSplit()
+                && fileBoolean.getPresentInGivenCommit()
+                && fileBoolean.getPresentInCurrentCommit()
+                && head.modified(givenHead, fileName)) {
+            givenContent = Utils.readContentsAsString
+                    (givenHead.getFile(fileName));
+            currentContent = Utils.readContentsAsString
+                    (head.getFile(fileName));
+            conflicted = true;
+            hasConflict = true;
+        } else {
+            conflicted = false;
+        }
+        if (conflicted) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<<<<<<< HEAD");
+            sb.append(System.lineSeparator());
+            sb.append(currentContent);
+            sb.append("=======");
+            sb.append(System.lineSeparator());
+            sb.append(givenContent);
+            sb.append(">>>>>>>");
+            sb.append(System.lineSeparator());
+            Utils.writeContents(new File(fileName), sb.toString());
+            currentStage.add(fileName);
+        }
+        return hasConflict;
+    }
 }

@@ -289,7 +289,8 @@ public class CommitTree implements Serializable {
                 System.getProperty("user.dir"));
         Commit commit = allCommits.get(hashValue);
         for (String fileName : workingDirFiles) {
-            if (!currentBranch.getHead().getFileMapper().containsKey(fileName)
+            if (!getCurrentBranch().getHead()
+                    .getFileMapper().containsKey(fileName)
                     && commit.getFileMapper().containsKey(fileName)) {
                 System.err.println("There is an untracked "
                         + "file in the way; delete it or add it first.");
@@ -297,17 +298,17 @@ public class CommitTree implements Serializable {
             }
         }
         commit.restoreAllFiles();
-        for (String fileName : currentBranch.getHead().
+        for (String fileName : getCurrentBranch().getHead().
                 getFileMapper().keySet()) {
             if (!commit.getFileMapper().containsKey(fileName)) {
                 File f = new File(fileName);
                 f.delete();
             }
         }
-        currentBranch.setHead(commit);
-        currentBranch.getCurrentStage().clearStageArea();
-        currentBranch.getCurrentStage().getStagedFiles().clear();
-        currentBranch.getCurrentStage().getFilesNewOnStage().clear();
+        getCurrentBranch().setHead(commit);
+        getCurrentBranch().getCurrentStage().clearStageArea();
+        getCurrentBranch().getCurrentStage().getStagedFiles().clear();
+        getCurrentBranch().getCurrentStage().getFilesNewOnStage().clear();
     }
 
     /**
@@ -315,27 +316,27 @@ public class CommitTree implements Serializable {
      * @param branchName Given branch.
      */
     public void merge(String branchName) {
-        if (!branchMap.containsKey(branchName)) {
+        if (!getBranchMap().containsKey(branchName)) {
             System.err.println("A branch with that name does not exist.");
             return;
         }
 
-        if (currentBranch.getBranchName().equals(branchName)) {
+        if (getCurrentBranch().getBranchName().equals(branchName)) {
             System.err.println("Cannot merge a branch with itself.");
             return;
         }
 
-        for (String fileName : currentBranch.getCurrentStage().
+        for (String fileName : getCurrentBranch().getCurrentStage().
                 getStagedFiles().keySet()) {
-            if (currentBranch.getCurrentStage().getStagedFiles().
+            if (getCurrentBranch().getCurrentStage().getStagedFiles().
                     get(fileName) == null) {
                 System.err.println("You have uncommitted changes.");
                 return;
             }
         }
 
-        Branch given = branchMap.get(branchName);
-        currentBranch.merge(given);
+        Branch given = getBranchMap().get(branchName);
+        getCurrentBranch().merge(given);
     }
 
     /**
