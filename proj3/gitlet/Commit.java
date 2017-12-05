@@ -263,7 +263,7 @@ public class Commit implements Serializable {
         }
         HashMap<String, String> parentFileMapper = parent.getFileMapper();
         for (String fileName : parentFileMapper.keySet()) {
-            if (!fileMapper.containsKey(fileName)) {
+            if (!fileMapper.containsKey(fileName) && !currentStage.getFilesMarkedForRemove().contains(fileName)) {
                 fileMapper.put(fileName, parentFileMapper.get(fileName));
             }
         }

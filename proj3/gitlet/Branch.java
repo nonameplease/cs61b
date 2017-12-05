@@ -152,6 +152,7 @@ public class Branch implements Serializable {
     public void merge(Branch given) {
         Commit givenHead = given.getHead();
         Commit split = splitPoint(this, given);
+        System.out.println(split.getFileMapper().keySet().toString());
         if (split.equals(givenHead)) {
             System.out.println(
                     "Given branch is an ancestor of the current branch.");
