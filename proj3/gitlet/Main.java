@@ -21,7 +21,7 @@ public class Main {
      * Init commit tree.
      * @return Commit tree.
      */
-    private static CommitTree init() {
+    public static CommitTree init() {
         File f = new File(GITLET_DIR);
         File stagef = new File(Stage.STAGEDIR);
         if (f.exists()) {
@@ -72,11 +72,6 @@ public class Main {
             System.out.println("IOException");
         }
     }
-
-
-
-
-
 
     /** Usage: java gitlet.Main ARGS, where ARGS contains
      *  <COMMAND> <OPERAND> .... */
@@ -217,5 +212,4 @@ public class Main {
         }
         saveTree(commitTree);
     }
-
 }
