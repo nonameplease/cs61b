@@ -282,7 +282,16 @@ public class CommitTree implements Serializable {
             System.err.println("No commit with that id exists.");
             return;
         }
+        List<String> workingDirFiles;
+        workingDirFiles = Utils.plainFilenamesIn(
+                System.getProperty("user.dir"));
         Commit commit = allCommits.get(hashValue);
+        for (String fileName : workingDirFiles) {
+            if (!currentBranch.getHead().getFileMapper().containsKey(fileName) && commit.getFileMapper().containsKey(fileName)) {
+                System.err.println("There is an untracked file in the way; delete it or add it first.");
+                return;
+            }
+        }
         commit.restoreAllFiles();
         currentBranch.setHead(commit);
         currentBranch.setCurrentStage(null);

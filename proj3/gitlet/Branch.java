@@ -171,7 +171,7 @@ public class Branch implements Serializable {
                     "Given branch is an ancestor of the current branch.");
             return;
         }
-        if (split.equals(getBranchName())) {
+        if (split.equals(head)) {
             head = givenHead;
             System.out.println("Current branch fast-forwarded.");
             return;
