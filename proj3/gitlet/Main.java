@@ -114,11 +114,11 @@ public class Main {
         HashMap<Integer, ArrayList<String>> commandMap = dealingError();
         String command = args[0];
         int argLength = args.length;
-        if (!commandMap.get(argLength).contains(command)) {
-            System.err.println("Incorrect operands.");
-        } else if (!commandMap.get(1).contains(command)
+        if (!commandMap.get(1).contains(command)
                 && !commandMap.get(2).contains(command)) {
             System.err.println("No command with that name exists.");
+        } else if (!commandMap.get(argLength).contains(command)) {
+            System.err.println("Incorrect operands.");
         }
     }
 

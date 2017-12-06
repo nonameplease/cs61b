@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Stage class.
@@ -178,6 +179,23 @@ public class Stage implements Serializable {
             }
         }
         return false;
+    }
+
+    /**
+     * In progress.
+     * @return String.
+     */
+    private String modificationNotStagedForCommit() {
+        String d = "d";
+        List<String> workingDirFiles;
+        workingDirFiles = Utils.plainFilenamesIn(
+                System.getProperty("user.dir"));
+        for (String fileName : workingDirFiles) {
+            if (getHeadCommit().getFileMapper().get(fileName) != null) {
+                d = "dd";
+            }
+        }
+        return d;
     }
 
     @Override
