@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /** Driver class for Gitlet, the tiny stupid version-control system.
  *  @author Scott Shao
@@ -73,6 +75,148 @@ public class Main {
         }
     }
 
+    /**
+     * A hashmap between number of arguments and command.
+     * @return The hashmap.
+     */
+    private static HashMap<Integer, ArrayList<String>> dealingError() {
+        HashMap<Integer, ArrayList<String>> errorCase = new HashMap<>();
+        ArrayList<String> argOne = new ArrayList<>();
+        argOne.add("init");
+        argOne.add("commit");
+        argOne.add("log");
+        argOne.add("global-log");
+        argOne.add("status");
+        ArrayList<String> argTwo = new ArrayList<>();
+        argTwo.add("add");
+        argTwo.add("commit");
+        argTwo.add("rm");
+        argTwo.add("find");
+        argTwo.add("checkout");
+        argTwo.add("branch");
+        argTwo.add("rm-branch");
+        argTwo.add("reset");
+        argTwo.add("merge");
+        ArrayList<String> argThreeAndFour = new ArrayList<>();
+        argThreeAndFour.add("checkout");
+        errorCase.put(1, argOne);
+        errorCase.put(2, argTwo);
+        errorCase.put(3, argThreeAndFour);
+        errorCase.put(4, argThreeAndFour);
+        return errorCase;
+    }
+
+    /**
+     * Handle error.
+     * @param args Input args.
+     */
+    private static void doComamandError(String[] args) {
+        HashMap<Integer, ArrayList<String>> commandMap = dealingError();
+        String command = args[0];
+        int argLength = args.length;
+        if (!commandMap.get(argLength).contains(command)) {
+            System.err.println("Incorrect operands.");
+        } else if (!commandMap.get(1).contains(command)
+                && !commandMap.get(2).contains(command)) {
+            System.err.println("No command with that name exists.");
+        }
+    }
+
+    /**
+     * Do command with one argument.
+     * @param command Command.
+     * @param commitTree CommitTree object.
+     * @return Initialized CommitTree.
+     */
+    private static CommitTree doCommandArgOne(String command,
+                                              CommitTree commitTree) {
+        if (command.equals("init")) {
+            commitTree = init();
+        } else if (command.equals("commit")) {
+            System.err.println("Please enter a commit message.");
+        } else if (command.equals("log")) {
+            commitTree.printLog();
+        } else if (command.equals("global-log")) {
+            commitTree.printGlobalLog();
+        } else if (command.equals("status")) {
+            System.out.println(commitTree.toString());
+        }
+        return commitTree;
+    }
+
+    /**
+     * Do command with two arguments.
+     * @param command Command.
+     * @param commitTree CommitTree object.
+     * @param token Arg.
+     */
+    private static void doCommandArgTwo(String command,
+                                        CommitTree commitTree, String token) {
+        if (command.equals("add")) {
+            commitTree.add(token);
+        } else if (command.equals("commit")) {
+            commitTree.commit(token);
+        } else if (command.equals("rm")) {
+            commitTree.remove(token);
+        } else if (command.equals("find")) {
+            commitTree.find(token);
+        } else if (command.equals("checkout")) {
+            commitTree.checkoutBranch(token);
+        } else if (command.equals("branch")) {
+            commitTree.addNewBranch(token);
+        } else if (command.equals("rm-branch")) {
+            commitTree.removeBranch(token);
+        } else if (command.equals("reset")) {
+            commitTree.reset(token);
+        } else if (command.equals("merge")) {
+            commitTree.merge(token);
+        }
+    }
+
+    /**
+     * Do command with three or more arguments.
+     * @param command Command.
+     * @param commitTree CommitTree object.
+     * @param args Input args.
+     */
+    private static void doCommandArgMore(String command,
+                                         CommitTree commitTree, String[] args) {
+        if (args.length == 3) {
+            if (!args[1].equals("--")) {
+                System.err.println("Incorrect operands.");
+            } else {
+                commitTree.checkoutFile(args[2]);
+            }
+        } else if (args.length == 4) {
+            if (!args[2].equals("--")) {
+                System.err.println("Incorrect operands.");
+            } else {
+                commitTree.checkoutCommit(args[1], args[3]);
+            }
+        }
+    }
+
+    /**
+     * Parse and do command.
+     * @param command The command string.
+     * @param commitTree CommitTree object.
+     * @param args Input args.
+     * @return Initialized commitTree.
+     */
+    public static CommitTree doCommand(String command,
+                                       CommitTree commitTree, String[] args) {
+        doComamandError(args);
+        int argsLength = args.length;
+        if (argsLength == 1) {
+            commitTree = doCommandArgOne(command, commitTree);
+        } else if (argsLength == 2) {
+            doCommandArgTwo(command, commitTree, args[1]);
+        } else {
+            doCommandArgMore(command, commitTree, args);
+        }
+        return commitTree;
+    }
+
     /** Usage: java gitlet.Main ARGS, where ARGS contains
      *  <COMMAND> <OPERAND> .... */
     public static void main(String... args) {
@@ -80,136 +224,13 @@ public class Main {
             System.err.println("Please enter a command.");
             return;
         }
-        String token = "";
-        if (args.length > 1) {
-            token = args[1];
-        }
-
-        String token2 = "";
-        if (args.length > 2) {
-            token2 = args[2];
-        }
-
-        String token3 = "";
-        if (args.length > 3) {
-            token3 = args[3];
-        }
         CommitTree commitTree = tryLoad();
         String command = args[0];
         if (!command.equals("init") && commitTree == null) {
             System.err.println("Not in an initialized Gitlet directory.");
             return;
         }
-        switch (command) {
-        case "init":
-            if (args.length == 1) {
-                commitTree = init();
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "add":
-            if (args.length == 2) {
-                commitTree.add(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "commit":
-            if (args.length == 2) {
-                commitTree.commit(token);
-            } else if (args.length == 1) {
-                System.err.println("Please enter a commit message.");
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "rm":
-            if (args.length == 2) {
-                commitTree.remove(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "log":
-            if (args.length == 1) {
-                commitTree.printLog();
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "global-log":
-            if (args.length == 1) {
-                commitTree.printGlobalLog();
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "find":
-            if (args.length == 2) {
-                commitTree.find(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "status":
-            if (args.length == 1) {
-                System.out.println(commitTree.toString());
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "checkout":
-            if (args.length == 3) {
-                if (!token.equals("--")) {
-                    System.err.println("Incorrect operands.");
-                    break;
-                }
-                commitTree.checkoutFile(token2);
-            } else if (args.length == 4) {
-                if (!token2.equals("--")) {
-                    System.err.println("Incorrect operands.");
-                    break;
-                }
-                commitTree.checkoutCommit(token, token3);
-            } else if (args.length == 2) {
-                commitTree.checkoutBranch(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "branch":
-            if (args.length == 2) {
-                commitTree.addNewBranch(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "rm-branch":
-            if (args.length == 2) {
-                commitTree.removeBranch(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "reset":
-            if (args.length == 2) {
-                commitTree.reset(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        case "merge":
-            if (args.length == 2) {
-                commitTree.merge(token);
-            } else {
-                System.err.println("Incorrect operands.");
-            }
-            break;
-        default:
-            System.err.println("No command with that name exists.");
-            break;
-        }
+        commitTree = doCommand(command, commitTree, args);
         saveTree(commitTree);
     }
 }

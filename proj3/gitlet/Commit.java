@@ -84,22 +84,6 @@ public class Commit implements Serializable {
         }
     }
 
-    /*public String findSplitPoint(Commit given) {
-        if (given == null) {
-            return null;
-        }
-
-        if (this.equals(given)) {
-            return this.hashValue;
-        }
-
-        if (this.timeStamp >= given.timeStamp) {
-            return given.findSplitPoint(this.parent);
-        } else {
-            return this.findSplitPoint(given.parent);
-        }
-    }*/
-
     /**
      * Get the ID of the commit.
      * @return ID of the commit.
