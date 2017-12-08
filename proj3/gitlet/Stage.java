@@ -186,16 +186,89 @@ public class Stage implements Serializable {
      * @return String.
      */
     private String modificationNotStagedForCommit() {
-        String d = "d";
+        StringBuilder sb = new StringBuilder();
+        ArrayList<String> filesInWorkingDir = getFileNamesInWorkingDir();
+        for (String fileName : filesInWorkingDir) {
+            if (getHeadCommit().getFileMapper().containsKey(fileName)
+                    && modifiedCompareToWorkingDir(fileName, "commit")
+                    && !getStagedFiles().containsKey(fileName)) {
+                sb.append(fileName + " (modified)\n");
+            } else if (getFilesNewOnStage().contains(fileName)
+                    && modifiedCompareToWorkingDir(fileName, "stage")) {
+                sb.append(fileName + " (modified)\n");
+            }
+        }
+        for (String fileName : getStagedFiles().keySet()) {
+            if (!getFileNamesInWorkingDir().contains(fileName)) {
+                sb.append(fileName + " (deleted)\n");
+            }
+        }
+        for (String fileName : getHeadCommit().getFileMapper().keySet()) {
+            if (!getFilesMarkedForRemove().contains(fileName)
+                    && !getFileNamesInWorkingDir().contains(fileName)) {
+                sb.append(fileName + " (deleted)\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Check if file is modified compare to working dir.
+     * @param fileName File name.
+     * @param location For file in commit: "commit",
+     *                 for file in stage: "stage".
+     * @return Boolean whether it is modified.
+     */
+    private boolean modifiedCompareToWorkingDir(String fileName,
+                                                String location) {
+        if (location.equals("commit")) {
+            return !Utils.readContentsAsString
+                    (new File(fileName))
+                    .equals(Utils.readContentsAsString
+                            (getHeadCommit().getFile(fileName)));
+        } else if (location.equals("stage")) {
+            return !Utils.readContentsAsString
+                    (new File(fileName))
+                    .equals(Utils.readContentsAsString
+                            (new File(STAGEDIR + fileName)));
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check untracked file for status.
+     * @return A string.
+     */
+    private String untrackedFile() {
+        StringBuilder sb = new StringBuilder();
+        ArrayList<String> filesInWorkingDir = getFileNamesInWorkingDir();
+        for (String fileName : filesInWorkingDir) {
+            if (!getStagedFiles().containsKey(fileName)
+                    && !getHeadCommit().getFileMapper().containsKey(fileName)) {
+                sb.append(fileName + "\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Get files in working dir.
+     * @return A arraylist.
+     */
+    public ArrayList<String> getFileNamesInWorkingDir() {
         List<String> workingDirFiles;
         workingDirFiles = Utils.plainFilenamesIn(
                 System.getProperty("user.dir"));
+        ArrayList<String> trackedFiles = new ArrayList<>();
         for (String fileName : workingDirFiles) {
-            if (getHeadCommit().getFileMapper().get(fileName) != null) {
-                d = "dd";
+            if (!fileName.equals(".gitignore")
+                    && !fileName.equals("Makefile")
+                    && !fileName.equals("proj3.iml")) {
+                trackedFiles.add(fileName);
             }
         }
-        return d;
+        return trackedFiles;
     }
 
     @Override
@@ -212,8 +285,10 @@ public class Stage implements Serializable {
         }
         sb.append("\n");
         sb.append("=== Modifications Not Staged For Commit ===" + "\n");
+        sb.append(modificationNotStagedForCommit());
         sb.append("\n");
         sb.append("=== Untracked Files ===" + "\n");
+        sb.append(untrackedFile());
         sb.append("\n");
         return sb.toString();
     }

@@ -306,8 +306,8 @@ public class CommitTree implements Serializable {
             }
         }
         getCurrentBranch().setHead(commit);
+        getCurrentBranch().setCurrentStage(commit.getCurrentStage());
         getCurrentBranch().getCurrentStage().clearStageArea();
-        getCurrentBranch().getCurrentStage().getStagedFiles().clear();
         getCurrentBranch().getCurrentStage().getFilesNewOnStage().clear();
     }
 
