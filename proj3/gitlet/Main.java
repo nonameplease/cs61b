@@ -40,9 +40,9 @@ public class Main {
      * Load serialized tree.
      * @return Commit tree.
      */
-    private static CommitTree tryLoad() {
+    public static CommitTree tryLoad(String path) {
         CommitTree commitTree = null;
-        File commitTreeFile = new File(GITLET_DIR + "gitletVCS.ser");
+        File commitTreeFile = new File(path);
         if (commitTreeFile.exists()) {
             try {
                 FileInputStream fileIn = new FileInputStream(commitTreeFile);
@@ -60,13 +60,13 @@ public class Main {
      * Save serialized tree.
      * @param commitTree Commit tree.
      */
-    public static void saveTree(CommitTree commitTree) {
+    public static void saveTree(CommitTree commitTree, String path) {
         if (commitTree == null) {
             return;
         }
 
         try {
-            File commitTreeFile = new File(GITLET_DIR + "gitletVCS.ser");
+            File commitTreeFile = new File(path);
             FileOutputStream fileOut = new FileOutputStream(commitTreeFile);
             ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
             objOut.writeObject(commitTree);
@@ -97,12 +97,16 @@ public class Main {
         argTwo.add("rm-branch");
         argTwo.add("reset");
         argTwo.add("merge");
-        ArrayList<String> argThreeAndFour = new ArrayList<>();
-        argThreeAndFour.add("checkout");
+        argTwo.add("rm-remote");
+        ArrayList<String> argThree = new ArrayList<>();
+        argThree.add("checkout");
+        argThree.add("add-remote");
+        ArrayList<String> argFour = new ArrayList<>();
+        argFour.add("checkout");
         errorCase.put(1, argOne);
         errorCase.put(2, argTwo);
-        errorCase.put(3, argThreeAndFour);
-        errorCase.put(4, argThreeAndFour);
+        errorCase.put(3, argThree);
+        errorCase.put(4, argFour);
         return errorCase;
     }
 
@@ -115,8 +119,9 @@ public class Main {
         String command = args[0];
         int argLength = args.length;
         if (!commandMap.get(1).contains(command)
-                && !commandMap.get(2).contains(command)) {
+                && !commandMap.get(2).contains(command) && !commandMap.get(3).contains(command)) {
             System.err.println("No command with that name exists.");
+            return;
         } else if (!commandMap.get(argLength).contains(command)) {
             System.err.println("Incorrect operands.");
         }
@@ -170,6 +175,8 @@ public class Main {
             commitTree.reset(token);
         } else if (command.equals("merge")) {
             commitTree.merge(token);
+        } else if (command.equals("rm-remote")) {
+            commitTree.rmRemote(token);
         }
     }
 
@@ -181,17 +188,25 @@ public class Main {
      */
     private static void doCommandArgMore(String command,
                                          CommitTree commitTree, String[] args) {
-        if (args.length == 3) {
-            if (!args[1].equals("--")) {
-                System.err.println("Incorrect operands.");
-            } else {
-                commitTree.checkoutFile(args[2]);
+        if (command.equals("checkout")) {
+            if (args.length == 3) {
+                if (!args[1].equals("--")) {
+                    System.err.println("Incorrect operands.");
+                } else {
+                    commitTree.checkoutFile(args[2]);
+                }
+            } else if (args.length == 4) {
+                if (!args[2].equals("--")) {
+                    System.err.println("Incorrect operands.");
+                } else {
+                    commitTree.checkoutCommit(args[1], args[3]);
+                }
             }
-        } else if (args.length == 4) {
-            if (!args[2].equals("--")) {
+        } else if (command.equals("add-remote")) {
+            if (args.length == 3) {
+                commitTree.addRemote(args[1], args[2]);
+            } else if (args.length == 4) {
                 System.err.println("Incorrect operands.");
-            } else {
-                commitTree.checkoutCommit(args[1], args[3]);
             }
         }
     }
@@ -224,13 +239,13 @@ public class Main {
             System.err.println("Please enter a command.");
             return;
         }
-        CommitTree commitTree = tryLoad();
+        CommitTree commitTree = tryLoad(GITLET_DIR + "gitletVCS.ser");
         String command = args[0];
         if (!command.equals("init") && commitTree == null) {
             System.err.println("Not in an initialized Gitlet directory.");
             return;
         }
         commitTree = doCommand(command, commitTree, args);
-        saveTree(commitTree);
+        saveTree(commitTree, GITLET_DIR + "gitletVCS.ser");
     }
 }

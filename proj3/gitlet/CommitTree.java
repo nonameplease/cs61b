@@ -34,6 +34,7 @@ public class CommitTree implements Serializable {
      */
     private static final int IDLENGTH = 40;
 
+
     /**
      * Initialize commit tree.
      */
@@ -357,6 +358,46 @@ public class CommitTree implements Serializable {
             return null;
         }
         return shortHashValue;
+    }
+
+    public void addRemote(String remoteName, String remoteDir) {
+        File remoteInfo = new File(".gitlet" + File.separator + remoteName);
+        if (remoteInfo.exists()) {
+            System.err.println("A remote with that name already exists.");
+            return;
+        }
+        Utils.writeContents(remoteInfo, remoteDir);
+    }
+
+    public void rmRemote(String remoteName) {
+        File remoteInfo = new File(".gitlet" + File.separator + remoteName);
+        if (!remoteInfo.exists()) {
+            System.err.println("A remote with that name does not exist.");
+            return;
+        } else {
+            remoteInfo.delete();
+        }
+    }
+
+    public void push(String remoteName, String remoteBranchName) {
+        File remoteInfo = new File(".gitlet" + File.separator + remoteName);
+        if (!remoteInfo.exists()) {
+            System.err.println("Remote directory not found.");
+            return;
+        }
+        final String remoteDir = Utils.readContentsAsString(remoteInfo);
+        CommitTree remoteCommitTree = Main.tryLoad(remoteDir);
+        Branch remoteBranch = remoteCommitTree.getCurrentBranch();
+        Commit remoteBranchHead = remoteBranch.getHead();
+        if (!remoteCommitTree.getBranchMap().containsKey(getCurrentBranch())) {
+
+        }
+        boolean possible = false;
+        Commit currentHead = getCurrentBranch().getHead();
+        while (currentHead.getParent() != currentHead) {
+
+        }
+
     }
 
     @Override
